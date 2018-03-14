@@ -22,8 +22,7 @@ class App extends React.Component {
             username: {u.username},
             id: {u.id},
             name: {u.name},
-            links: [link1: (id: {u.links[0].id}, url: {u.links[0].url}),
-              link2: (id: {u.links[1].id}, url: {u.links[1].url})]
+            linkkien määrä: {u.links.length}
             </li>
           )}
         </ul>
