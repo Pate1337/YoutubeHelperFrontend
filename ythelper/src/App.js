@@ -1,13 +1,40 @@
-import React from 'react';
+import React from 'react'
+import { usersInitialization } from './reducers/userReducer'
+import { connect } from 'react-redux'
 
 class App extends React.Component {
+
+/*ComponentDidMount toinen vaihtoehto*/
+  componentWillMount() {
+    console.log('Mounting App')
+    this.props.usersInitialization()
+  }
+
   render() {
+    console.log('Rendering App')
+    console.log('Käyttäjät: ' + this.props.users.length)
+
     return (
       <div>
-        <h1>Morjesta Mikko</h1>
+        <h1>Käyttäjät</h1>
+        <ul>
+          {this.props.users.map(u => <li key={u.id}>{u.username}</li>)}
+        </ul>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    users: state.users
+  }
+}
+
+const mapDispatchToProps = {
+  usersInitialization
+}
+
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
+
+export default ConnectedApp

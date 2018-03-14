@@ -1,0 +1,11 @@
+import axios from 'axios'
+const baseUrl = '/api/users'
+
+const getAll = async () => {
+  console.log('getAll userService')
+  const response = await axios.get(baseUrl)
+  console.log('response saapunut')
+  return response.data
+}
+
+export default { getAll }
