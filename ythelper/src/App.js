@@ -18,7 +18,14 @@ class App extends React.Component {
       <div>
         <h1>Käyttäjät</h1>
         <ul>
-          {this.props.users.map(u => <li key={u.id}>{u.username}</li>)}
+          {this.props.users.map(u => <li key={u.id}>
+            username: {u.username},
+            id: {u.id},
+            name: {u.name},
+            links: [link1: (id: {u.links[0].id}, url: {u.links[0].url}),
+              link2: (id: {u.links[1].id}, url: {u.links[1].url})]
+            </li>
+          )}
         </ul>
       </div>
     )
