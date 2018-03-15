@@ -8,7 +8,8 @@ const search = async (query) => {
   haku komponentissa parametrina saatuun queryyn valmiina. Esim
   query='part=snippet&q=toto africa&type=video&maxResults=50'*/
   const response = await axios.get(`${baseUrl}/search?${query}&key=${key}`)
-  console.log('Youtube API:sta saatu response: ' + response)
+  /*Response on json*/
+  console.log('Youtube API:sta saatu response: ' + response.data)
   return response.data
 }
 

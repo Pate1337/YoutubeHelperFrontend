@@ -20,7 +20,7 @@ export const searchForVideo = (searchObject) => {
   /*Tännekkin voisi olla fiksua laittaa formatLinks metodi*/
   return async (dispatch) => {
     const results = await youtubeService.search(query)
-    console.log('Results from youtubeService: ' + results)
+    console.log('Results from youtubeService: ' + results.items[0].snippet.title)
     dispatch({
       type: 'SEARCH',
       data: results
