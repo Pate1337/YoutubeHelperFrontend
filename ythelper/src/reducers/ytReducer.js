@@ -26,13 +26,12 @@ export const searchForVideo = (searchObject) => {
   }
   return async (dispatch) => {
     const result = await youtubeService.search(query)
-    console.log('Results from youtubeService: ' + result.items[0].snippet.title)
     const items = result.items
     const formattedItems = items.map(i => formatItem(i))
-    /*Pakko pitää JSONina statessa, koska object oliona ei mahdollista*/
+
     dispatch({
       type: 'SEARCH',
-      data: JSON.stringify(formattedItems)
+      data: formattedItems
     })
   }
 }

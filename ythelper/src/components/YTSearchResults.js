@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import YTSearchResult from './YTSearchResult'
 
 class YTSearchResults extends React.Component {
 
@@ -7,7 +8,9 @@ class YTSearchResults extends React.Component {
     console.log('Rendering YTSearchResults')
     return (
       <div>
-        {this.props.ytSearchResults}
+        {this.props.ytSearchResults.map(r =>
+          <YTSearchResult key={r.id} item={r} />
+        )}
       </div>
     )
   }
