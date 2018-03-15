@@ -27,7 +27,8 @@ export const searchForVideo = (searchObject) => {
   const formatItem = (item) => {
     return {
       id: item.id.videoId,
-      title: item.snippet.title
+      title: item.snippet.title,
+      thumbnail: item.snippet.thumbnails.default.url
     }
   }
   return async (dispatch) => {
