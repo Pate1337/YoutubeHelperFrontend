@@ -17,13 +17,22 @@ export const searchForVideo = (searchObject) => {
   esim. q=. Tässä vaiheessa kuitenkin pelkkää hakukenttää voidaan muuttaa.*/
   const q = searchObject.text
   const query = `part=snippet&q=${q}&type=video&maxResults=50`
-  /*Tännekkin voisi olla fiksua laittaa formatLinks metodi*/
+  /*formatItemissä nyt vaan pari hassua kohtaa*/
+  const formatItem = (item) => {
+    return {
+      id: item.id.videoId,
+      title: item.snippet.title
+    }
+  }
   return async (dispatch) => {
-    const results = await youtubeService.search(query)
-    console.log('Results from youtubeService: ' + results.items[0].snippet.title)
+    const result = await youtubeService.search(query)
+    console.log('Results from youtubeService: ' + result.items[0].snippet.title)
+    const items = result.items
+    const formattedItems = items.map(i => formatItem(i))
+    /*Pakko pitää JSONina statessa, koska object oliona ei mahdollista*/
     dispatch({
       type: 'SEARCH',
-      data: results
+      data: JSON.stringify(formattedItems)
     })
   }
 }
