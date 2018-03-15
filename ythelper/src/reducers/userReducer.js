@@ -25,9 +25,7 @@ export const usersInitialization = () => {
   }
 
   return async (dispatch) => {
-    console.log('Tänne asti päästään')
     const users = await userService.getAll()
-    console.log('Käyttäjät userReducerissa')
     let formattedUsers = []
     users.forEach(u => {
       formattedUsers.push(formatUser(u))

@@ -1,6 +1,8 @@
 import React from 'react'
 import { usersInitialization } from './reducers/userReducer'
 import { connect } from 'react-redux'
+import YTSearchBar from './components/YTSearchBar'
+import YTSearchResults from './components/YTSearchResults'
 
 class App extends React.Component {
 
@@ -26,6 +28,8 @@ class App extends React.Component {
             </li>
           )}
         </ul>
+        <YTSearchBar />
+        <YTSearchResults />
       </div>
     )
   }
