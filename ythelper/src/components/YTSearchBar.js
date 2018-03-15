@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { searchForVideo } from '../reducers/ytReducer'
+import { clearSearchResults } from '../reducers/ytReducer'
 
 class YTSearchBar extends React.Component {
   constructor() {
@@ -27,6 +28,12 @@ class YTSearchBar extends React.Component {
     })
   }
 
+  clearResults = (event) => {
+    console.log('clearResults YTSearchBar')
+    event.preventDefault()
+    this.props.clearSearchResults()
+  }
+
   render() {
     console.log('Renderöidään YTSearchBar')
 
@@ -41,7 +48,10 @@ class YTSearchBar extends React.Component {
             onChange={this.handleSearchFieldChange}
           />
           <button type='submit'>
-            Hae
+            Search
+          </button>
+          <button type='button' onClick={this.clearResults}>
+            Clear search results
           </button>
         </form>
       </div>
@@ -50,7 +60,8 @@ class YTSearchBar extends React.Component {
 }
 
 const mapDispatchToProps = {
-  searchForVideo
+  searchForVideo,
+  clearSearchResults
 }
 
 const ConnectedYTSearchBar = connect(null, mapDispatchToProps)(YTSearchBar)

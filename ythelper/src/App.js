@@ -1,5 +1,6 @@
 import React from 'react'
 import { usersInitialization } from './reducers/userReducer'
+import { searchResultInitialization } from './reducers/ytReducer'
 import { connect } from 'react-redux'
 import YTSearchBar from './components/YTSearchBar'
 import YTSearchResults from './components/YTSearchResults'
@@ -10,6 +11,7 @@ class App extends React.Component {
   componentWillMount() {
     console.log('Mounting App')
     this.props.usersInitialization()
+    this.props.searchResultInitialization()
   }
 
   render() {
@@ -42,7 +44,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  usersInitialization
+  usersInitialization,
+  searchResultInitialization
 }
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
