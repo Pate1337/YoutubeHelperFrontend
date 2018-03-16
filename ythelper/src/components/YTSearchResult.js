@@ -30,10 +30,16 @@ class YTSearchResult extends React.Component {
   addToFavourites = (event) => {
     console.log('addToFavourites YTSearchResult')
     event.preventDefault()
-    /*Tarkistetaan, ettei linkki ole jo käyttäjän suosikeissa*/
-    const alreadyFavorited = this.props.loggedUser.links
-      .filter(link => link.linkId === this.props.item.id)
-    if (!alreadyFavorited) {
+    console.log('loggedUser.id: ' + this.props.loggedUser.id)
+    /*loggedUserilla ei ole kenttää links, ei tule loginservicelta.*/
+    /*Tarkistetaan, onko linkki jo käyttäjän linkeissä.*/
+    const loggedUser = this.props.users.filter(u => u.id === this.props.loggedUser.id)
+    console.log('filtteröinnillä saatu loggedUser.links: ' + loggedUser[0].links)
+    let linkExists = []
+    if (loggedUser[0].links.length !== 0) {
+      linkExists = loggedUser[0].links.filter(l => l.linkId === this.props.item.id)
+    }
+    if (linkExists.length === 0) {
       const url = 'https://www.youtube.com/watch?v=' + this.props.item.id
       console.log('video id: ' + this.props.item.id)
       console.log('video title: ' + this.props.item.title)
@@ -45,15 +51,17 @@ class YTSearchResult extends React.Component {
       }
       /*Tämä kutsuu siis linkServicen metodia, joka postaa backendiin.
       Siellä linkki lisätään linkkitietokantaan sekä käyttäjän kenttään links*/
-      this.props.addFavouriteForUser(linkObject)
+      this.props.addFavouriteForUser(linkObject, this.props.loggedUser.id)
+      /*Tässä pitäisi kentien vielä päivittää kaikkien linkkien tila*/
     } else {
-      console.log('Linkki on jo suosikeissa')
+      console.log('Linkki on jo käyttäjän suosikeissa!')
     }
   }
 
 
   render() {
     console.log('Rendering YTSearchResult')
+    const showFavouriteButton = { display: this.props.loggedUser !== null ? '' : 'none' }
     /*Toi react-youtube on ihan uskomaton lifesaver*/
     /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
     if (this.state.playVideo) {
@@ -91,9 +99,10 @@ class YTSearchResult extends React.Component {
     }
   }
 }
-cons mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
-    loggedUser: state.loggedUser
+    loggedUser: state.loggedUser,
+    users: state.users
   }
 }
 

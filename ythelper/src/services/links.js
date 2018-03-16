@@ -26,7 +26,9 @@ const createAndAddLinkToUserFavourites = async (newObject) => {
     headers: { 'Authorization': token }
   }
   const url = baseUrl + '/favourites'
+  console.log('url: ' + url)
   const response = await axios.post(url, newObject, config)
+  console.log('backendistä saatu response: ' + response)
   return response.data
 }
 
