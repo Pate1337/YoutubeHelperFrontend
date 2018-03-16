@@ -33,6 +33,8 @@ class YTSearchResult extends React.Component {
     console.log('loggedUser.id: ' + this.props.loggedUser.id)
     /*loggedUserilla ei ole kenttää links, ei tule loginservicelta.*/
     /*Tarkistetaan, onko linkki jo käyttäjän linkeissä.*/
+    /*Tässä ei ole järjen häivää. Pitää kehitellä userServicee mahdollisuus
+    hakea käyttäjä palvelimelta id:n perusteella.*/
     const loggedUser = this.props.users.filter(u => u.id === this.props.loggedUser.id)
     console.log('filtteröinnillä saatu loggedUser.links: ' + loggedUser[0].links)
     let linkExists = []
@@ -44,6 +46,7 @@ class YTSearchResult extends React.Component {
       console.log('video id: ' + this.props.item.id)
       console.log('video title: ' + this.props.item.title)
       console.log('video url: ' + url)
+      /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
       const linkObject = {
         title: this.props.item.title,
         url: url,
@@ -61,10 +64,11 @@ class YTSearchResult extends React.Component {
 
   render() {
     console.log('Rendering YTSearchResult')
-    const showFavouriteButton = { display: this.props.loggedUser !== null ? '' : 'none' }
+    console.log('loggedUser: ' + this.props.loggedUser)
     /*Toi react-youtube on ihan uskomaton lifesaver*/
     /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
     if (this.state.playVideo) {
+      const showFavouriteButton = { display: (this.props.loggedUser !== null) ? '' : 'none' }
       const opts = {
         height: '315',
         width: '560',
@@ -84,7 +88,7 @@ class YTSearchResult extends React.Component {
           <button onClick={this.toggleVisibility}>
             Hide
           </button>
-          <button onClick={this.addToFavourites}>
+          <button onClick={this.addToFavourites} style={showFavouriteButton}>
             Add to Favourites
           </button>
         </div>
