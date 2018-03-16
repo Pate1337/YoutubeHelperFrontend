@@ -32,6 +32,7 @@ class YTSearchBar extends React.Component {
     console.log('clearResults YTSearchBar')
     event.preventDefault()
     this.props.clearSearchResults()
+
   }
 
   render() {
