@@ -1,5 +1,10 @@
 import axios from 'axios'
 const baseUrl = '/api/links'
+/*Lisätään linkki aina joko favouriteLinkiksi tai playlistLinkiksi.
+Baseurliin laitetaan siis joko /favourites tai /playlists jossa samaan tapaan
+lisätään ensin linkki, muutta
+sitten se asetetaan käyttäjän playlist kenttään. Tämän pyynnön mukana pitää
+määrittää onko kyseessä uusi playlist vai jo olemassa oleva.*/
 
 let token = null
 
@@ -14,14 +19,15 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
-const createAndAddLinkToUser = async (newObject) => {
+const createAndAddLinkToUserFavourites = async (newObject) => {
   /*newObject tarvii kentät title, url ja linkId*/
-  console.log('createAndAddLinkToUser linkService')
+  console.log('createAndAddLinkToUserFavourites linkService')
   const config = {
     headers: { 'Authorization': token }
   }
-  const response = await axios.post(baseUrl, newObject, config)
+  const url = baseUrl + '/favourites'
+  const response = await axios.post(url, newObject, config)
   return response.data
 }
 
-export default { getAll, setToken, createAndAddLinkToUser }
+export default { getAll, setToken, createAndAddLinkToUserFavourites }

@@ -17,7 +17,7 @@ class LoggedBar extends React.Component {
       <div>
         {this.props.loggedUser.username} logged in&nbsp;
         <button onClick={this.logOut}>
-          logOut
+          Logout
         </button>
       </div>
     )

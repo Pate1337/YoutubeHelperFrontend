@@ -37,4 +37,21 @@ export const usersInitialization = () => {
   }
 }
 
+export const addFavouriteForUser = (linkObject) => {
+  console.log('addFavouriteForUser userService')
+  /*YTSearchResultissa on jo tarkistettu, että linkki ei ole käyttäjän
+  suosikeissa.*/
+  const link = await linkService.createAndAddLinkToUserFavourites(linkObject)
+  /*Tämän jälkeen tietokantaan on lisätty käyttäjän links kenttään
+  tämä uusi linkki. Ja linkkitietokantaan on lisätty kyseinen linkki, jos
+  se ei ollut siellä aiemmin.*/
+
+  return async (dispatch) => {
+    dispatch({
+      type: 'ADD_LINK_FOR_USER',
+      data: userId
+    })
+  }
+}
+
 export default userReducer
