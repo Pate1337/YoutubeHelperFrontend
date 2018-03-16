@@ -1,4 +1,5 @@
 import React from 'react'
+import Youtube from 'react-youtube'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -15,24 +16,37 @@ class YTSearchResult extends React.Component {
     })
   }
 
+  onReady = (event) => {
+    console.log('Video on valmis toistettavaksi')
+  }
+
+  onEnd = (event) => {
+    /*Ja tänne saadaankin sitten toiminnallisuus soittolistan luomiseksi :DDD*/
+    console.log('Video on päättynyt')
+  }
+
+
   render() {
     console.log('Rendering YTSearchResult')
-    /*let src = 'https://www.youtube.com/embed/' + this.props.item.id + '?rel=0'*/
-    /*Antaa ton ylemmän olla siltä varalta että laitetaan pikkusoittimet*/
-    /*Vois laittaa jo pikkusoittimen tohon alkulistausnäkymään.*/
+    /*Toi react-youtube on ihan uskomaton lifesaver*/
     /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
     if (this.state.playVideo) {
-      let src = 'https://www.youtube.com/embed/' + this.props.item.id + '?rel=0&autoplay=1'
+      const opts = {
+        height: '315',
+        width: '560',
+        playerVars: {
+          autoplay: 1,
+          rel: 0
+        }
+      }
       return (
         <div>
-          <iframe
-            title={this.props.item.id}
-            width="560"
-            height="315"
-            src={src}
-            frameBorder="0"
-            allowFullScreen>
-          </iframe>
+          <Youtube
+            videoId={this.props.item.id}
+            opts={opts}
+            onReady={this.onReady}
+            onEnd={this.onEnd}
+          />
           <button onClick={this.toggleVisibility}>
             Hide
           </button>
@@ -50,3 +64,20 @@ class YTSearchResult extends React.Component {
 }
 
 export default YTSearchResult
+
+/*let src = 'https://www.youtube.com/embed/' + this.props.item.id + '?rel=0&autoplay=1'
+return (
+  <div>
+    <iframe
+      title={this.props.item.id}
+      width="560"
+      height="315"
+      src={src}
+      frameBorder="0"
+      allowFullScreen>
+    </iframe>
+    <button onClick={this.toggleVisibility}>
+      Hide
+    </button>
+  </div>
+)*/
