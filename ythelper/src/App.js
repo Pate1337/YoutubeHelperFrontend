@@ -39,7 +39,7 @@ class App extends React.Component {
         <div>
           <div>
           <RegisterForm />
-        </div>
+          </div>
           <LoginForm />
           <h1>Käyttäjät</h1>
           <ul>
