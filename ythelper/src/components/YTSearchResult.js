@@ -36,6 +36,8 @@ class YTSearchResult extends React.Component {
     /*Tarkistetaan, onko linkki jo käyttäjän linkeissä.*/
     /*Tässä ei ole järjen häivää. Pitää kehitellä userServicee mahdollisuus
     hakea käyttäjä palvelimelta id:n perusteella.*/
+    
+    /*Käytä ny herran jumala state favouritesa tässä!!!!!*/
     const loggedUser = this.props.users.filter(u => u.id === this.props.loggedUser.id)
     console.log('filtteröinnillä saatu loggedUser.links: ' + loggedUser[0].links)
     let linkExists = []

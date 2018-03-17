@@ -9,7 +9,8 @@ import LoginForm from './components/LoginForm'
 import LoggedBar from './components/LoggedBar'
 import FavouriteLinks from './components/FavouriteLinks'
 import { usersFavourites } from './reducers/favouriteLinksReducer'
-import RegisterForm from './components/RegisterForm';
+import { usersPlaylists } from './reducers/playlistsReducer'
+import RegisterForm from './components/RegisterForm'
 
 class App extends React.Component {
 
@@ -20,6 +21,7 @@ class App extends React.Component {
     this.props.usersInitialization()
     this.props.searchResultInitialization()
     this.props.usersFavourites()
+    this.props.usersPlaylists()
   }
 
   render() {
@@ -30,7 +32,7 @@ class App extends React.Component {
     if (this.props.users.length === 0) {
       return (
         <div>
-          <RegisterForm />
+          Waiting for database
         </div>
       )
     }
@@ -89,7 +91,8 @@ const mapDispatchToProps = {
   usersInitialization,
   searchResultInitialization,
   loggedUserInitialization,
-  usersFavourites
+  usersFavourites,
+  usersPlaylists
 }
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)

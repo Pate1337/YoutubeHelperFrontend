@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addLoggedUser } from '../reducers/loggedUserReducer'
 import { usersFavourites } from '../reducers/favouriteLinksReducer'
+import { usersPlaylists } from '../reducers/playlistsReducer'
 
 class LoginForm extends React.Component {
   constructor() {
@@ -25,6 +26,7 @@ class LoginForm extends React.Component {
     }
     const response = await this.props.addLoggedUser(user)
     this.props.usersFavourites()
+    this.props.usersPlaylists()
     /*Tässä vaiheessa ihan simppeli tarkistus jos kirjautuminen ei onnistu*/
     if (response !== 'error') {
       console.log('Logged in')
@@ -67,7 +69,8 @@ class LoginForm extends React.Component {
 
 const mapDispatchToProps = {
   addLoggedUser,
-  usersFavourites
+  usersFavourites,
+  usersPlaylists
 }
 
 const ConnectedLoginForm = connect(null, mapDispatchToProps)(LoginForm)

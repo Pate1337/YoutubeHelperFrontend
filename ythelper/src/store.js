@@ -4,12 +4,14 @@ import userReducer from './reducers/userReducer'
 import ytReducer from './reducers/ytReducer'
 import loggedUserReducer from './reducers/loggedUserReducer'
 import favouriteLinksReducer from './reducers/favouriteLinksReducer'
+import playlistsReducer from './reducers/playlistsReducer'
 
 const reducer = combineReducers({
   users: userReducer,
   ytSearchResults: ytReducer,
   loggedUser: loggedUserReducer,
-  favouriteLinks: favouriteLinksReducer
+  favouriteLinks: favouriteLinksReducer,
+  playlists: playlistsReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

@@ -23,6 +23,18 @@ const userReducer = (store = [], action) => {
       })
       /*Nyt siis pelkästään käyttäjän favouritelinkkien tila on päivitetty*/
       return [...old, {...modified[0], links: [...modified[0].links, action.data]}]
+    case 'ADD_PLAYLIST_FOR_USER':
+      console.log('ADD_PLAYLIST_FOR_USER userReducer')
+      let old = []
+      let modified = []
+      store.forEach(u => {
+        if (u.id === action.userId) {
+          modified.push(u)
+        } else {
+          old.push(u)
+        }
+      })
+      return [...old, {...modified[0], playlists: [...modified[0].playlists, action.data]}]
     default:
       console.log('default in userReducer')
       return store
@@ -31,14 +43,13 @@ const userReducer = (store = [], action) => {
 
 export const usersInitialization = () => {
   console.log('usersInitialization in userReducer')
-  /*Eli tuo links pitää kokeilla miten toimii, koska ilmeisesti ei pysty laittamaan
-  links: [{link1}, {link2}, {link3}, ...]*/
   const formatUser = (user) => {
     return {
       id: user.id,
       username: user.username,
       name: user.name,
-      links: user.links
+      links: user.links,
+      playlists: user.playlists
     }
   }
 
@@ -62,8 +73,9 @@ export const addNewUser = (userObject) => {
       id: user.id,
       username: user.username,
       name: user.name,
-      links: user.links
-      
+      links: user.links,
+      playlists: user.playlists
+
       //Favorite linkit ?? (ja muut kentät??)
     }
   }
@@ -97,6 +109,26 @@ export const addFavouriteForUser = (linkObject, userId) => {
       data: link,
       userId: userId
     })
+  }
+}
+
+export const addPlaylistForUser = (playlistObject, userId) => {
+  console.log('addPlaylistForUser userReducer')
+  /*Tarkistetaan taas jo ennen tänne pääsyä onko samannimnen soittolista
+  jo olemassa!!*/
+  return async (dispatch) => {
+    try {
+      const playlist = await linkService.createPlaylist(playlistObject)
+      dispatch({
+        type: 'ADD_PLAYLIST_FOR_USER',
+        data: playlist,
+        userId: userId
+      })
+    } catch (exception) {
+      /*Joku random error.*/
+      console.log('error')
+    }
+
   }
 }
 

@@ -32,4 +32,14 @@ const createAndAddLinkToUserFavourites = async (newObject) => {
   return response.data
 }
 
-export default { getAll, setToken, createAndAddLinkToUserFavourites }
+const createPlaylist = async (newObject) => {
+  /*Pelkkä title*/
+  console.log('createPlaylist linkService')
+  const config = {
+    headers: { 'Authorization': token}
+  }
+  const response = await axios.post('/api/playlists', newObject, config)
+  return response.data
+}
+
+export default { getAll, setToken, createAndAddLinkToUserFavourites, createPlaylist }
