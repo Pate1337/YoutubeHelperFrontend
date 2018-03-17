@@ -24,7 +24,7 @@ class RegisterForm extends React.Component {
       username: this.state.username,
       password: this.state.password
     }
-    if(username.length < 5 || password.length < 8) {
+    if(user.username.length < 5 || user.password.length < 8) {
       console.log('Username must be >4 chars and password >7')
     } else {
       const response = await this.props.addNewUser(user)

@@ -59,7 +59,7 @@ export const addNewUser = (userObject) => {
   console.log('kutsuttu addNewUseria userReducerissa')
   const formatUser = (user) => {
     return {
-      id: user._id,
+      id: user.id,
       username: user.username,
       name: user.name,
       links: user.links
