@@ -7,6 +7,9 @@ const favouriteLinksReducer = (store = [], action) => {
     case 'GET_FAVOURITES':
       console.log('GET_FAVOURITES favouriteLinksReducer')
       return action.data
+    case 'REMOVE':
+      console.log('REMOVE favouriteLinksReducer')
+      return []
     default:
       return store
   }
@@ -25,6 +28,15 @@ export const usersFavourites = () => {
         data: user.links
       })
     }
+  }
+}
+
+export const removeFavourites = () => {
+  console.log('removeFavourites favouriteLinksReducer')
+  return async (dispatch) => {
+    dispatch({
+      type: 'REMOVE'
+    })
   }
 }
 
