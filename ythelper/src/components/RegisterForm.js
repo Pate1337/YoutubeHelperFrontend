@@ -7,6 +7,7 @@ class RegisterForm extends React.Component {
     super()
     this.state = {
       username: '',
+      name: '',
       password: ''
     }
   }
@@ -22,6 +23,7 @@ class RegisterForm extends React.Component {
     event.preventDefault()
     const user = {
       username: this.state.username,
+      name: this.state.name,
       password: this.state.password
     }
     if(user.username.length < 5 || user.password.length < 8) {
@@ -30,6 +32,7 @@ class RegisterForm extends React.Component {
       const response = await this.props.addNewUser(user)
       this.setState({
         username: '',
+        name: '',
         password: ''
       })
     }
@@ -46,6 +49,13 @@ class RegisterForm extends React.Component {
               type='text'
               name='username'
               value={this.state.username}
+              onChange={this.handleRegisterFieldChange}
+            />
+          Name:
+            <input
+              type='text'
+              name='name'
+              value={this.state.name}
               onChange={this.handleRegisterFieldChange}
             />
           Password:
