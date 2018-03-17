@@ -38,7 +38,7 @@ class App extends React.Component {
       return (
         <div>
           <div>
-            <RegisterForm />
+          <RegisterForm />
           </div>
           <LoginForm />
           <h1>Käyttäjät</h1>
