@@ -61,7 +61,7 @@ export const addNewUser = (userObject) => {
     return {
       id: user._id,
       username: user.username,
-      name: user.name,
+      name: user.name
       //Favorite linkit ?? (ja muut kentät??)
     }
   }

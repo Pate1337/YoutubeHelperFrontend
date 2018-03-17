@@ -9,6 +9,7 @@ import LoginForm from './components/LoginForm'
 import LoggedBar from './components/LoggedBar'
 import FavouriteLinks from './components/FavouriteLinks'
 import { usersFavourites } from './reducers/favouriteLinksReducer'
+import RegisterForm from './components/RegisterForm';
 
 class App extends React.Component {
 
@@ -29,7 +30,7 @@ class App extends React.Component {
     if (this.props.users.length === 0) {
       return (
         <div>
-          Waiting for database
+          <RegisterForm />
         </div>
       )
     }
