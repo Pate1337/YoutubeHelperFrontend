@@ -37,6 +37,9 @@ class App extends React.Component {
     if (this.props.loggedUser === null) {
       return (
         <div>
+          <div>
+          <RegisterForm />
+        </div>
           <LoginForm />
           <h1>Käyttäjät</h1>
           <ul>
