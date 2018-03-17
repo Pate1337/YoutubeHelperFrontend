@@ -51,6 +51,7 @@ export const usersInitialization = () => {
   }
 }
 
+
 /*Tää saattais olla fiksumpaa sijoittaa linkReduceriin*/
 export const addFavouriteForUser = (linkObject, userId) => {
   console.log('addFavouriteForUser userService')

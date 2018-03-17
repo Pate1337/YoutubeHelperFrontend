@@ -2,6 +2,7 @@ import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
 import { addFavouriteForUser } from '../reducers/userReducer'
+import { usersFavourites } from '../reducers/favouriteLinksReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -27,7 +28,7 @@ class YTSearchResult extends React.Component {
     console.log('Video on päättynyt')
   }
 
-  addToFavourites = (event) => {
+  addToFavourites = async (event) => {
     console.log('addToFavourites YTSearchResult')
     event.preventDefault()
     console.log('loggedUser.id: ' + this.props.loggedUser.id)
@@ -52,9 +53,10 @@ class YTSearchResult extends React.Component {
         url: url,
         linkId: this.props.item.id
       }
-      /*Tämä kutsuu siis linkServicen metodia, joka postaa backendiin.
+      /*Tämä kutsuu siis userServicen metodia, joka postaa backendiin.
       Siellä linkki lisätään linkkitietokantaan sekä käyttäjän kenttään links*/
-      this.props.addFavouriteForUser(linkObject, this.props.loggedUser.id)
+      await this.props.addFavouriteForUser(linkObject, this.props.loggedUser.id)
+      await this.props.usersFavourites()
       /*Tässä pitäisi kentien vielä päivittää kaikkien linkkien tila*/
     } else {
       console.log('Linkki on jo käyttäjän suosikeissa!')
@@ -111,7 +113,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  addFavouriteForUser
+  addFavouriteForUser,
+  usersFavourites
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

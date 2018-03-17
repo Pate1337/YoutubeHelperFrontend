@@ -7,6 +7,8 @@ import YTSearchBar from './components/YTSearchBar'
 import YTSearchResults from './components/YTSearchResults'
 import LoginForm from './components/LoginForm'
 import LoggedBar from './components/LoggedBar'
+import FavouriteLinks from './components/FavouriteLinks'
+import { usersFavourites } from './reducers/favouriteLinksReducer'
 
 class App extends React.Component {
 
@@ -16,6 +18,7 @@ class App extends React.Component {
     this.props.loggedUserInitialization()
     this.props.usersInitialization()
     this.props.searchResultInitialization()
+    this.props.usersFavourites()
   }
 
   render() {
@@ -23,6 +26,13 @@ class App extends React.Component {
     console.log('Käyttäjät: ' + this.props.users.length)
     /*Mun mielestä ihan ok tapa päättää mitä näytetään kun ei olla kirjauduttu
     tai ollaan kirjauduttu, on laittaa vaan ehtolauseita..*/
+    if (this.props.users.length === 0) {
+      return (
+        <div>
+          Waiting for database
+        </div>
+      )
+    }
     if (this.props.loggedUser === null) {
       return (
         <div>
@@ -55,6 +65,7 @@ class App extends React.Component {
               </li>
             )}
           </ul>
+          <FavouriteLinks />
           <YTSearchBar />
           <YTSearchResults />
         </div>
@@ -73,7 +84,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   usersInitialization,
   searchResultInitialization,
-  loggedUserInitialization
+  loggedUserInitialization,
+  usersFavourites
 }
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
