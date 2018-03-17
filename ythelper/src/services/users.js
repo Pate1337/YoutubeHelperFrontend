@@ -13,4 +13,11 @@ const getUserById = async (id) => {
   return response.data
 }
 
-export default { getAll, getUserById }
+const addUser = async (newUser) => {
+  console.log('addUser userService')
+  const response = await axios.post(baseUrl, newUser)
+
+  return response.data
+}
+
+export default { getAll, getUserById, addUser }

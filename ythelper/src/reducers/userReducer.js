@@ -6,6 +6,10 @@ const userReducer = (store = [], action) => {
     case 'INIT_USERS':
       console.log('Initiate users userReducer')
       return action.data
+    //Uusi user, tsekkaa onko tää ihan vituillaan
+    case 'NEW_USER':
+      console.log('Uuden käyttäjän lisäys userReducer')
+      return [...store, action.data]
     case 'ADD_LINK_FOR_USER':
       console.log('ADD_LINK_FOR_USER userReducer')
       let old = []
@@ -51,6 +55,29 @@ export const usersInitialization = () => {
   }
 }
 
+export const addNewUser = (userObject) => {
+  console.log('kutsuttu addNewUseria userReducerissa')
+  const formatUser = (user) => {
+    return {
+      id: user._id,
+      username: user.username,
+      name: user.name,
+      //Favorite linkit ?? (ja muut kentät??)
+    }
+  }
+  return async (dispatch) => {
+    try {
+      const user = await userService.addUser(userObject)
+      const formattedUser = formatUser(user)
+      dispatch({
+        type: 'NEW_USER',
+        data: formattedUser
+      })
+    } catch (e) {
+      return "error"
+    }
+  }
+}
 
 /*Tää saattais olla fiksumpaa sijoittaa linkReduceriin*/
 export const addFavouriteForUser = (linkObject, userId) => {
