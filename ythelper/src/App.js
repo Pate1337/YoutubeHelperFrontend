@@ -8,9 +8,11 @@ import YTSearchResults from './components/YTSearchResults'
 import LoginForm from './components/LoginForm'
 import LoggedBar from './components/LoggedBar'
 import FavouriteLinks from './components/FavouriteLinks'
-import { usersFavourites } from './reducers/favouriteLinksReducer'
-import { usersPlaylists } from './reducers/playlistsReducer'
+/*import { usersFavourites } from './reducers/favouriteLinksReducer'
+import { usersPlaylists } from './reducers/playlistsReducer'*/
+import { userLinks } from './reducers/userLinksReducer'
 import RegisterForm from './components/RegisterForm'
+import PlaylistForm from './components/PlaylistForm'
 
 class App extends React.Component {
 
@@ -20,8 +22,9 @@ class App extends React.Component {
     this.props.loggedUserInitialization()
     this.props.usersInitialization()
     this.props.searchResultInitialization()
-    this.props.usersFavourites()
-    this.props.usersPlaylists()
+    /*this.props.usersFavourites()
+    this.props.usersPlaylists()*/
+    this.props.userLinks()
   }
 
   render() {
@@ -49,7 +52,8 @@ class App extends React.Component {
               username: {u.username},
               id: {u.id},
               name: {u.name},
-              linkkien määrä: {u.links.length}
+              linkkien määrä: {u.links.length},
+              soittolistojen määrä: {u.playlists.length}
               </li>
             )}
           </ul>
@@ -67,11 +71,13 @@ class App extends React.Component {
               username: {u.username},
               id: {u.id},
               name: {u.name},
-              linkkien määrä: {u.links.length}
+              linkkien määrä: {u.links.length},
+              soittolistojen määrä: {u.playlists.length}
               </li>
             )}
           </ul>
           <FavouriteLinks />
+          <PlaylistForm />
           <YTSearchBar />
           <YTSearchResults />
         </div>
@@ -91,8 +97,9 @@ const mapDispatchToProps = {
   usersInitialization,
   searchResultInitialization,
   loggedUserInitialization,
-  usersFavourites,
-  usersPlaylists
+/*  usersFavourites,
+  usersPlaylists*/
+  userLinks
 }
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)

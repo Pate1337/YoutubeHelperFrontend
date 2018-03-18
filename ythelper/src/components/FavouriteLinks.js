@@ -22,7 +22,8 @@ class FavouriteLinks extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    favouriteLinks: state.favouriteLinks
+    /*favouriteLinks: state.favouriteLinks*/
+    favouriteLinks: state.userLinks.favourites
   }
 }
 

@@ -2,7 +2,8 @@ import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
 import { addFavouriteForUser } from '../reducers/userReducer'
-import { usersFavourites } from '../reducers/favouriteLinksReducer'
+/*import { usersFavourites } from '../reducers/favouriteLinksReducer'*/
+import { userLinks } from '../reducers/userLinksReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -33,22 +34,13 @@ class YTSearchResult extends React.Component {
     event.preventDefault()
     console.log('loggedUser.id: ' + this.props.loggedUser.id)
     /*loggedUserilla ei ole kenttää links, ei tule loginservicelta.*/
+
     /*Tarkistetaan, onko linkki jo käyttäjän linkeissä.*/
-    /*Tässä ei ole järjen häivää. Pitää kehitellä userServicee mahdollisuus
-    hakea käyttäjä palvelimelta id:n perusteella.*/
-    
-    /*Käytä ny herran jumala state favouritesa tässä!!!!!*/
-    const loggedUser = this.props.users.filter(u => u.id === this.props.loggedUser.id)
-    console.log('filtteröinnillä saatu loggedUser.links: ' + loggedUser[0].links)
-    let linkExists = []
-    if (loggedUser[0].links.length !== 0) {
-      linkExists = loggedUser[0].links.filter(l => l.linkId === this.props.item.id)
-    }
+    const linkExists = this.props.favourites
+      .filter(f => f.linkId === this.props.item.id)
     if (linkExists.length === 0) {
       const url = 'https://www.youtube.com/watch?v=' + this.props.item.id
-      console.log('video id: ' + this.props.item.id)
-      console.log('video title: ' + this.props.item.title)
-      console.log('video url: ' + url)
+
       /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
       const linkObject = {
         title: this.props.item.title,
@@ -58,7 +50,8 @@ class YTSearchResult extends React.Component {
       /*Tämä kutsuu siis userServicen metodia, joka postaa backendiin.
       Siellä linkki lisätään linkkitietokantaan sekä käyttäjän kenttään links*/
       await this.props.addFavouriteForUser(linkObject, this.props.loggedUser.id)
-      await this.props.usersFavourites()
+      /*await this.props.usersFavourites()*/
+      await this.props.userLinks()
       /*Tässä pitäisi kentien vielä päivittää kaikkien linkkien tila*/
     } else {
       console.log('Linkki on jo käyttäjän suosikeissa!')
@@ -68,7 +61,6 @@ class YTSearchResult extends React.Component {
 
   render() {
     console.log('Rendering YTSearchResult')
-    console.log('loggedUser: ' + this.props.loggedUser)
     /*Toi react-youtube on ihan uskomaton lifesaver*/
     /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
     if (this.state.playVideo) {
@@ -110,13 +102,14 @@ class YTSearchResult extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    users: state.users
+    favourites: state.userLinks.favourites
   }
 }
 
 const mapDispatchToProps = {
   addFavouriteForUser,
-  usersFavourites
+  /*usersFavourites*/
+  userLinks
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

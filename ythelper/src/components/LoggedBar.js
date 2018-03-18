@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { removeLoggedUser } from '../reducers/loggedUserReducer'
-import { removeFavourites } from '../reducers/favouriteLinksReducer'
-import { removePlaylists } from '../reducers/playlistsReducer'
+/*import { removeFavourites } from '../reducers/favouriteLinksReducer'
+import { removePlaylists } from '../reducers/playlistsReducer'*/
+import { removeUserLinks } from '../reducers/userLinksReducer'
 
 class LoggedBar extends React.Component {
 
@@ -10,8 +11,9 @@ class LoggedBar extends React.Component {
     console.log('logOut LoggedBar')
     event.preventDefault()
     this.props.removeLoggedUser()
-    this.props.removeFavourites()
-    this.props.removePlaylists()
+    /*this.props.removeFavourites()
+    this.props.removePlaylists()*/
+    this.props.removeUserLinks()
     /*this.props.history.push('/')*/
   }
 
@@ -36,8 +38,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   removeLoggedUser,
-  removeFavourites,
-  removePlaylists
+  /*removeFavourites,
+  removePlaylists*/
+  removeUserLinks
 }
 
 const ConnectedLoggedBar = connect(mapStateToProps, mapDispatchToProps)(LoggedBar)

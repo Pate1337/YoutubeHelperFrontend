@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addPlaylistForUser } from '../reducers/userReducer'
-import { usersPlaylists } from '../reducers/playlistsReducer'
+/*import { usersPlaylists } from '../reducers/playlistsReducer'*/
+import { userLinks } from '../reducers/userLinksReducer'
 
 class PlaylistForm extends React.Component {
   constructor() {
@@ -24,8 +25,21 @@ class PlaylistForm extends React.Component {
       /*Samaan tapaan kuin suosikkien lisääminen.*/
       /*Ja tänne kanssa state.playlistin läpikäynti. Ei päästetä eteenpäin
       jos samanniminen soittolista on jo!!!!*/
-      await this.props.addPlaylistForUser(playlistObject, this.props.loggedUser.id)
-      await this.props.usersPlaylists()
+      const alreadyExists = this.props.playlists
+        .filter(p => p.title === this.state.title)
+      if (alreadyExists.length === 0) {
+        await this.props.addPlaylistForUser(playlistObject, this.props.loggedUser.id)
+        /*await this.props.usersPlaylists()*/
+        await this.props.userLinks()
+        this.setState({
+          title: ''
+        })
+      } else {
+        console.log('Samanniminen soittolista on jo olemassa!')
+        this.setState({
+          title: ''
+        })
+      }
     } else {
       console.log('Soittolistalla pitää olla nimi!')
     }
@@ -44,6 +58,9 @@ class PlaylistForm extends React.Component {
             value={this.state.title}
             onChange={this.handleFieldChange}
           />
+          <button type='submit'>
+            Add new playlist
+          </button>
         </form>
       </div>
     )
@@ -52,13 +69,15 @@ class PlaylistForm extends React.Component {
 
 const mapDispatchToProps = {
   addPlaylistForUser,
-  usersPlaylists
+  /*usersPlaylists*/
+  userLinks
 }
 
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    playlists: state.playlists
+    /*playlists: state.playlists*/
+    playlists: state.userLinks.playlists
   }
 }
 

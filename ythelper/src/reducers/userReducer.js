@@ -25,16 +25,16 @@ const userReducer = (store = [], action) => {
       return [...old, {...modified[0], links: [...modified[0].links, action.data]}]
     case 'ADD_PLAYLIST_FOR_USER':
       console.log('ADD_PLAYLIST_FOR_USER userReducer')
-      let old = []
-      let modified = []
+      let vanhat = []
+      let muokatut = []
       store.forEach(u => {
         if (u.id === action.userId) {
-          modified.push(u)
+          muokatut.push(u)
         } else {
-          old.push(u)
+          vanhat.push(u)
         }
       })
-      return [...old, {...modified[0], playlists: [...modified[0].playlists, action.data]}]
+      return [...vanhat, {...muokatut[0], playlists: [...muokatut[0].playlists, action.data]}]
     default:
       console.log('default in userReducer')
       return store
