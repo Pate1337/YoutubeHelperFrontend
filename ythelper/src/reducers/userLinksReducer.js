@@ -1,6 +1,7 @@
 import userService from '../services/users'
+import linkService from '../services/links'
 
-/*Tän tehtävä on vaan palauttaa suosikit aina kun kutsutaan.
+/*Tän tehtävä on vaan palauttaa suosikit ja playlistit aina kun kutsutaan.
 Mitään ei tarvi täällä lisätä, koska hakee kaiken tietokannasta.*/
 const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => {
   switch(action.type) {
@@ -10,6 +11,22 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
     case 'REMOVE':
       console.log('REMOVE userLinksReducer')
       return { favourites: [], playlists: [] }
+    case 'ADD_LINK_TO_PLAYLIST':
+      console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
+      /*Etsitään muokattu playlisti playlistId:n perusteella.*/
+      let oldPlaylists = []
+      let modifiedPlaylist = []
+      store.playlists.forEach(p => {
+        if (p._id === action.playlistId) {
+          modifiedPlaylist.push(p)
+        } else {
+          oldPlaylists.push(p)
+        }
+      })
+      return {
+        favourites: store.favourites,
+        playlists: [...oldPlaylists, {...modifiedPlaylist[0], links: [...modifiedPlaylist[0].links, action.data]}]
+      }
     default:
       return store
   }
@@ -41,6 +58,22 @@ export const removeUserLinks = () => {
     dispatch({
       type: 'REMOVE'
     })
+  }
+}
+
+export const addLinkToPlaylist = (linkObject, playlistId) => {
+  console.log('addLinkToPlaylist userLinksReducer')
+  return async (dispatch) => {
+    try {
+      const link = await linkService.addLinkToPlaylist(linkObject, playlistId)
+      dispatch({
+        type: 'ADD_LINK_TO_PLAYLIST',
+        data: link,
+        playlistId: playlistId
+      })
+    } catch (exception) {
+      return 'error'
+    }
   }
 }
 

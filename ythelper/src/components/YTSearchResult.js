@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { addFavouriteForUser } from '../reducers/userReducer'
 /*import { usersFavourites } from '../reducers/favouriteLinksReducer'*/
 import { userLinks } from '../reducers/userLinksReducer'
+import { addLinkToPlaylist } from '../reducers/userLinksReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -70,10 +71,24 @@ class YTSearchResult extends React.Component {
     console.log('addToPlaylist YTSearchResult')
     event.preventDefault()
     console.log('event.target.id: ' + event.target.id)
-    /*Tarkistetaan, onko linkki jo soittolistalla*/
-    const playlist = this.props.playlists
-      .find(p => p._id === event.target.id)
-    console.log('playlist.title: ' + playlist.title)
+
+    /*Nyt pitäis hakea playlistin linkit sit palvelimelta..
+    Ehkä fiksumpaa lähettää palvelimelle ja katsoa tuleeko sieltä error.
+    Jos tulee, niin linkki on kyseisellä soittolistalla.*/
+    const url = 'https://www.youtube.com/watch?v=' + this.props.item.id
+
+    /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
+    const linkObject = {
+      title: this.props.item.title,
+      url: url,
+      linkId: this.props.item.id
+    }
+    const response = await this.props.addLinkToPlaylist(linkObject, event.target.id)
+    if (response !== 'error') {
+      console.log('Linkki lisätty soittolistaan!')
+    } else {
+      console.log('Linkkiä ei lisätty soittolistaan')
+    }
     this.setState({
       showPlaylists: false
     })
@@ -142,7 +157,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   addFavouriteForUser,
   /*usersFavourites*/
-  userLinks
+  userLinks,
+  addLinkToPlaylist
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)
