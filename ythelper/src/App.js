@@ -13,6 +13,7 @@ import { usersPlaylists } from './reducers/playlistsReducer'*/
 import { userLinks } from './reducers/userLinksReducer'
 import RegisterForm from './components/RegisterForm'
 import PlaylistForm from './components/PlaylistForm'
+import Playlists from './components/Playlists'
 
 class App extends React.Component {
 
@@ -77,6 +78,7 @@ class App extends React.Component {
             )}
           </ul>
           <FavouriteLinks />
+          <Playlists />
           <PlaylistForm />
           <YTSearchBar />
           <YTSearchResults />

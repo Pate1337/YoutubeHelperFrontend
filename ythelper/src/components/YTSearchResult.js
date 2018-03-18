@@ -9,7 +9,8 @@ class YTSearchResult extends React.Component {
   constructor() {
     super()
     this.state = {
-      playVideo: false
+      playVideo: false,
+      showPlaylists: false
     }
   }
   /*Ehkä myöhemmin laitetaan searchResult stateen tieto siitä onko video
@@ -58,13 +59,36 @@ class YTSearchResult extends React.Component {
     }
   }
 
+  togglePlaylists = () => {
+    console.log('togglePlaylists YTSearchResult')
+    this.setState({
+      showPlaylists: !this.state.showPlaylists
+    })
+  }
+
+  addToPlaylist = async (event) => {
+    console.log('addToPlaylist YTSearchResult')
+    event.preventDefault()
+    console.log('event.target.id: ' + event.target.id)
+    /*Tarkistetaan, onko linkki jo soittolistalla*/
+    const playlist = this.props.playlists
+      .find(p => p._id === event.target.id)
+    console.log('playlist.title: ' + playlist.title)
+    this.setState({
+      showPlaylists: false
+    })
+  }
+
 
   render() {
     console.log('Rendering YTSearchResult')
     /*Toi react-youtube on ihan uskomaton lifesaver*/
     /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
     if (this.state.playVideo) {
-      const showFavouriteButton = { display: (this.props.loggedUser !== null) ? '' : 'none' }
+      const showButtons = { display: (this.props.loggedUser !== null) ? '' : 'none' }
+      const showPlaylists = { display: (this.state.showPlaylists === true) ? '' : 'none' }
+      console.log('this.state.showPlaylists: ' + this.state.showPlaylists)
+      console.log('this.props.playlists.length: ' + this.props.playlists.length)
       const opts = {
         height: '315',
         width: '560',
@@ -84,9 +108,17 @@ class YTSearchResult extends React.Component {
           <button onClick={this.toggleVisibility}>
             Hide
           </button>
-          <button onClick={this.addToFavourites} style={showFavouriteButton}>
+          <button onClick={this.addToFavourites} style={showButtons}>
             Add to Favourites
           </button>
+          <button onClick={this.togglePlaylists} style={showButtons}>
+            Add to Playlist
+          </button>
+          {this.props.playlists.map(p =>
+            <button key={p._id} id={p._id} onClick={this.addToPlaylist} style={showPlaylists}>
+              Add to {p.title}
+            </button>
+          )}
         </div>
       )
     } else {
@@ -102,7 +134,8 @@ class YTSearchResult extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    favourites: state.userLinks.favourites
+    favourites: state.userLinks.favourites,
+    playlists: state.userLinks.playlists
   }
 }
 
