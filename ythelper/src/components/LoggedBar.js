@@ -4,6 +4,7 @@ import { removeLoggedUser } from '../reducers/loggedUserReducer'
 /*import { removeFavourites } from '../reducers/favouriteLinksReducer'
 import { removePlaylists } from '../reducers/playlistsReducer'*/
 import { removeUserLinks } from '../reducers/userLinksReducer'
+import { clearSearchResults } from '../reducers/ytReducer'
 
 class LoggedBar extends React.Component {
 
@@ -14,6 +15,7 @@ class LoggedBar extends React.Component {
     /*this.props.removeFavourites()
     this.props.removePlaylists()*/
     this.props.removeUserLinks()
+    this.props.clearSearchResults()
     /*this.props.history.push('/')*/
   }
 
@@ -40,7 +42,8 @@ const mapDispatchToProps = {
   removeLoggedUser,
   /*removeFavourites,
   removePlaylists*/
-  removeUserLinks
+  removeUserLinks,
+  clearSearchResults
 }
 
 const ConnectedLoggedBar = connect(mapStateToProps, mapDispatchToProps)(LoggedBar)

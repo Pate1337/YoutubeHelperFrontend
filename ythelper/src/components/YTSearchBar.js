@@ -23,15 +23,15 @@ class YTSearchBar extends React.Component {
       text: this.state.text
     }
     this.props.searchForVideo(searchObject)
-    this.setState({
-      text: ''
-    })
   }
 
   clearResults = (event) => {
     console.log('clearResults YTSearchBar')
     event.preventDefault()
     this.props.clearSearchResults()
+    this.setState({
+      text: ''
+    })
 
   }
 

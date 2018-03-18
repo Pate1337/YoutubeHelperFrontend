@@ -37,7 +37,8 @@ export const searchForVideo = (searchObject) => {
     const formattedItems = items.map(i => formatItem(i))
 
     /*Tallennetaan localStorageen, jotta hakutulokset säilyvät kun
-    sivu refreshataan*/
+    sivu refreshataan. Koska näitä ei siis tallenneta missään vaiheessa
+    tietokantaan. (siksi localStorage)*/
     window.localStorage.setItem('ytSearchResults', JSON.stringify(formattedItems))
 
     dispatch({
