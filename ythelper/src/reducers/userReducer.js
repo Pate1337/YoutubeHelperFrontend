@@ -1,5 +1,4 @@
 import userService from '../services/users'
-import linkService from '../services/links'
 /*Eli täällä on nyt mun mielestä semmonen tilanne, että initialisoinnin
 jälkeen, täällä on kaikki käyttäjät siinä muodossa, että tiedot näkyy
 mutta linkkien ja playlistien kohdalla näkyy vaan id:t. Eli ei
@@ -16,31 +15,6 @@ const userReducer = (store = [], action) => {
     case 'NEW_USER':
       console.log('Uuden käyttäjän lisäys userReducer')
       return [...store, action.data]
-    /*case 'ADD_LINK_FOR_USER':
-      console.log('ADD_LINK_FOR_USER userReducer')
-      let old = []
-      let modified = []
-      store.forEach(u => {
-        if (u.id === action.userId) {
-          modified.push(u)
-        } else {
-          old.push(u)
-        }
-      })*/
-      /*Nyt siis pelkästään käyttäjän favouritelinkkien tila on päivitetty*/
-      /*return [...old, {...modified[0], links: [...modified[0].links, action.data]}]*/
-    /*case 'ADD_PLAYLIST_FOR_USER':
-      console.log('ADD_PLAYLIST_FOR_USER userReducer')
-      let vanhat = []
-      let muokatut = []
-      store.forEach(u => {
-        if (u.id === action.userId) {
-          muokatut.push(u)
-        } else {
-          vanhat.push(u)
-        }
-      })
-      return [...vanhat, {...muokatut[0], playlists: [...muokatut[0].playlists, action.data]}]*/
     default:
       console.log('default in userReducer')
       return store

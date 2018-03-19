@@ -32,14 +32,13 @@ class Playlist extends React.Component {
   }
   render() {
     console.log('Rendering Playlist')
-    const showPlayer = { display: (this.state.showPlayer === true) ? '' : 'none' }
-    /*if (this.props.playlist.links.length === 0) {
+    if (this.props.playlist.links.length === 0) {
       return (
         <div>
           <h3>{this.props.item.title}, links: {this.props.playlist.links.length}</h3>
         </div>
       )
-    } else {*/
+    } else {
       const opts = {
         height: '315',
         width: '560',
@@ -48,20 +47,12 @@ class Playlist extends React.Component {
           rel: 0
         }
       }
-      return (
-        <div>
-          <h3>{this.props.item.title}, links: {this.props.playlist.links.length}</h3>
-          <Youtube
-            videoId={this.props.playlist.links[this.state.index].linkId}
-            opts={opts}
-            onEnd={this.playNext}
-          />
-        </div>
-      )
-      /*if (this.state.showPlayer) {
+      if (this.state.showPlayer) {
         return (
           <div>
-            <h3 onClick={this.toggleVisibility}>{this.props.item.title}, links: {this.props.playlist.links.length}</h3>
+            <h3 onClick={this.toggleVisibility}>{this.props.item.title},
+              links: {this.props.playlist.links.length},
+              (press to hide)</h3>
             <Youtube
               videoId={this.props.playlist.links[this.state.index].linkId}
               opts={opts}
@@ -72,11 +63,13 @@ class Playlist extends React.Component {
       } else {
         return (
           <div>
-            <h3 onClick={this.toggleVisibility}>{this.props.item.title}, links: {this.props.playlist.links.length}</h3>
+            <h3 onClick={this.toggleVisibility}>{this.props.item.title},
+            links: {this.props.playlist.links.length},
+            (press to play)</h3>
           </div>
         )
-      }*/
-    /*}*/
+      }
+    }
   }
 }
 

@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addPlaylistForUser } from '../reducers/userLinksReducer'
-/*import { usersPlaylists } from '../reducers/playlistsReducer'*/
-import { userLinks } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
 
 class PlaylistForm extends React.Component {

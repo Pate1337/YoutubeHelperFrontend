@@ -21,18 +21,21 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
     case 'ADD_LINK_TO_PLAYLIST':
       console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
       /*Etsitään muokattu playlisti playlistId:n perusteella.*/
-      let oldPlaylists = []
-      let modifiedPlaylist = []
+      /*Jotta soittolista toimis kivasti, niin pitäis saada järjestys pysyyn
+      samana*/
+      let playlists = []
       store.playlists.forEach(p => {
         if (p._id === action.playlistId) {
-          modifiedPlaylist.push(p)
+          /*Tätä muokataan*/
+          let newPlaylist = {...p, links: [...p.links, action.data]}
+          playlists.push(newPlaylist)
         } else {
-          oldPlaylists.push(p)
+          playlists.push(p)
         }
       })
       return {
         favourites: store.favourites,
-        playlists: [...oldPlaylists, {...modifiedPlaylist[0], links: [...modifiedPlaylist[0].links, action.data]}]
+        playlists: playlists
       }
       case 'ADD_PLAYLIST':
         console.log('ADD_PLAYLIST userLinksReducer')
