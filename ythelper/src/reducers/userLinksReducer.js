@@ -3,7 +3,7 @@ import linkService from '../services/links'
 
 /*Täällä on nyt ongelmia! Aaaa, tätyy jättää formatoimatta backissa
 playlistin lisäyksessä, suosikin lisäyksessa ja uuden linkin lisäyksessä
-soittolistalle!*/
+soittolistalle! Nyt pitäis kaikki olla kunnossa.*/
 const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => {
   switch(action.type) {
     case 'GET_ALL':
