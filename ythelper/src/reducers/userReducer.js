@@ -1,5 +1,11 @@
 import userService from '../services/users'
 import linkService from '../services/links'
+/*Eli täällä on nyt mun mielestä semmonen tilanne, että initialisoinnin
+jälkeen, täällä on kaikki käyttäjät siinä muodossa, että tiedot näkyy
+mutta linkkien ja playlistien kohdalla näkyy vaan id:t. Eli ei
+populointia. Tälläsenä sen voi pitää. userLinksReducer pitää sitten
+kirjaa kirjautuneen käyttäjän suosikeista ja soittolistoista paljon
+tarkempaa kirjaa, siellä kaikki on populoitu.*/
 
 const userReducer = (store = [], action) => {
   switch(action.type) {
@@ -10,7 +16,7 @@ const userReducer = (store = [], action) => {
     case 'NEW_USER':
       console.log('Uuden käyttäjän lisäys userReducer')
       return [...store, action.data]
-    case 'ADD_LINK_FOR_USER':
+    /*case 'ADD_LINK_FOR_USER':
       console.log('ADD_LINK_FOR_USER userReducer')
       let old = []
       let modified = []
@@ -20,10 +26,10 @@ const userReducer = (store = [], action) => {
         } else {
           old.push(u)
         }
-      })
+      })*/
       /*Nyt siis pelkästään käyttäjän favouritelinkkien tila on päivitetty*/
-      return [...old, {...modified[0], links: [...modified[0].links, action.data]}]
-    case 'ADD_PLAYLIST_FOR_USER':
+      /*return [...old, {...modified[0], links: [...modified[0].links, action.data]}]*/
+    /*case 'ADD_PLAYLIST_FOR_USER':
       console.log('ADD_PLAYLIST_FOR_USER userReducer')
       let vanhat = []
       let muokatut = []
@@ -34,7 +40,7 @@ const userReducer = (store = [], action) => {
           vanhat.push(u)
         }
       })
-      return [...vanhat, {...muokatut[0], playlists: [...muokatut[0].playlists, action.data]}]
+      return [...vanhat, {...muokatut[0], playlists: [...muokatut[0].playlists, action.data]}]*/
     default:
       console.log('default in userReducer')
       return store
@@ -90,45 +96,6 @@ export const addNewUser = (userObject) => {
     } catch (e) {
       return "error"
     }
-  }
-}
-
-/*Tää saattais olla fiksumpaa sijoittaa linkReduceriin*/
-export const addFavouriteForUser = (linkObject, userId) => {
-  console.log('addFavouriteForUser userService')
-  /*YTSearchResultissa on jo tarkistettu ettei käyttäjällä ole jo kyseistä
-  linkkiä suosikeissa.*/
-
-  return async (dispatch) => {
-    const link = await linkService.createAndAddLinkToUserFavourites(linkObject)
-    /*Tämän jälkeen tietokantaan on lisätty käyttäjän links kenttään
-    tämä uusi linkki. Ja linkkitietokantaan on lisätty kyseinen linkki, jos
-    se ei ollut siellä aiemmin.*/
-    dispatch({
-      type: 'ADD_LINK_FOR_USER',
-      data: link,
-      userId: userId
-    })
-  }
-}
-
-export const addPlaylistForUser = (playlistObject, userId) => {
-  console.log('addPlaylistForUser userReducer')
-  /*Tarkistetaan taas jo ennen tänne pääsyä onko samannimnen soittolista
-  jo olemassa!!*/
-  return async (dispatch) => {
-    try {
-      const playlist = await linkService.createPlaylist(playlistObject)
-      dispatch({
-        type: 'ADD_PLAYLIST_FOR_USER',
-        data: playlist,
-        userId: userId
-      })
-    } catch (exception) {
-      /*Joku random error.*/
-      console.log('error')
-    }
-
   }
 }
 

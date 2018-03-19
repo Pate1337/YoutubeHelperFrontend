@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addPlaylistForUser } from '../reducers/userReducer'
+import { addPlaylistForUser } from '../reducers/userLinksReducer'
 /*import { usersPlaylists } from '../reducers/playlistsReducer'*/
 import { userLinks } from '../reducers/userLinksReducer'
 
@@ -25,17 +25,27 @@ class PlaylistForm extends React.Component {
       /*Samaan tapaan kuin suosikkien lisääminen.*/
       /*Ja tänne kanssa state.playlistin läpikäynti. Ei päästetä eteenpäin
       jos samanniminen soittolista on jo!!!!*/
-      const alreadyExists = this.props.playlists
+      /*const alreadyExists = this.props.playlists
         .filter(p => p.title === this.state.title)
       if (alreadyExists.length === 0) {
-        await this.props.addPlaylistForUser(playlistObject, this.props.loggedUser.id)
-        /*await this.props.usersPlaylists()*/
-        await this.props.userLinks()
+        await this.props.addPlaylistForUser(playlistObject)
         this.setState({
           title: ''
         })
       } else {
         console.log('Samanniminen soittolista on jo olemassa!')
+        this.setState({
+          title: ''
+        })
+      }*/
+      const response = await this.props.addPlaylistForUser(playlistObject)
+      if (response !== 'error') {
+        console.log('soittolista lisätty!')
+        this.setState({
+          title: ''
+        })
+      } else {
+        console.log('Soittolistaa ei lisätty!')
         this.setState({
           title: ''
         })

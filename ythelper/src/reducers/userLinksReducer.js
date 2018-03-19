@@ -11,6 +11,12 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
     case 'REMOVE':
       console.log('REMOVE userLinksReducer')
       return { favourites: [], playlists: [] }
+    case 'ADD_FAVOURITE':
+      console.log('ADD_FAVOURITE userLinksReducer')
+      return {
+        favourites: [...store.favourites, action.data],
+        playlists: store.playlists
+      }
     case 'ADD_LINK_TO_PLAYLIST':
       console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
       /*Etsitään muokattu playlisti playlistId:n perusteella.*/
@@ -27,6 +33,12 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
         favourites: store.favourites,
         playlists: [...oldPlaylists, {...modifiedPlaylist[0], links: [...modifiedPlaylist[0].links, action.data]}]
       }
+      case 'ADD_PLAYLIST':
+        console.log('ADD_PLAYLIST userLinksReducer')
+        return {
+          favourites: store.favourites,
+          playlists: [...store.playlists, action.data]
+        }
     default:
       return store
   }
@@ -74,6 +86,42 @@ export const addLinkToPlaylist = (linkObject, playlistId) => {
     } catch (exception) {
       return 'error'
     }
+  }
+}
+
+export const addFavouriteForUser = (linkObject) => {
+  console.log('addFavouriteForUser userLinksReducer')
+  /*YTSearchResultissa on jo tarkistettu ettei käyttäjällä ole jo kyseistä
+  linkkiä suosikeissa.*/
+
+  return async (dispatch) => {
+    try {
+      const link = await linkService.createAndAddLinkToUserFavourites(linkObject)
+      dispatch({
+        type: 'ADD_FAVOURITE',
+        data: link
+      })
+    } catch (exception) {
+      return 'error'
+    }
+  }
+}
+
+export const addPlaylistForUser = (playlistObject) => {
+  console.log('addPlaylistForUser userLinksReducer')
+  /*Backendi tuskin vielä kunnossa*/
+  return async (dispatch) => {
+    try {
+      const playlist = await linkService.createPlaylist(playlistObject)
+      dispatch({
+        type: 'ADD_PLAYLIST',
+        data: playlist
+      })
+    } catch (exception) {
+      /*Kaikki samaantapaan kuin linkin lisäämienn playlistiin*/
+      return 'error'
+    }
+
   }
 }
 

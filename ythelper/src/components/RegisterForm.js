@@ -81,4 +81,3 @@ const mapDispatchToProps = {
 const ConnectedRegisterForm = connect(null, mapDispatchToProps)(RegisterForm)
 
 export default ConnectedRegisterForm
-

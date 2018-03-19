@@ -1,9 +1,8 @@
 import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
-import { addFavouriteForUser } from '../reducers/userReducer'
+import { addFavouriteForUser } from '../reducers/userLinksReducer'
 /*import { usersFavourites } from '../reducers/favouriteLinksReducer'*/
-import { userLinks } from '../reducers/userLinksReducer'
 import { addLinkToPlaylist } from '../reducers/userLinksReducer'
 
 class YTSearchResult extends React.Component {
@@ -32,32 +31,33 @@ class YTSearchResult extends React.Component {
   }
 
   addToFavourites = async (event) => {
+    /*Backend kunnossa*/
     console.log('addToFavourites YTSearchResult')
     event.preventDefault()
-    console.log('loggedUser.id: ' + this.props.loggedUser.id)
-    /*loggedUserilla ei ole kenttää links, ei tule loginservicelta.*/
 
     /*Tarkistetaan, onko linkki jo käyttäjän linkeissä.*/
     const linkExists = this.props.favourites
       .filter(f => f.linkId === this.props.item.id)
-    if (linkExists.length === 0) {
-      const url = 'https://www.youtube.com/watch?v=' + this.props.item.id
+    /*if (linkExists.length === 0) {*/
 
       /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
       const linkObject = {
         title: this.props.item.title,
-        url: url,
+        thumbnail: this.props.item.thumbnail,
         linkId: this.props.item.id
       }
-      /*Tämä kutsuu siis userServicen metodia, joka postaa backendiin.
-      Siellä linkki lisätään linkkitietokantaan sekä käyttäjän kenttään links*/
-      await this.props.addFavouriteForUser(linkObject, this.props.loggedUser.id)
-      /*await this.props.usersFavourites()*/
-      await this.props.userLinks()
+
+      const response = await this.props.addFavouriteForUser(linkObject)
+      if (response !== 'error') {
+        console.log('lisätty')
+      } else {
+        console.log('Ei lisätty')
+      }
+
       /*Tässä pitäisi kentien vielä päivittää kaikkien linkkien tila*/
-    } else {
+  /*  } else {
       console.log('Linkki on jo käyttäjän suosikeissa!')
-    }
+    }*/
   }
 
   togglePlaylists = () => {
@@ -68,19 +68,13 @@ class YTSearchResult extends React.Component {
   }
 
   addToPlaylist = async (event) => {
+    /*Backend on kunnossa*/
     console.log('addToPlaylist YTSearchResult')
     event.preventDefault()
-    console.log('event.target.id: ' + event.target.id)
 
-    /*Nyt pitäis hakea playlistin linkit sit palvelimelta..
-    Ehkä fiksumpaa lähettää palvelimelle ja katsoa tuleeko sieltä error.
-    Jos tulee, niin linkki on kyseisellä soittolistalla.*/
-    const url = 'https://www.youtube.com/watch?v=' + this.props.item.id
-
-    /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
     const linkObject = {
       title: this.props.item.title,
-      url: url,
+      thumbnail: this.props.item.thumbnail,
       linkId: this.props.item.id
     }
     const response = await this.props.addLinkToPlaylist(linkObject, event.target.id)
@@ -157,7 +151,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   addFavouriteForUser,
   /*usersFavourites*/
-  userLinks,
   addLinkToPlaylist
 }
 
