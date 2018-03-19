@@ -36,7 +36,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
       }
       case 'ADD_PLAYLIST':
         console.log('ADD_PLAYLIST userLinksReducer')
-        console.log('action.data: ' + action.data.id + action.data.title)
+        console.log('action.data: ' + action.data._id + action.data.title)
         return {
           favourites: store.favourites,
           playlists: [...store.playlists, action.data]

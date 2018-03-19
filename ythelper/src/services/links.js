@@ -39,7 +39,7 @@ const createPlaylist = async (newObject) => {
     headers: { 'Authorization': token}
   }
   const response = await axios.post('/api/playlists', newObject, config)
-  console.log('backista tullu playlist; ' + response.data.id + response.data.title)
+  console.log('backista tullu playlist; ' + response.data._id + response.data.title)
   return response.data
 }
 
