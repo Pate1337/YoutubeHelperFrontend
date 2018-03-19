@@ -10,7 +10,7 @@ class FavouriteLink extends React.Component {
     console.log('Rendering FavouriteLink')
     return (
       <div>
-        <p>{this.props.item.title}</p>
+        {this.props.item.title}
       </div>
     )
   }

@@ -1,8 +1,9 @@
 import userService from '../services/users'
 import linkService from '../services/links'
 
-/*Tän tehtävä on vaan palauttaa suosikit ja playlistit aina kun kutsutaan.
-Mitään ei tarvi täällä lisätä, koska hakee kaiken tietokannasta.*/
+/*Täällä on nyt ongelmia! Aaaa, tätyy jättää formatoimatta backissa
+playlistin lisäyksessä, suosikin lisäyksessa ja uuden linkin lisäyksessä
+soittolistalle!*/
 const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => {
   switch(action.type) {
     case 'GET_ALL':
@@ -35,6 +36,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
       }
       case 'ADD_PLAYLIST':
         console.log('ADD_PLAYLIST userLinksReducer')
+        console.log('action.data: ' + action.data.id + action.data.title)
         return {
           favourites: store.favourites,
           playlists: [...store.playlists, action.data]

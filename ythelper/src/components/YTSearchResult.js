@@ -80,12 +80,15 @@ class YTSearchResult extends React.Component {
     const response = await this.props.addLinkToPlaylist(linkObject, event.target.id)
     if (response !== 'error') {
       console.log('Linkki lisätty soittolistaan!')
+      this.setState({
+        showPlaylists: false
+      })
     } else {
       console.log('Linkkiä ei lisätty soittolistaan')
+      this.setState({
+        showPlaylists: false
+      })
     }
-    this.setState({
-      showPlaylists: false
-    })
   }
 
 
