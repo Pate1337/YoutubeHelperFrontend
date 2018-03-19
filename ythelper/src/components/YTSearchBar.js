@@ -18,11 +18,13 @@ class YTSearchBar extends React.Component {
   handleSubmit = (event) => {
     console.log('handleSubmit YTSearchBar')
     event.preventDefault()
-    /*Kun tulevaisuudessa useampi kenttä, esim. järjestys, hakutulosten määrä..*/
-    const searchObject = {
-      text: this.state.text
+    if (this.state.text !== '') {
+      /*Kun tulevaisuudessa useampi kenttä, esim. järjestys, hakutulosten määrä..*/
+      const searchObject = {
+        text: this.state.text
+      }
+      this.props.searchForVideo(searchObject)
     }
-    this.props.searchForVideo(searchObject)
   }
 
   clearResults = (event) => {

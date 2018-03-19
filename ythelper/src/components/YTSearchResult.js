@@ -2,7 +2,7 @@ import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
 import { addFavouriteForUser } from '../reducers/userLinksReducer'
-/*import { usersFavourites } from '../reducers/favouriteLinksReducer'*/
+import { usersInitialization } from '../reducers/userReducer'
 import { addLinkToPlaylist } from '../reducers/userLinksReducer'
 
 class YTSearchResult extends React.Component {
@@ -50,6 +50,7 @@ class YTSearchResult extends React.Component {
       const response = await this.props.addFavouriteForUser(linkObject)
       if (response !== 'error') {
         console.log('lisätty')
+        await this.props.usersInitialization()
       } else {
         console.log('Ei lisätty')
       }
@@ -153,8 +154,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   addFavouriteForUser,
-  /*usersFavourites*/
-  addLinkToPlaylist
+  addLinkToPlaylist,
+  usersInitialization
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

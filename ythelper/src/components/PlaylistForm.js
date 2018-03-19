@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { addPlaylistForUser } from '../reducers/userLinksReducer'
 /*import { usersPlaylists } from '../reducers/playlistsReducer'*/
 import { userLinks } from '../reducers/userLinksReducer'
+import { usersInitialization } from '../reducers/userReducer'
 
 class PlaylistForm extends React.Component {
   constructor() {
@@ -44,6 +45,9 @@ class PlaylistForm extends React.Component {
         this.setState({
           title: ''
         })
+        /*Onpahan ainakin kaikki tiedot ajantasalla, mukaanlukien muiden
+        käyttäjien reaaliaikaset lisäykset. Luulis vaa olevan aika hidasta.*/
+        await this.props.usersInitialization()
       } else {
         console.log('Soittolistaa ei lisätty!')
         this.setState({
@@ -79,14 +83,12 @@ class PlaylistForm extends React.Component {
 
 const mapDispatchToProps = {
   addPlaylistForUser,
-  /*usersPlaylists*/
-  userLinks
+  usersInitialization
 }
 
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    /*playlists: state.playlists*/
     playlists: state.userLinks.playlists
   }
 }

@@ -91,7 +91,9 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return {
     users: state.users,
-    loggedUser: state.loggedUser
+    loggedUser: state.loggedUser,
+    favourites: state.userLinks.favourites,
+    playlists: state.userLinks.playlists
   }
 }
 
