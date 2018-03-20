@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { addFavouriteForUser } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
 import { addLinkToPlaylist } from '../reducers/userLinksReducer'
+import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -81,6 +82,8 @@ class YTSearchResult extends React.Component {
     const response = await this.props.addLinkToPlaylist(linkObject, event.target.id)
     if (response !== 'error') {
       console.log('Linkki lisätty soittolistaan!')
+      /*Pitää lisätä myös playingPlaylistille*/
+      await this.props.addToPlayingPlaylist(linkObject)
       this.setState({
         showPlaylists: false
       })
@@ -155,7 +158,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   addFavouriteForUser,
   addLinkToPlaylist,
-  usersInitialization
+  usersInitialization,
+  addToPlayingPlaylist
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

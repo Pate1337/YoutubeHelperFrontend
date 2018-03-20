@@ -14,6 +14,7 @@ import { userLinks } from './reducers/userLinksReducer'
 import RegisterForm from './components/RegisterForm'
 import PlaylistForm from './components/PlaylistForm'
 import Playlists from './components/Playlists'
+import HiddenPlaylist from './components/HiddenPlaylist'
 
 class App extends React.Component {
 
@@ -66,6 +67,7 @@ class App extends React.Component {
       return (
         <div>
           <LoggedBar />
+          <HiddenPlaylist />
           <h1>Käyttäjät</h1>
           <ul>
             {this.props.users.map(u => <li key={u.id}>
