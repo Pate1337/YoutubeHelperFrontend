@@ -17,8 +17,20 @@ class RegisterForm extends React.Component {
   handleRegisterFieldChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
+    }, () => {
+      if (this.state.pwordCheck !== this.state.password) {
+        this.setState({
+          colors: 'red'
+        })
+      }
+      else {
+        this.setState({
+          colors: 'green'
+        })
+      }
     })
   }
+
 
   handleRegistering = async (event) => {
     console.log('handleRegistering RegisterForm')
@@ -28,11 +40,11 @@ class RegisterForm extends React.Component {
       name: this.state.name,
       password: this.state.password
     }
-    if(user.username.length < 5 || user.password.length < 8 || user.name.length < 2) {
+    if (user.username.length < 5 || user.password.length < 8 || user.name.length < 2) {
       console.log('Username must be >4 chars and password >7 and name must be >=2')
-    }  else if (this.state.pwordCheck !== user.password) {
+    } else if (this.state.pwordCheck !== user.password) {
       console.log('Passwords dont match!')
-    }   else {
+    } else {
       const response = await this.props.addNewUser(user)
       this.setState({
         username: '',
@@ -51,32 +63,32 @@ class RegisterForm extends React.Component {
         <form onSubmit={this.handleRegistering}>
           Username:
             <input
-              type='text'
-              name='username'
-              value={this.state.username}
-              onChange={this.handleRegisterFieldChange}
-            />
+            type='text'
+            name='username'
+            value={this.state.username}
+            onChange={this.handleRegisterFieldChange}
+          />
           Name:
             <input
-              type='text'
-              name='name'
-              value={this.state.name}
-              onChange={this.handleRegisterFieldChange}
-            />
+            type='text'
+            name='name'
+            value={this.state.name}
+            onChange={this.handleRegisterFieldChange}
+          />
           Password:
             <input
-              type='password'
-              name='password'
-              value={this.state.password}
-              onChange={this.handleRegisterFieldChange}
-            />
-          <p style={{color: this.state.colors}}>Re-Enter Password:</p>
-            <input
-              type='password'
-              name='pwordCheck'
-              value={this.state.pwordCheck}
-              onChange={this.handleRegisterFieldChange}
-            />
+            type='password'
+            name='password'
+            value={this.state.password}
+            onChange={this.handleRegisterFieldChange}
+          />
+          <p style={{ color: this.state.colors }}>Re-Enter Password:</p>
+          <input
+            type='password'
+            name='pwordCheck'
+            value={this.state.pwordCheck}
+            onChange={this.handleRegisterFieldChange}
+          />
           <button type='submit'>
             Register
           </button>
