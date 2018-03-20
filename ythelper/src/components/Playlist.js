@@ -163,9 +163,8 @@ class Playlist extends React.Component {
 
 
 /*Kutsutaan Reduceria*/
-  playNext = async (event) => {
+  playNext = async () => {
     console.log('playNext')
-    event.preventDefault()
     await this.props.playNext()
   }
 

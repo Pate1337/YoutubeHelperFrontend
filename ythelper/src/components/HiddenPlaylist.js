@@ -33,6 +33,7 @@ class HiddenPlaylist extends React.Component {
     if (this.props.playlist !== null) {
       return (
         <div style={showBar}>
+          Playing {this.props.playlist.title}
           <button onClick={this.shuffle}>
             Random
           </button>
@@ -42,7 +43,6 @@ class HiddenPlaylist extends React.Component {
           <button onClick={this.playNext}>
             Next
           </button>
-          Playing {this.props.playlist.title}
           <button onClick={this.showPlaylist}>
             Show playlist
           </button>
