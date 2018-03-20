@@ -22,7 +22,8 @@ export const searchForVideo = (searchObject) => {
   /*Katsotaan hakuehdot tässä. Turha lähettää pyynnön mukana tyhjiä parameterja
   esim. q=. Tässä vaiheessa kuitenkin pelkkää hakukenttää voidaan muuttaa.*/
   const q = searchObject.text
-  const query = `part=snippet&q=${q}&type=video&maxResults=50`
+  const maxResults = searchObject.maxResults
+  const query = `part=snippet&q=${q}&type=video&maxResults=${maxResults}`
   /*formatItemissä nyt vaan pari hassua kohtaa*/
   const formatItem = (item) => {
     return {

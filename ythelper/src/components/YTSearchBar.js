@@ -7,7 +7,8 @@ class YTSearchBar extends React.Component {
   constructor() {
     super()
     this.state = {
-      text: ''
+      text: '',
+      maxResults: 5
     }
   }
 
@@ -18,10 +19,12 @@ class YTSearchBar extends React.Component {
   handleSubmit = (event) => {
     console.log('handleSubmit YTSearchBar')
     event.preventDefault()
+    console.log('maxresults: ' + this.state.maxResults)
     if (this.state.text !== '') {
       /*Kun tulevaisuudessa useampi kenttä, esim. järjestys, hakutulosten määrä..*/
       const searchObject = {
-        text: this.state.text
+        text: this.state.text,
+        maxResults: this.state.maxResults
       }
       this.props.searchForVideo(searchObject)
     }
@@ -56,6 +59,13 @@ class YTSearchBar extends React.Component {
           <button type='button' onClick={this.clearResults}>
             Clear search results
           </button>
+          Max results:
+          <select name='maxResults' onChange={this.handleSearchFieldChange}>
+            <option value='5'>5</option>
+            <option value='10'>10</option>
+            <option value='25'>25</option>
+            <option value='50'>50</option>
+          </select>
         </form>
       </div>
     )

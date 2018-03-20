@@ -7,7 +7,6 @@ class Playlist extends React.Component {
     super(props)
     this.state = {
       showPlayer: false,
-      links: this.props.item.links,
       index: 0
     }
   }
@@ -35,7 +34,7 @@ class Playlist extends React.Component {
     if (this.props.playlist.links.length === 0) {
       return (
         <div>
-          <h3>{this.props.item.title}, links: {this.props.playlist.links.length}</h3>
+          <h3>{this.props.playlist.title}, links: {this.props.playlist.links.length}</h3>
         </div>
       )
     } else {
@@ -50,7 +49,7 @@ class Playlist extends React.Component {
       if (this.state.showPlayer) {
         return (
           <div>
-            <h3 onClick={this.toggleVisibility}>{this.props.item.title},
+            <h3 onClick={this.toggleVisibility}>{this.props.playlist.title},
               links: {this.props.playlist.links.length},
               (press to hide)</h3>
             <Youtube
@@ -63,7 +62,7 @@ class Playlist extends React.Component {
       } else {
         return (
           <div>
-            <h3 onClick={this.toggleVisibility}>{this.props.item.title},
+            <h3 onClick={this.toggleVisibility}>{this.props.playlist.title},
             links: {this.props.playlist.links.length},
             (press to play)</h3>
           </div>
@@ -76,8 +75,7 @@ class Playlist extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const playlist = state.userLinks.playlists.find(p => p._id === ownProps.item._id)
   return {
-    playlist: playlist,
-    item: ownProps.item
+    playlist: playlist
   }
 }
 
