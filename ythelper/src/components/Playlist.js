@@ -1,19 +1,22 @@
 import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
+import { shufflePlaylist } from '../reducers/userLinksReducer'
 
 class Playlist extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       showPlayer: false,
-      index: 0
+      index: 0,
+      hidden: false
     }
   }
 
   toggleVisibility = () => {
     this.setState({
-      showPlayer: !this.state.showPlayer
+      showPlayer: !this.state.showPlayer,
+      hidden: false
     })
   }
 
@@ -29,6 +32,41 @@ class Playlist extends React.Component {
       })
     }
   }
+
+  shuffle = async (event) => {
+    event.preventDefault()
+    await this.props.shufflePlaylist(this.props.playlist._id)
+  }
+
+  playPrevious = (event) => {
+    event.preventDefault()
+    if (this.state.index === 0) {
+      this.setState({
+        index: this.props.playlist.links.length - 1
+      })
+    } else {
+      this.setState({
+        index: this.state.index - 1
+      })
+    }
+  }
+
+  play = (event) => {
+    event.preventDefault()
+    /*Etsitään linkin indeksi taulukossa this.props.playlist.links*/
+    const index = this.props.playlist.links.findIndex(l => event.target.id === l._id)
+    console.log('index: ' + index)
+    this.setState({
+      index: index
+    })
+  }
+
+  hidePlayer = () => {
+    this.setState({
+      hidden: true
+    })
+  }
+
   render() {
     console.log('Rendering Playlist')
     if (this.props.playlist.links.length === 0) {
@@ -46,6 +84,9 @@ class Playlist extends React.Component {
           rel: 0
         }
       }
+      /*hidden = true vaan jos soittolista on jo kertaalleen avattu ja sen jälkeen
+      piilotettu.*/
+
       if (this.state.showPlayer) {
         return (
           <div>
@@ -57,6 +98,20 @@ class Playlist extends React.Component {
               opts={opts}
               onEnd={this.playNext}
             />
+            <button onClick={this.shuffle}>
+              Play in random order
+            </button>
+            <button onClick={this.playPrevious}>
+              Previous
+            </button>
+            <button onClick={this.playNext}>
+              Next
+            </button>
+            <ol>
+              {this.props.playlist.links.map(l =>
+                <li onClick={this.play} id={l._id} key={l._id}>{l.title}</li>
+              )}
+            </ol>
           </div>
         )
       } else {
@@ -79,6 +134,10 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const ConnectedPlaylist = connect(mapStateToProps)(Playlist)
+const mapDispatchToProps = {
+  shufflePlaylist
+}
+
+const ConnectedPlaylist = connect(mapStateToProps, mapDispatchToProps)(Playlist)
 
 export default ConnectedPlaylist

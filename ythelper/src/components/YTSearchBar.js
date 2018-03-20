@@ -2,13 +2,23 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { searchForVideo } from '../reducers/ytReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
+import { updateSearchBar } from '../reducers/ytSearchBarReducer'
 
 class YTSearchBar extends React.Component {
   constructor() {
     super()
+    const searchBarJSON = window.localStorage.getItem('ytSearchBar')
+    let text = ''
+    let maxResults = 5
+    if (searchBarJSON) {
+      const searchBar = JSON.parse(searchBarJSON)
+      text = searchBar.text
+      maxResults = searchBar.maxResults
+      console.log('text: ' + text + ', maxResults: ' + maxResults)
+    }
     this.state = {
-      text: '',
-      maxResults: 5
+      text: text,
+      maxResults: maxResults
     }
   }
 
@@ -27,6 +37,7 @@ class YTSearchBar extends React.Component {
         maxResults: this.state.maxResults
       }
       this.props.searchForVideo(searchObject)
+      window.localStorage.setItem('ytSearchBar', JSON.stringify(searchObject))
     }
   }
 
@@ -34,6 +45,11 @@ class YTSearchBar extends React.Component {
     console.log('clearResults YTSearchBar')
     event.preventDefault()
     this.props.clearSearchResults()
+    const searchObject = {
+      text: '',
+      maxResults: this.state.maxResults
+    }
+    window.localStorage.setItem('ytSearchBar', JSON.stringify(searchObject))
     this.setState({
       text: ''
     })
@@ -42,7 +58,6 @@ class YTSearchBar extends React.Component {
 
   render() {
     console.log('Renderöidään YTSearchBar')
-
     return (
       <div>
         <h2>Hae Youtubesta</h2>
@@ -61,10 +76,10 @@ class YTSearchBar extends React.Component {
           </button>
           Max results:
           <select name='maxResults' onChange={this.handleSearchFieldChange}>
-            <option value='5'>5</option>
-            <option value='10'>10</option>
-            <option value='25'>25</option>
-            <option value='50'>50</option>
+            <option value='5' selected={(this.state.maxResults.toString() === '5') ? true : false}>5</option>
+            <option value='10' selected={(this.state.maxResults.toString() === '10') ? true : false}>10</option>
+            <option value='25' selected={(this.state.maxResults.toString() === '25') ? true : false}>25</option>
+            <option value='50' selected={(this.state.maxResults.toString() === '50') ? true : false}>50</option>
           </select>
         </form>
       </div>
@@ -72,11 +87,19 @@ class YTSearchBar extends React.Component {
   }
 }
 
-const mapDispatchToProps = {
-  searchForVideo,
-  clearSearchResults
+const mapStateToProps = (state) => {
+  return {
+    text: state.ytSearchBar.text,
+    maxResults: state.ytSearchBar.maxResults
+  }
 }
 
-const ConnectedYTSearchBar = connect(null, mapDispatchToProps)(YTSearchBar)
+const mapDispatchToProps = {
+  searchForVideo,
+  clearSearchResults,
+  updateSearchBar
+}
+
+const ConnectedYTSearchBar = connect(mapStateToProps, mapDispatchToProps)(YTSearchBar)
 
 export default ConnectedYTSearchBar

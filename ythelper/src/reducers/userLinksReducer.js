@@ -44,6 +44,33 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
           favourites: store.favourites,
           playlists: [...store.playlists, action.data]
         }
+      case 'SHUFFLE_PLAYLIST':
+        console.log('SHUFFLE_PLAYLIST userLinksReducer')
+        /*Etsitään soittolista ja muokataan tietyn soittolistan linkkejä*/
+        let plists = []
+        store.playlists.forEach(p => {
+          if (p._id === action.playlistId) {
+            /*Tätä muokataan. Fisher-Yates Shuffling Algorithm.*/
+            let links = p.links
+            let i
+            let j
+            let temp
+            for (i = links.length - 1; i > 0; i--) {
+              j = Math.floor(Math.random() * (i + 1))
+              temp = links[i]
+              links[i] = links[j]
+              links[j] = temp
+            }
+            let newPlaylist = {...p, links: links}
+            plists.push(newPlaylist)
+          } else {
+            plists.push(p)
+          }
+        })
+      return {
+        favourites: store.favourites,
+        playlists: plists
+      }    
     default:
       return store
   }
@@ -126,7 +153,16 @@ export const addPlaylistForUser = (playlistObject) => {
       /*Kaikki samaantapaan kuin linkin lisäämienn playlistiin*/
       return 'error'
     }
+  }
+}
 
+export const shufflePlaylist = (playlistId) => {
+  console.log('shufflePlaylist userLinksReducer')
+  return async (dispatch) => {
+    dispatch({
+      type: 'SHUFFLE_PLAYLIST',
+      playlistId: playlistId
+    })
   }
 }
 

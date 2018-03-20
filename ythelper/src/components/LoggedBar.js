@@ -16,6 +16,7 @@ class LoggedBar extends React.Component {
     this.props.removePlaylists()*/
     this.props.removeUserLinks()
     this.props.clearSearchResults()
+    window.localStorage.removeItem('ytSearchBar')
     /*this.props.history.push('/')*/
   }
 
