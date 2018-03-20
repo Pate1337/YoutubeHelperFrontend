@@ -8,7 +8,8 @@ class RegisterForm extends React.Component {
     this.state = {
       username: '',
       name: '',
-      password: ''
+      password: '',
+      pwordCheck: ''
     }
   }
 
@@ -26,14 +27,17 @@ class RegisterForm extends React.Component {
       name: this.state.name,
       password: this.state.password
     }
-    if(user.username.length < 5 || user.password.length < 8) {
-      console.log('Username must be >4 chars and password >7')
-    } else {
+    if(user.username.length < 5 || user.password.length < 8 || user.name.length < 2) {
+      console.log('Username must be >4 chars and password >7 and name must be >=2')
+    }  else if (this.state.pwordCheck !== user.password) {
+      console.log('Passwords dont match!')
+    }   else {
       const response = await this.props.addNewUser(user)
       this.setState({
         username: '',
         name: '',
-        password: ''
+        password: '',
+        pwordCheck: ''
       })
     }
   }
@@ -63,6 +67,13 @@ class RegisterForm extends React.Component {
               type='password'
               name='password'
               value={this.state.password}
+              onChange={this.handleRegisterFieldChange}
+            />
+          Re-Enter Password:
+            <input
+              type='password'
+              name='pwordCheck'
+              value={this.state.pwordCheck}
               onChange={this.handleRegisterFieldChange}
             />
           <button type='submit'>
