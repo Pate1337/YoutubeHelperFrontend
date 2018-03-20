@@ -9,7 +9,8 @@ class RegisterForm extends React.Component {
       username: '',
       name: '',
       password: '',
-      pwordCheck: ''
+      pwordCheck: '',
+      colors: 'red'
     }
   }
 
@@ -69,7 +70,7 @@ class RegisterForm extends React.Component {
               value={this.state.password}
               onChange={this.handleRegisterFieldChange}
             />
-          Re-Enter Password:
+          <p style={{color: this.state.colors}}>Re-Enter Password:</p>
             <input
               type='password'
               name='pwordCheck'
