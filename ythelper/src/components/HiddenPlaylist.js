@@ -6,6 +6,8 @@ import { shufflePlaylist } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
 import { playRandom } from '../reducers/playlistPlayingReducer'
 import { Player, ControlBar } from 'video-react'
+import ReactPlayer from 'react-player'
+import ReactPlayerControls from 'react-player-controls'
 
 class HiddenPlaylist extends React.Component {
   /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi
@@ -43,6 +45,7 @@ class HiddenPlaylist extends React.Component {
       return (
         <div style={showBar}>
           Playing {this.props.playlist.title}
+          <progress max="1" value="0"></progress>
           <button onClick={this.shuffle}>
             Shuffle playlist
           </button>

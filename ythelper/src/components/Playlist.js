@@ -62,6 +62,12 @@ class Playlist extends React.Component {
     await this.props.playRandom()
   }
 
+  /*useProgressBar = (event) => {
+    if(event.data == YT.PlayerState.PLAYING) {
+
+    }
+  }*/
+
   render() {
     console.log('Rendering Playlist')
     if (this.props.playlist.links.length === 0 ||
