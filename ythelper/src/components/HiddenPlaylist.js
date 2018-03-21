@@ -4,8 +4,11 @@ import { playNext } from '../reducers/playlistPlayingReducer'
 import { playPrevious } from '../reducers/playlistPlayingReducer'
 import { shufflePlaylist } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
+import { ProgressBar, PlayButton } from 'react-player-controls'
 
 class HiddenPlaylist extends React.Component {
+  /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi
+  palkki toimimaan.*/
 
   playPrevious = async (event) => {
     event.preventDefault()
