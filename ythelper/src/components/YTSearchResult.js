@@ -73,17 +73,20 @@ class YTSearchResult extends React.Component {
     /*Backend on kunnossa*/
     console.log('addToPlaylist YTSearchResult')
     event.preventDefault()
-
+    const playlistId = event.target.id
     const linkObject = {
       title: this.props.item.title,
       thumbnail: this.props.item.thumbnail,
       linkId: this.props.item.id
     }
-    const response = await this.props.addLinkToPlaylist(linkObject, event.target.id)
+    const response = await this.props.addLinkToPlaylist(linkObject, playlistId)
     if (response !== 'error') {
       console.log('Linkki lisätty soittolistaan!')
       /*Pitää lisätä myös playingPlaylistille*/
-      await this.props.addToPlayingPlaylist(linkObject)
+      if (this.props.playingPlaylist.playlist !== null &&
+        playlistId === this.props.playingPlaylist.playlist._id) {
+        await this.props.addToPlayingPlaylist(linkObject)
+      }
       this.setState({
         showPlaylists: false
       })
@@ -140,7 +143,11 @@ class YTSearchResult extends React.Component {
     } else {
       return (
         <div>
-          <img onClick={this.toggleVisibility} src={this.props.item.thumbnail} alt={this.props.item.title}/>
+          <img onClick={this.toggleVisibility}
+            src={this.props.item.thumbnail}
+            alt={this.props.item.title}
+            style={{cursor: 'pointer', display: 'inline-block'}}
+          />
           id: {this.props.item.id}, title: {this.props.item.title}
         </div>
       )
@@ -151,7 +158,8 @@ const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
     favourites: state.userLinks.favourites,
-    playlists: state.userLinks.playlists
+    playlists: state.userLinks.playlists,
+    playingPlaylist: state.playingPlaylist
   }
 }
 
