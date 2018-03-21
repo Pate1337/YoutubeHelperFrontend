@@ -5,7 +5,7 @@ import { playPrevious } from '../reducers/playlistPlayingReducer'
 import { shufflePlaylist } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
 import { playRandom } from '../reducers/playlistPlayingReducer'
-import { ProgressBar, PlayButton } from 'react-player-controls'
+import { Player, ControlBar } from 'video-react'
 
 class HiddenPlaylist extends React.Component {
   /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi

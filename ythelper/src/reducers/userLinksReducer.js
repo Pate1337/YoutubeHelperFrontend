@@ -70,7 +70,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
       return {
         favourites: store.favourites,
         playlists: plists
-      }    
+      }
     default:
       return store
   }

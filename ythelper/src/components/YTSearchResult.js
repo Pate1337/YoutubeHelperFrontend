@@ -5,6 +5,7 @@ import { addFavouriteForUser } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
 import { addLinkToPlaylist } from '../reducers/userLinksReducer'
 import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
+import { searchForRelatedVideos } from '../reducers/ytReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -52,6 +53,9 @@ class YTSearchResult extends React.Component {
       if (response !== 'error') {
         console.log('lisätty')
         await this.props.usersInitialization()
+        /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
+        voidaan hakea kyseisen videon related videos.*/
+        /*await this.props.searchForRelatedVideos(linkObject.linkId)*/
       } else {
         console.log('Ei lisätty')
       }
@@ -167,7 +171,8 @@ const mapDispatchToProps = {
   addFavouriteForUser,
   addLinkToPlaylist,
   usersInitialization,
-  addToPlayingPlaylist
+  addToPlayingPlaylist,
+  searchForRelatedVideos
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)
