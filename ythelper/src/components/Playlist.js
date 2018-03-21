@@ -8,6 +8,7 @@ import { playPrevious } from '../reducers/playlistPlayingReducer'
 import { play } from '../reducers/playlistPlayingReducer'
 import { hidePlayer } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
+import { playRandom } from '../reducers/playlistPlayingReducer'
 
 class Playlist extends React.Component {
   /*Laitetaan kaikki statet storeen. Niin arvoja voidaan muuttaa myös
@@ -56,6 +57,11 @@ class Playlist extends React.Component {
     await this.props.showPlayer()
   }
 
+  random = async (event) => {
+    event.preventDefault()
+    await this.props.playRandom()
+  }
+
   render() {
     console.log('Rendering Playlist')
     if (this.props.playlist.links.length === 0 ||
@@ -101,7 +107,10 @@ class Playlist extends React.Component {
                 onEnd={this.playNext}
               />
               <button onClick={this.shuffle}>
-                Random
+                Shuffle playlist
+              </button>
+              <button onClick={this.random}>
+                Play random
               </button>
               <button onClick={this.playPrevious}>
                 Previous
@@ -184,7 +193,8 @@ const mapDispatchToProps = {
   playPrevious,
   play,
   hidePlayer,
-  showPlayer
+  showPlayer,
+  playRandom
 }
 
 const ConnectedPlaylist = connect(mapStateToProps, mapDispatchToProps)(Playlist)

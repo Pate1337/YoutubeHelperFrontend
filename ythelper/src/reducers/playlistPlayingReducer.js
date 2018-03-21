@@ -10,15 +10,23 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
       }
     case 'SHUFFLE_PLAYLIST':
       console.log('SHUFFLE_PLAYLIST playlistPlayingReducer')
+      console.log('state.index: ' + state.index)
       let links = state.playlist.links
       let i
       let j
       let temp
       for (i = links.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1))
-        temp = links[i]
-        links[i] = links[j]
-        links[j] = temp
+        if (i !== state.index) {
+          j = Math.floor(Math.random() * (i + 1))
+          while (j === state.index) {
+            j = Math.floor(Math.random() * (i + 1))
+          }
+          /*Ei siis muuteta links[state.index] paikkaa, eikä laiteta
+          mitään paikalle links[state.index]*/
+          temp = links[i]
+          links[i] = links[j]
+          links[j] = temp
+        }
       }
       let newPlaylist = {...state.playlist, links: links}
       return {
@@ -88,9 +96,32 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         index: state.index,
         playedOnce: true
       }
+    case 'PLAY_RANDOM':
+      console.log('PLAY_RANDOM playlistPlayingReducer')
+      let random = Math.floor(Math.random() * state.playlist.links.length)
+      if (state.playlist.links.length >= 2) {
+        while (random === state.index) {
+          random = Math.floor(Math.random() * state.playlist.links.length)
+        }
+      }
+      return {
+        playlist: state.playlist,
+        hidden: state.hidden,
+        index: random,
+        playedOnce: true
+      }
     default:
       console.log('default playlistPlayingReducer')
       return state
+  }
+}
+
+export const playRandom = () => {
+  console.log('playRandom playlistPlayingReducer')
+  return async (dispatch) => {
+    dispatch({
+      type: 'PLAY_RANDOM'
+    })
   }
 }
 

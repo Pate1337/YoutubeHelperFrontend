@@ -4,6 +4,7 @@ import { playNext } from '../reducers/playlistPlayingReducer'
 import { playPrevious } from '../reducers/playlistPlayingReducer'
 import { shufflePlaylist } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
+import { playRandom } from '../reducers/playlistPlayingReducer'
 import { ProgressBar, PlayButton } from 'react-player-controls'
 
 class HiddenPlaylist extends React.Component {
@@ -31,6 +32,11 @@ class HiddenPlaylist extends React.Component {
     await this.props.showPlayer()
   }
 
+  random = async (event) => {
+    event.preventDefault()
+    await this.props.playRandom()
+  }
+
   render() {
     const showBar = { display: (this.props.hidden === true) ? '' : 'none' }
     if (this.props.playlist !== null) {
@@ -38,7 +44,10 @@ class HiddenPlaylist extends React.Component {
         <div style={showBar}>
           Playing {this.props.playlist.title}
           <button onClick={this.shuffle}>
-            Random
+            Shuffle playlist
+          </button>
+          <button onClick={this.random}>
+            Play random
           </button>
           <button onClick={this.playPrevious}>
             Previous
@@ -70,7 +79,8 @@ const mapDispatchToProps = {
   shufflePlaylist,
   playNext,
   playPrevious,
-  showPlayer
+  showPlayer,
+  playRandom
 }
 
 const ConnectedHiddenPlaylist = connect(mapStateToProps, mapDispatchToProps)(HiddenPlaylist)
