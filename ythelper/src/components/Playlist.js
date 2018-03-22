@@ -10,18 +10,16 @@ import { hidePlayer } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
 import { playRandom } from '../reducers/playlistPlayingReducer'
 import { playing } from '../reducers/playlistPlayingReducer'
+import { setCurrentTime } from '../reducers/playlistPlayingReducer'
 class Playlist extends React.Component {
   /*Laitetaan kaikki statet storeen. Niin arvoja voidaan muuttaa myös
   muissa komponenteissa, esim. Appin ylhäällä olevassa Playlistissä.*/
   constructor() {
     super()
     this.state = {
-      timer: null,
-      counter: 0
+      seekDone: false
     }
   }
-
-
 /*Kutsutaan Reduceria*/
   playNext = async () => {
     console.log('playNext')
@@ -52,6 +50,14 @@ class Playlist extends React.Component {
   hidePlayer = async (event) => {
     event.preventDefault()
     await this.props.hidePlayer()
+    /*Laitetaan palkki soimaan*/
+    const youtube = document.getElementById('youtube')
+    youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    /*Tämä soitin pauselle*/
+    const player = document.getElementById('player')
+    player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    /*Jos täällä saatais currentTime se säästäis 10 renderöintikertaa.*/
+    /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
   }
 
   setPlayingPlaylist = async (event) => {
@@ -60,8 +66,21 @@ class Playlist extends React.Component {
   }
 
   showPlayer = async (event) => {
+    /*Täällä pitää tiesti asettaa paussille palkin soitin.
+    Ja laittaa tämä soitin soimaan.*/
     event.preventDefault()
+    /*Pitää asettaa seekDone falseks. Koska ei sitä ole.*/
+    this.setState({
+      seekDone: false
+    })
     await this.props.showPlayer()
+    /*Tämä soimaan.*/
+    const player = document.getElementById('player')
+    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    /*Palkki pauselle.*/
+    const youtube = document.getElementById('youtube')
+    youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    /*Palkissa pitää asettaa currentTime, johon sit siikataan onPlayssa*/
   }
 
   random = async (event) => {
@@ -70,29 +89,29 @@ class Playlist extends React.Component {
   }
 
   onPlay = async (event) => {
-    console.log('onPlay playeri')
-    let timer = setInterval(this.tick, 200);
-    this.setState({timer})
+    console.log('Playeri soittaa')
+    /*Tähän seekTo*/
+    console.log('Ja currentTime: ' + this.props.currentTime)
+    if (!this.state.seekDone) {
+      console.log('Nyt suoritetaan seekTo')
+      event.target.seekTo(this.props.currentTime)
+      this.setState({
+        seekDone: true
+      })
+    }
   }
-
-  tick = () => {
-    this.setState({
-      counter: this.state.counter + 0.2
-    })
-  }
-
 
   pause = (event) => {
-    console.log('timerin arvo: ' + this.state.counter)
-    console.log('Oikea arvo: ' + event.target.getCurrentTime())
-    clearInterval(this.state.timer)
-  }
-
-  /*useProgressBar = (event) => {
-    if(event.data == YT.PlayerState.PLAYING) {
-
+    /*Jos playerPlaying == false. Normi paussituksen yhteydessä ei tarvi*/
+    if (!this.props.playerPlaying) {
+      const currentTime = event.target.getCurrentTime()
+      console.log('currentTime: ' + currentTime)
+      this.props.setCurrentTime(currentTime)
+      this.setState({
+        seekDone: false
+      })
     }
-  }*/
+  }
 
   render() {
     console.log('Rendering Playlist')
@@ -121,8 +140,8 @@ class Playlist extends React.Component {
       on soittovuorossa oleva soittolista.*/
       if (this.props.playlist._id === this.props.anyPlaylist._id &&
         this.props.playedOnce === true) {
-        const playerShown = { display: (this.props.hidden === false) ? '' : 'none'}
-        const playerNotShown = { display: (this.props.hidden === false) ? 'none' : ''}
+        const playerShown = { display: (this.props.playerPlaying) ? '' : 'none'}
+        const playerNotShown = { display: (this.props.playerPlaying) ? 'none' : ''}
         return (
           <div>
             <div style={playerShown}>
@@ -134,6 +153,7 @@ class Playlist extends React.Component {
                 </div>
               </h3>
               <Youtube
+                id='player'
                 videoId={this.props.playlist.links[this.props.index].linkId}
                 opts={opts}
                 onEnd={this.playNext}
@@ -214,10 +234,10 @@ const mapStateToProps = (state, ownProps) => {
   return {
     playlist: playlist,
     anyPlaylist: ownProps.item,
-    hidden: state.playingPlaylist.hidden,
     index: state.playingPlaylist.index,
     playedOnce: state.playingPlaylist.playedOnce,
-    playerPlaying: state.playingPlaylist.playerPlaying
+    playerPlaying: state.playingPlaylist.playerPlaying,
+    currentTime: state.playingPlaylist.currentTime
   }
 }
 
@@ -229,7 +249,8 @@ const mapDispatchToProps = {
   play,
   hidePlayer,
   showPlayer,
-  playRandom
+  playRandom,
+  setCurrentTime
 }
 
 const ConnectedPlaylist = connect(mapStateToProps, mapDispatchToProps)(Playlist)
