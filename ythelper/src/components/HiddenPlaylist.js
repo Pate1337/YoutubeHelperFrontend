@@ -8,6 +8,7 @@ import { playRandom } from '../reducers/playlistPlayingReducer'
 import { Player, ControlBar } from 'video-react'
 import ReactPlayer from 'react-player'
 import ReactPlayerControls from 'react-player-controls'
+import Youtube from 'react-youtube'
 
 class HiddenPlaylist extends React.Component {
   /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi
@@ -25,7 +26,6 @@ class HiddenPlaylist extends React.Component {
 
   playNext = async (event) => {
     console.log('playNext')
-    event.preventDefault()
     await this.props.playNext()
   }
 
@@ -39,13 +39,50 @@ class HiddenPlaylist extends React.Component {
     await this.props.playRandom()
   }
 
+  ready = (event) => {
+    console.log('ready')
+    event.target.playVideo()
+  }
+
+  onPlay = (event) => {
+    /*Tänne tulee sit metodi seekTo() jolla saadaan reducerin tuoma
+    aika tänne.*/
+    /*event.target.seekTo(10, false)*/
+    if (event.data == Youtube.PlayerState.PLAYING) {
+      console.log('ok tää toimii yolo')
+    }
+  }
+
+  stateChange = (event) => {
+    console.log('Kun toi menee siihen mutoo et sitä ei renderöidä, niin kappas')
+  }
+
   render() {
-    const showBar = { display: (this.props.hidden === true) ? '' : 'none' }
-    if (this.props.playlist !== null) {
+    console.log('Renderin hiddenPlaylist')
+    const showBar = { display: (this.props.hidden === true) ? '' : 'none',
+      backgroundColor: 'black', color: 'white'}
+    const opts = {
+      height: '45',
+      width: '300',
+      playerVars: {
+        autoplay: 1,
+        rel: 0,
+        autohide: 0,
+        showinfo: 0
+      },
+      frameborder: 0
+    }
+    if (this.props.playlist !== null && this.props.playerPlaying === false) {
       return (
         <div style={showBar}>
           Playing {this.props.playlist.title}
-          <progress max="1" value="0"></progress>
+          <Youtube
+            videoId={this.props.playlist.links[this.props.index].linkId}
+            opts={opts}
+            onEnd={this.playNext}
+            onReady={this.ready}
+            onPlay={this.onPlay}
+          />
           <button onClick={this.shuffle}>
             Shuffle playlist
           </button>
@@ -72,9 +109,12 @@ class HiddenPlaylist extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('mapStateToProps hiddenPlaylist: ' + state.playingPlaylist.playerPlaying)
   return {
     playlist: state.playingPlaylist.playlist,
-    hidden: state.playingPlaylist.hidden
+    hidden: state.playingPlaylist.hidden,
+    index: state.playingPlaylist.index,
+    playerPlaying: state.playingPlaylist.playerPlaying
   }
 }
 

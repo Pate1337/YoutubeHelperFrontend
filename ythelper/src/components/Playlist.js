@@ -9,10 +9,17 @@ import { play } from '../reducers/playlistPlayingReducer'
 import { hidePlayer } from '../reducers/playlistPlayingReducer'
 import { showPlayer } from '../reducers/playlistPlayingReducer'
 import { playRandom } from '../reducers/playlistPlayingReducer'
-
+import { playing } from '../reducers/playlistPlayingReducer'
 class Playlist extends React.Component {
   /*Laitetaan kaikki statet storeen. Niin arvoja voidaan muuttaa myös
   muissa komponenteissa, esim. Appin ylhäällä olevassa Playlistissä.*/
+  constructor() {
+    super()
+    this.state = {
+      timer: null,
+      counter: 0
+    }
+  }
 
 
 /*Kutsutaan Reduceria*/
@@ -60,6 +67,25 @@ class Playlist extends React.Component {
   random = async (event) => {
     event.preventDefault()
     await this.props.playRandom()
+  }
+
+  onPlay = async (event) => {
+    console.log('onPlay playeri')
+    let timer = setInterval(this.tick, 200);
+    this.setState({timer})
+  }
+
+  tick = () => {
+    this.setState({
+      counter: this.state.counter + 0.2
+    })
+  }
+
+
+  pause = (event) => {
+    console.log('timerin arvo: ' + this.state.counter)
+    console.log('Oikea arvo: ' + event.target.getCurrentTime())
+    clearInterval(this.state.timer)
   }
 
   /*useProgressBar = (event) => {
@@ -111,6 +137,8 @@ class Playlist extends React.Component {
                 videoId={this.props.playlist.links[this.props.index].linkId}
                 opts={opts}
                 onEnd={this.playNext}
+                onPlay={this.onPlay}
+                onPause={this.pause}
               />
               <button onClick={this.shuffle}>
                 Shuffle playlist
@@ -188,7 +216,8 @@ const mapStateToProps = (state, ownProps) => {
     anyPlaylist: ownProps.item,
     hidden: state.playingPlaylist.hidden,
     index: state.playingPlaylist.index,
-    playedOnce: state.playingPlaylist.playedOnce
+    playedOnce: state.playingPlaylist.playedOnce,
+    playerPlaying: state.playingPlaylist.playerPlaying
   }
 }
 

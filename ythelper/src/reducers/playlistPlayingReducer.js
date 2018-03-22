@@ -1,4 +1,4 @@
-const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 0, playedOnce: false }, action) => {
+const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, hidden: false, index: 0, playedOnce: false }, action) => {
   switch(action.type) {
     case 'INIT_PLAYLIST':
       console.log('INIT_PLAYLIST playlistPlayingReducer')
@@ -6,7 +6,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: action.data,
         hidden: false,
         index: 0,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: true
       }
     case 'SHUFFLE_PLAYLIST':
       console.log('SHUFFLE_PLAYLIST playlistPlayingReducer')
@@ -33,7 +34,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: newPlaylist,
         hidden: state.hidden,
         index: state.index,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: state.playerPlaying
       }
     case 'PLAY_NEXT':
       console.log('PLAY_NEXT playlistPlayingReducer')
@@ -47,7 +49,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: state.playlist,
         hidden: state.hidden,
         index: index,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: state.playerPlaying
       }
     case 'PLAY_PREV':
       console.log('PLAY_PREV playlistPlayingReducer')
@@ -61,7 +64,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: state.playlist,
         hidden: state.hidden,
         index: indx,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: state.playerPlaying
       }
     case 'PLAY':
       console.log('PLAY playlistPlayingReducer')
@@ -69,7 +73,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: state.playlist,
         hidden: state.hidden,
         index: action.index,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: state.playerPlaying
       }
     case 'HIDE_PLAYER':
       console.log('HIDE_PLAYER playlistPlayingReducer')
@@ -77,7 +82,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: state.playlist,
         hidden: true,
         index: state.index,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: false
       }
     case 'SHOW_PLAYER':
       console.log('SHOW_PLAYER playlistPlayingReducer')
@@ -85,7 +91,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: state.playlist,
         hidden: false,
         index: state.index,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: true
       }
     case 'ADD_LINK':
       console.log('ADD_LINK playlistPlayingReducer')
@@ -94,7 +101,8 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: moddedPlaylist,
         hidden: false,
         index: state.index,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: state.playerPlaying
       }
     case 'PLAY_RANDOM':
       console.log('PLAY_RANDOM playlistPlayingReducer')
@@ -108,8 +116,17 @@ const playlistPlayingReducer = (state = { playlist: null, hidden: false, index: 
         playlist: state.playlist,
         hidden: state.hidden,
         index: random,
-        playedOnce: true
+        playedOnce: true,
+        playerPlaying: state.playerPlaying
       }
+    /*case 'PLAYING':
+      return {
+        playlist: state.playlist,
+        hidden: state.hidden,
+        index: state.index,
+        playedOnce: state.playedOnce,
+        playing: true
+      }*/
     default:
       console.log('default playlistPlayingReducer')
       return state
@@ -121,6 +138,14 @@ export const playRandom = () => {
   return async (dispatch) => {
     dispatch({
       type: 'PLAY_RANDOM'
+    })
+  }
+}
+
+export const playing = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'PLAYING'
     })
   }
 }
