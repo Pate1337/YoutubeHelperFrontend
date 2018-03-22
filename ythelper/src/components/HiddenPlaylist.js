@@ -17,7 +17,8 @@ class HiddenPlaylist extends React.Component {
   constructor() {
     super()
     this.state = {
-      seekDone: false
+      seekDone: false,
+      paused: true
     }
   }
 
@@ -44,13 +45,15 @@ class HiddenPlaylist extends React.Component {
     /*Laitetaan playeri soimaan*/
     /*Siinä vaiheessa kun playeri rupee soittaan, niin pitää olla tiedossa
     currentTime !!! Eli toi alempi tonne pauseen!*/
-    const player = document.getElementById('player')
-    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-    console.log('Playeri rupee soittaan')
-    /*Tämä soitin pauselle*/
-    const youtube = document.getElementById('youtube')
-    youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-    console.log('Palkin pitäis olla pausella')
+    if (!this.state.paused) {
+      const player = document.getElementById('player')
+      player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+      console.log('Playeri rupee soittaan')
+      /*Tämä soitin pauselle*/
+      const youtube = document.getElementById('youtube')
+      youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+      console.log('Palkin pitäis olla pausella')
+    }
     /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
   }
 
@@ -67,6 +70,9 @@ class HiddenPlaylist extends React.Component {
       event.target.pauseVideo()
     } else {
       /*Eli kun on palkin vuoro soittaa*/
+      this.setState({
+        paused: false
+      })
       console.log('Palkki rupes soimaan! Ja Playeri meni paussille')
       /*Tähän seekTo*/
       console.log('Ja currentTime: ' + this.props.currentTime)
@@ -84,16 +90,17 @@ class HiddenPlaylist extends React.Component {
 
   pause = (event) => {
     /*Sama täällä. Normi paussituksen yhteydessä ei tarvi muuttaa statee.*/
-    if (this.props.playerPlaying) {
+    /*if (this.props.playerPlaying) {*/
       console.log('ollaan pausessa')
       const currentTime = event.target.getCurrentTime()
       console.log('currentTime: ' + currentTime)
       this.props.setCurrentTime(currentTime)
       /*Tää on nyt null, koska ekal kerral ei oo renderöity*/
       this.setState({
-        seekDone: false
+        seekDone: false,
+        paused: true
       })
-    }
+    /*}*/
   }
 
 

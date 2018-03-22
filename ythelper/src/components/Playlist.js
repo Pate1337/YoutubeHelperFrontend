@@ -17,7 +17,8 @@ class Playlist extends React.Component {
   constructor() {
     super()
     this.state = {
-      seekDone: false
+      seekDone: false,
+      paused: true
     }
   }
 /*Kutsutaan Reduceria*/
@@ -51,11 +52,15 @@ class Playlist extends React.Component {
     event.preventDefault()
     await this.props.hidePlayer()
     /*Laitetaan palkki soimaan*/
-    const youtube = document.getElementById('youtube')
-    youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-    /*Tämä soitin pauselle*/
-    const player = document.getElementById('player')
-    player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    /*Tähän pitää saada tieto, onko paused video. Jos on, nii myös
+    palkin video pitää laittaa pauselle.*/
+    if (!this.state.paused) {
+      const youtube = document.getElementById('youtube')
+      youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+      /*Tämä soitin pauselle*/
+      const player = document.getElementById('player')
+      player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    }
     /*Jos täällä saatais currentTime se säästäis 10 renderöintikertaa.*/
     /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
   }
@@ -90,6 +95,9 @@ class Playlist extends React.Component {
 
   onPlay = async (event) => {
     console.log('Playeri soittaa')
+    this.setState({
+      paused: false
+    })
     /*Tähän seekTo*/
     console.log('Ja currentTime: ' + this.props.currentTime)
     if (!this.state.seekDone) {
@@ -103,14 +111,15 @@ class Playlist extends React.Component {
 
   pause = (event) => {
     /*Jos playerPlaying == false. Normi paussituksen yhteydessä ei tarvi*/
-    if (!this.props.playerPlaying) {
+    /*if (!this.props.playerPlaying) {*/
       const currentTime = event.target.getCurrentTime()
       console.log('currentTime: ' + currentTime)
       this.props.setCurrentTime(currentTime)
       this.setState({
-        seekDone: false
+        seekDone: false,
+        paused: true
       })
-    }
+    /*}*/
   }
 
   render() {
