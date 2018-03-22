@@ -12,6 +12,13 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
     case 'REMOVE':
       console.log('REMOVE userLinksReducer')
       return { favourites: [], playlists: [] }
+    case 'REMOVE_LINK':
+      console.log('REMOVE_LINK userLinksReducer')
+      let favouritesC = store.favourites.filter( link => link._id != action.linkId)
+      return {
+        favourites: favouritesC,
+        playlists: store.playlists
+      }
     case 'ADD_FAVOURITE':
       console.log('ADD_FAVOURITE userLinksReducer')
       return {
@@ -101,6 +108,16 @@ export const removeUserLinks = () => {
   return async (dispatch) => {
     dispatch({
       type: 'REMOVE'
+    })
+  }
+}
+
+export const removeOneFavouriteLink = (linkId) => {
+  console.log('removeOneFavouriteLink userLinksReducer')
+  return async (dispatch) => {
+    dispatch({
+      type: 'REMOVE_LINK',
+      linkId: linkId
     })
   }
 }

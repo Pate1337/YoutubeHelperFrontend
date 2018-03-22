@@ -1,19 +1,39 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { removeOneFavouriteLink } from '../reducers/userLinksReducer'
 
 class FavouriteLink extends React.Component {
+  constructor() {
+    super()
+  }
 
-/*  delete = async (event) => {
-    event.preventDefault()
-
-  }*/
   render() {
     console.log('Rendering FavouriteLink')
     return (
       <div>
-        {this.props.item.title}
+        <p>{this.props.item.title} <button onClick={this.removeOneFavouriteLink}>Remove From Favorites</button></p>
       </div>
     )
   }
+
+  removeOneFavouriteLink = async (event) => {
+    event.preventDefault()
+    console.log('test')
+    await this.props.removeOneFavouriteLink(this.props.item._id)
+  }
+
 }
 
-export default FavouriteLink
+const mapStateToProps = (state, ownProps) => {
+  return {
+    item: ownProps.item
+  }
+}
+
+const mapDispatchToProps = {
+  removeOneFavouriteLink
+}
+
+const ConnectedFavouriteLink = connect(mapStateToProps, mapDispatchToProps)(FavouriteLink)
+
+export default ConnectedFavouriteLink
