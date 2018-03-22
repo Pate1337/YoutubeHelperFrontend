@@ -17,6 +17,7 @@ class FavouriteLinks extends React.Component {
       </div>
     )
   }
+   
 }
 
 const mapStateToProps = (state) => {

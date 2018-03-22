@@ -32,6 +32,18 @@ const createAndAddLinkToUserFavourites = async (newObject) => {
   return response.data
 }
 
+const deleteOneLinkFromUserFavourites = async (linkId) => {
+  console.log('deleteOneLinkFromUserFavourites linkService')
+  const config = {
+    headers: { 'Authorization': token }
+  }
+  const url = baseUrl + '/favourites'
+  console.log('url: ' + url)
+  const response = await axios.delete(url, linkId, config)
+  console.log('Bäkkärin vastaus poistoon: ' + response)
+  return response.data
+}
+
 const createPlaylist = async (newObject) => {
   /*Pelkkä title*/
   console.log('createPlaylist linkService')
