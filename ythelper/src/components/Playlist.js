@@ -55,19 +55,30 @@ class Playlist extends React.Component {
     /*Tähän pitää saada tieto, onko paused video. Jos on, nii myös
     palkin video pitää laittaa pauselle.*/
     if (!this.state.paused) {
-      const youtube = document.getElementById('youtube')
-      youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
       /*Tämä soitin pauselle*/
       const player = document.getElementById('player')
       player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+      const youtube = document.getElementById('youtube')
+      youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
     }
     /*Jos täällä saatais currentTime se säästäis 10 renderöintikertaa.*/
     /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
   }
 
   setPlayingPlaylist = async (event) => {
+    /*Myös täällä pitää laittaa palkki paussille ja tämä soimaan.*/
     event.preventDefault()
     await this.props.initPlayingPlaylist(this.props.anyPlaylist)
+    /*Palkki pauselle.*/
+    const youtube = document.getElementById('youtube')
+    youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    /*Palkissa pitää asettaa currentTime, johon sit siikataan onPlayssa*/
+    /*Tästä tuli vahingossa tosi hyvä. Jos laitetaan toiselta soittolistalta
+    biisi soimaan, joka sattuu olemaan sama kuin palkissa soiva toisen
+    soittolistan biisi, niin siitä huolimatta seekataan samaan kohtaan:DD*/
+    /*const player = document.getElementById('player')
+    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    */
   }
 
   showPlayer = async (event) => {
@@ -79,13 +90,13 @@ class Playlist extends React.Component {
       seekDone: false
     })
     await this.props.showPlayer()
-    /*Tämä soimaan.*/
-    const player = document.getElementById('player')
-    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
     /*Palkki pauselle.*/
     const youtube = document.getElementById('youtube')
     youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
     /*Palkissa pitää asettaa currentTime, johon sit siikataan onPlayssa*/
+    /*Tämä soimaan.*/
+    const player = document.getElementById('player')
+    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
   }
 
   random = async (event) => {

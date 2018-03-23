@@ -46,13 +46,13 @@ class HiddenPlaylist extends React.Component {
     /*Siinä vaiheessa kun playeri rupee soittaan, niin pitää olla tiedossa
     currentTime !!! Eli toi alempi tonne pauseen!*/
     if (!this.state.paused) {
-      const player = document.getElementById('player')
-      player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-      console.log('Playeri rupee soittaan')
       /*Tämä soitin pauselle*/
       const youtube = document.getElementById('youtube')
       youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
       console.log('Palkin pitäis olla pausella')
+      const player = document.getElementById('player')
+      player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+      console.log('Playeri rupee soittaan')
     }
     /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
   }
