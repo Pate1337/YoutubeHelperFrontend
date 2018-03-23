@@ -58,6 +58,9 @@ class Playlist extends React.Component {
       /*Tämä soitin pauselle*/
       const player = document.getElementById('player')
       player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+      /*Lähetetään myös palkille pause kutsu, jolloin siellä voidaan
+      ensin asettaa seekTo ja vasta sitten ruveta soittamaan. Mutta
+      sillon siellä on oltava jo tieto mihin seekataan.*/
       const youtube = document.getElementById('youtube')
       youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
     }

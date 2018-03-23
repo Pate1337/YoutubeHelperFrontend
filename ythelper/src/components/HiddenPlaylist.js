@@ -67,6 +67,7 @@ class HiddenPlaylist extends React.Component {
     console.log('onPlay hiddenplaylist.')
     if (!this.props.playedOnce || this.props.playerPlaying) {
       /*Pause vain jos soitin soittaa (eka kerta kun soitin avataan)*/
+      console.log('pause kutsuttu....')
       event.target.pauseVideo()
     } else {
       /*Eli kun on palkin vuoro soittaa*/
@@ -89,9 +90,17 @@ class HiddenPlaylist extends React.Component {
   }
 
   pause = (event) => {
-    /*Sama täällä. Normi paussituksen yhteydessä ei tarvi muuttaa statee.*/
-    /*if (this.props.playerPlaying) {*/
-      console.log('ollaan pausessa')
+    /*Kutsut muualta aina pauseen*/
+    console.log('pause HiddenPlaylist')
+    console.log('katotaa miltä this.state.paused näyttää kun kutsu muualta: ' + this.state.paused)
+    /*if (event.data === 2) {
+      console.log('event.data == 2')
+      console.log('Kutsutaan seekTo HiddenPlaylist')
+      event.target.seekTo(this.props.currentTime)
+      event.target.playVideo()
+      console.log('playVideo() kutsuttu...')
+    } else {*/
+      console.log('ollaan pausessa HiddenPlaylist')
       const currentTime = event.target.getCurrentTime()
       console.log('currentTime: ' + currentTime)
       this.props.setCurrentTime(currentTime)
@@ -100,7 +109,7 @@ class HiddenPlaylist extends React.Component {
         seekDone: false,
         paused: true
       })
-    /*}*/
+  /*  }*/
   }
 
 
@@ -119,9 +128,7 @@ class HiddenPlaylist extends React.Component {
       },
       frameborder: 0
     }
-    /*Renderöidään tää heti. Kun playerissä ruvetaan soittamaan, tää on mutella.
-    Kun playerissä painetaan pikkupalkki, otetaan tää pois mutelta.
-    Kun tää painetaan pois, laitetaan tää taas */
+    /*Renderöidään tää heti.*/
     /*if (this.props.playlist !== null && this.props.playerPlaying === false) {*/
       return (
         <div id='playlistBar' style={showBar}>
