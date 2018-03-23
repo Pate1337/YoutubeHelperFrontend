@@ -26,11 +26,3 @@ const mapStateToProps = (state) => {
 const ConnectedPlaylists = connect(mapStateToProps)(Playlists)
 
 export default ConnectedPlaylists
-
-/*
-<div onClick={} >
-  title: {playlist.title},
-  id: {playlist._id},
-  links: {playlist.links.length}
-</div>
-*/

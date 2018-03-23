@@ -50,12 +50,8 @@ class HiddenPlaylist extends React.Component {
   onPlay = async (event) => {
     /*Ensimmäisellä renderöinnillä!*/
     if (!this.props.playedOnce || this.props.playerPlaying) {
-      /*Pause vain jos soitin soittaa (eka kerta kun soitin avataan)*/
       event.target.pauseVideo()
     } else {
-      console.log('needSeek pitäis olla true: ' + this.props.needSeek)
-      /*Eli kun on palkin vuoro soittaa*/
-
       if (this.props.needSeek) {
         console.log('TARVII SEEKATA')
         event.target.seekTo(this.props.currentTime)
