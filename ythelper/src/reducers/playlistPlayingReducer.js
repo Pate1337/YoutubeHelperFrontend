@@ -1,4 +1,4 @@
-const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, hidden: false, index: 0, playedOnce: false, currentTime: 0 }, action) => {
+const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, hidden: false, index: 0, playedOnce: false, currentTime: 0, startTime: 0 }, action) => {
   switch(action.type) {
     case 'INIT_PLAYLIST':
       console.log('INIT_PLAYLIST playlistPlayingReducer')
@@ -8,7 +8,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: 0,
         playedOnce: true,
         playerPlaying: true,
-        currentTime: 0
+        currentTime: 0,
+        startTime: 0
       }
     case 'SHUFFLE_PLAYLIST':
       console.log('SHUFFLE_PLAYLIST playlistPlayingReducer')
@@ -37,7 +38,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: state.index,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'PLAY_NEXT':
       console.log('PLAY_NEXT playlistPlayingReducer')
@@ -53,7 +55,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: index,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'PLAY_PREV':
       console.log('PLAY_PREV playlistPlayingReducer')
@@ -69,7 +72,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: indx,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'PLAY':
       console.log('PLAY playlistPlayingReducer')
@@ -79,7 +83,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: action.index,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     /*Tätä kutsutaan, kun halutaan laittaa palkki soimaan*/
     case 'HIDE_PLAYER':
@@ -90,7 +95,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: state.index,
         playedOnce: true,
         playerPlaying: false,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'SHOW_PLAYER':
       console.log('SHOW_PLAYER playlistPlayingReducer')
@@ -100,7 +106,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: state.index,
         playedOnce: true,
         playerPlaying: true,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'ADD_LINK':
       console.log('ADD_LINK playlistPlayingReducer')
@@ -111,7 +118,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: state.index,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'PLAY_RANDOM':
       console.log('PLAY_RANDOM playlistPlayingReducer')
@@ -127,7 +135,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: random,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
-        currentTime: state.currentTime
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     case 'SET_TIME':
       return {
@@ -136,7 +145,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
         index: state.index,
         playedOnce: state.playedOnce,
         playerPlaying: state.playerPlaying,
-        currentTime: action.data
+        currentTime: action.currentTime,
+        startTime: action.startTime
       }
     /*case 'PLAYING':
       return {
@@ -161,12 +171,13 @@ export const playRandom = () => {
   }
 }
 
-export const setCurrentTime = (currentTime) => {
+export const setCurrentTime = (currentTime, startTime) => {
   console.log('setCurrentTime playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'SET_TIME',
-      data: currentTime
+      currentTime: currentTime,
+      startTime: startTime
     })
   }
 }

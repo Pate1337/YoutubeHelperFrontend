@@ -11,6 +11,7 @@ import { showPlayer } from '../reducers/playlistPlayingReducer'
 import { playRandom } from '../reducers/playlistPlayingReducer'
 import { playing } from '../reducers/playlistPlayingReducer'
 import { setCurrentTime } from '../reducers/playlistPlayingReducer'
+
 class Playlist extends React.Component {
   /*Laitetaan kaikki statet storeen. Niin arvoja voidaan muuttaa myös
   muissa komponenteissa, esim. Appin ylhäällä olevassa Playlistissä.*/
@@ -113,13 +114,18 @@ class Playlist extends React.Component {
       paused: false
     })
     /*Tähän seekTo*/
-    console.log('Ja currentTime: ' + this.props.currentTime)
     if (!this.state.seekDone) {
-      console.log('Nyt suoritetaan seekTo')
-      event.target.seekTo(this.props.currentTime)
-      this.setState({
-        seekDone: true
-      })
+      console.log('Nyt kutsutaan seekTo')
+      const readyTime = Date.now()
+      const timeTaken = readyTime - this.props.startTime
+      const timeTakenSec = timeTaken / 1000
+      if ((this.props.currentTime + timeTakenSec) < event.target.getDuration()) {
+        event.target.seekTo(this.props.currentTime + timeTakenSec)
+        console.log('timeTakenSec: ' + timeTakenSec)
+        this.setState({
+          seekDone: true
+        })
+      }
     }
   }
 
@@ -128,7 +134,7 @@ class Playlist extends React.Component {
     /*if (!this.props.playerPlaying) {*/
       const currentTime = event.target.getCurrentTime()
       console.log('currentTime: ' + currentTime)
-      this.props.setCurrentTime(currentTime)
+      this.props.setCurrentTime(currentTime, Date.now())
       this.setState({
         seekDone: false,
         paused: true
@@ -260,7 +266,8 @@ const mapStateToProps = (state, ownProps) => {
     index: state.playingPlaylist.index,
     playedOnce: state.playingPlaylist.playedOnce,
     playerPlaying: state.playingPlaylist.playerPlaying,
-    currentTime: state.playingPlaylist.currentTime
+    currentTime: state.playingPlaylist.currentTime,
+    startTime: state.playingPlaylist.startTime
   }
 }
 

@@ -65,6 +65,7 @@ class HiddenPlaylist extends React.Component {
   onPlay = (event) => {
     /*Ensimmäisellä renderöinnillä!*/
     console.log('onPlay hiddenplaylist.')
+    console.log('event.target.duration(): ' + event.target.getDuration())
     if (!this.props.playedOnce || this.props.playerPlaying) {
       /*Pause vain jos soitin soittaa (eka kerta kun soitin avataan)*/
       console.log('pause kutsuttu....')
@@ -79,10 +80,20 @@ class HiddenPlaylist extends React.Component {
       console.log('Ja currentTime: ' + this.props.currentTime)
       if (!this.state.seekDone) {
         console.log('Nyt kutsutaan seekTo')
-        event.target.seekTo(this.props.currentTime)
+        const readyTime = Date.now()
+        const timeTaken = readyTime - this.props.startTime
+        const timeTakenSec = timeTaken / 1000
+        if ((this.props.currentTime + timeTakenSec) < event.target.getDuration()) {
+          event.target.seekTo(this.props.currentTime + timeTakenSec)
+          console.log('timeTakenSec: ' + timeTakenSec)
+          this.setState({
+            seekDone: true
+          })
+        }
+        /*event.target.seekTo(this.props.currentTime)
         this.setState({
           seekDone: true
-        })
+        })*/
       }
       /*Nyt tässä metodissa pitää vielä tarkistaa, ettei seekTo
       jää ikuiseen looppiin!!*/
@@ -103,7 +114,7 @@ class HiddenPlaylist extends React.Component {
       console.log('ollaan pausessa HiddenPlaylist')
       const currentTime = event.target.getCurrentTime()
       console.log('currentTime: ' + currentTime)
-      this.props.setCurrentTime(currentTime)
+      this.props.setCurrentTime(currentTime, Date.now())
       /*Tää on nyt null, koska ekal kerral ei oo renderöity*/
       this.setState({
         seekDone: false,
@@ -185,7 +196,8 @@ const mapStateToProps = (state) => {
     index: state.playingPlaylist.index,
     playerPlaying: state.playingPlaylist.playerPlaying,
     playedOnce: state.playingPlaylist.playedOnce,
-    currentTime: state.playingPlaylist.currentTime
+    currentTime: state.playingPlaylist.currentTime,
+    startTime: state.playingPlaylist.startTime
   }
 }
 
