@@ -43,7 +43,7 @@ class HiddenPlaylist extends React.Component {
     /*Pakko vetää timeoutti et toi helvetin postMessage kerkee pauseen ton*/
     console.log('this.props.currentTime ennen ku lähtee: ' + this.props.currentTime)
     setTimeout(() => {
-      const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0.25, true]}
+      const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0.1, true]}
       const message = JSON.stringify(data)
       player.contentWindow.postMessage(message, '*')
       player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
