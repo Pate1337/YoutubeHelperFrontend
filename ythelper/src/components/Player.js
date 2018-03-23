@@ -12,19 +12,23 @@ class Player extends React.Component {
   }
 
   onPlay = async (event) => {
+    console.log('onPlay Player')
+    console.log('AIKA KUN PERILLÄ: ' + Date.now())
+    console.log('this.props.currentTime: ' + this.props.currentTime)
+    console.log('getCurrentTime: ' + event.target.getCurrentTime())
     if (this.props.playerPlaying) {
-      console.log('needSeek playlist: ' + this.props.needSeek)
-      if (this.props.needSeek) {
+      /*if (this.props.needSeek) {
         console.log('NEED TO SEEK')
         event.target.seekTo(this.props.currentTime)
         await this.props.seekDone()
-      }
+      }*/
     } else {
       event.target.pauseVideo()
     }
   }
 
   pause = (event) => {
+    console.log('pause Player')
     const currentTime = event.target.getCurrentTime()
     this.props.setCurrentTime(currentTime, Date.now())
   }
@@ -57,9 +61,15 @@ class Player extends React.Component {
     const player = document.getElementById('player')
     player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
 
-    await this.props.seekRequired()
+    /*await this.props.seekRequired()*/
     const youtube = document.getElementById('youtube')
-    youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    setTimeout(() => {
+      const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0.25, true]}
+      const message = JSON.stringify(data)
+      youtube.contentWindow.postMessage(message, '*')
+      youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    }, 30)
+    /*youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')*/
   }
 
   showPlayer = async (event) => {
@@ -69,9 +79,15 @@ class Player extends React.Component {
     const youtube = document.getElementById('youtube')
     youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
 
-    await this.props.seekRequired()
+    /*await this.props.seekRequired()*/
     const player = document.getElementById('player')
-    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    setTimeout(() => {
+      const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0.25, true]}
+      const message = JSON.stringify(data)
+      player.contentWindow.postMessage(message, '*')
+      player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    }, 30)
+    /*player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')*/
 
   }
 

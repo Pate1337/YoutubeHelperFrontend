@@ -36,10 +36,18 @@ class HiddenPlaylist extends React.Component {
     await this.props.showPlayer()
 
     const youtube = document.getElementById('youtube')
+    console.log('AIKA kun lähtee: ' + Date.now())
     youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-    await this.props.seekRequired()
+    /*await this.props.seekRequired()*/
     const player = document.getElementById('player')
-    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    /*Pakko vetää timeoutti et toi helvetin postMessage kerkee pauseen ton*/
+    console.log('this.props.currentTime ennen ku lähtee: ' + this.props.currentTime)
+    setTimeout(() => {
+      const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0.25, true]}
+      const message = JSON.stringify(data)
+      player.contentWindow.postMessage(message, '*')
+      player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    }, 30)
   }
 
   random = async (event) => {
@@ -51,18 +59,22 @@ class HiddenPlaylist extends React.Component {
     /*Ensimmäisellä renderöinnillä!*/
     if (!this.props.playedOnce || this.props.playerPlaying) {
       event.target.pauseVideo()
-    } else {
+    } /*else {
+
       if (this.props.needSeek) {
         console.log('TARVII SEEKATA')
         event.target.seekTo(this.props.currentTime)
         await this.props.seekDone()
       }
-    }
+    }*/
   }
 
-  pause = (event) => {
+  pause = async (event) => {
+    console.log('pause HiddenPlayer')
     const currentTime = event.target.getCurrentTime()
-    this.props.setCurrentTime(currentTime, Date.now())
+    console.log('gecurrentTime() pausessa: ' + currentTime)
+    await this.props.setCurrentTime(currentTime, Date.now())
+    console.log('this.props.currentTime pausessa: ' + this.props.currentTime)
   }
 
 
@@ -72,7 +84,7 @@ class HiddenPlaylist extends React.Component {
       backgroundColor: 'black', color: 'white'}
     const opts = {
       height: '45',
-      width: '300',
+      width: '400',
       playerVars: {
         autoplay: 1,
         rel: 0,
