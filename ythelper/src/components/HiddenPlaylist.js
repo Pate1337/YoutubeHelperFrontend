@@ -10,17 +10,12 @@ import ReactPlayer from 'react-player'
 import ReactPlayerControls from 'react-player-controls'
 import Youtube from 'react-youtube'
 import { setCurrentTime } from '../reducers/playlistPlayingReducer'
+import { seekDone } from '../reducers/playlistPlayingReducer'
+import { seekRequired } from '../reducers/playlistPlayingReducer'
 
 class HiddenPlaylist extends React.Component {
   /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi
   palkki toimimaan.*/
-  constructor() {
-    super()
-    this.state = {
-      seekDone: false,
-      paused: true
-    }
-  }
 
   playPrevious = async (event) => {
     event.preventDefault()
@@ -33,28 +28,18 @@ class HiddenPlaylist extends React.Component {
   }
 
   playNext = async (event) => {
-    console.log('playNext')
     await this.props.playNext()
   }
 
   showPlaylist = async (event) => {
-    console.log('SHOWPLAYLIST HIDDENPLAYLIST')
     event.preventDefault()
     await this.props.showPlayer()
-    /*Kaivetaan toi Youtube Tagi tänne*/
-    /*Laitetaan playeri soimaan*/
-    /*Siinä vaiheessa kun playeri rupee soittaan, niin pitää olla tiedossa
-    currentTime !!! Eli toi alempi tonne pauseen!*/
-    if (!this.state.paused) {
-      /*Tämä soitin pauselle*/
-      const youtube = document.getElementById('youtube')
-      youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-      console.log('Palkin pitäis olla pausella')
-      const player = document.getElementById('player')
-      player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-      console.log('Playeri rupee soittaan')
-    }
-    /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
+
+    const youtube = document.getElementById('youtube')
+    youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    await this.props.seekRequired()
+    const player = document.getElementById('player')
+    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
   }
 
   random = async (event) => {
@@ -62,65 +47,26 @@ class HiddenPlaylist extends React.Component {
     await this.props.playRandom()
   }
 
-  onPlay = (event) => {
+  onPlay = async (event) => {
     /*Ensimmäisellä renderöinnillä!*/
-    console.log('onPlay hiddenplaylist.')
-    console.log('event.target.duration(): ' + event.target.getDuration())
     if (!this.props.playedOnce || this.props.playerPlaying) {
       /*Pause vain jos soitin soittaa (eka kerta kun soitin avataan)*/
-      console.log('pause kutsuttu....')
       event.target.pauseVideo()
     } else {
+      console.log('needSeek pitäis olla true: ' + this.props.needSeek)
       /*Eli kun on palkin vuoro soittaa*/
-      this.setState({
-        paused: false
-      })
-      console.log('Palkki rupes soimaan! Ja Playeri meni paussille')
-      /*Tähän seekTo*/
-      console.log('Ja currentTime: ' + this.props.currentTime)
-      if (!this.state.seekDone) {
-        console.log('Nyt kutsutaan seekTo')
-        const readyTime = Date.now()
-        const timeTaken = readyTime - this.props.startTime
-        const timeTakenSec = timeTaken / 1000
-        if ((this.props.currentTime + timeTakenSec) < event.target.getDuration()) {
-          event.target.seekTo(this.props.currentTime + timeTakenSec)
-          console.log('timeTakenSec: ' + timeTakenSec)
-          this.setState({
-            seekDone: true
-          })
-        }
-        /*event.target.seekTo(this.props.currentTime)
-        this.setState({
-          seekDone: true
-        })*/
+
+      if (this.props.needSeek) {
+        console.log('TARVII SEEKATA')
+        event.target.seekTo(this.props.currentTime)
+        await this.props.seekDone()
       }
-      /*Nyt tässä metodissa pitää vielä tarkistaa, ettei seekTo
-      jää ikuiseen looppiin!!*/
     }
   }
 
   pause = (event) => {
-    /*Kutsut muualta aina pauseen*/
-    console.log('pause HiddenPlaylist')
-    console.log('katotaa miltä this.state.paused näyttää kun kutsu muualta: ' + this.state.paused)
-    /*if (event.data === 2) {
-      console.log('event.data == 2')
-      console.log('Kutsutaan seekTo HiddenPlaylist')
-      event.target.seekTo(this.props.currentTime)
-      event.target.playVideo()
-      console.log('playVideo() kutsuttu...')
-    } else {*/
-      console.log('ollaan pausessa HiddenPlaylist')
-      const currentTime = event.target.getCurrentTime()
-      console.log('currentTime: ' + currentTime)
-      this.props.setCurrentTime(currentTime, Date.now())
-      /*Tää on nyt null, koska ekal kerral ei oo renderöity*/
-      this.setState({
-        seekDone: false,
-        paused: true
-      })
-  /*  }*/
+    const currentTime = event.target.getCurrentTime()
+    this.props.setCurrentTime(currentTime, Date.now())
   }
 
 
@@ -139,41 +85,34 @@ class HiddenPlaylist extends React.Component {
       },
       frameborder: 0
     }
-    /*Renderöidään tää heti.*/
-    /*if (this.props.playlist !== null && this.props.playerPlaying === false) {*/
-      return (
-        <div id='playlistBar' style={showBar}>
-          Playing {this.props.playlist.title}
-          <Youtube
-            id='youtube'
-            videoId={this.props.playlist.links[this.props.index].linkId}
-            opts={opts}
-            onEnd={this.playNext}
-            onPlay={this.onPlay}
-            onPause={this.pause}
-          />
-          <button onClick={this.shuffle}>
-            Shuffle playlist
-          </button>
-          <button onClick={this.random}>
-            Play random
-          </button>
-          <button onClick={this.playPrevious}>
-            Previous
-          </button>
-          <button onClick={this.playNext}>
-            Next
-          </button>
-          <button onClick={this.showPlaylist}>
-            Show playlist
-          </button>
-        </div>
-      )
-  /*  } else {
-      return (
-        <div></div>
-      )
-    }*/
+    return (
+      <div id='playlistBar' style={showBar}>
+        Playing {this.props.playlist.title}
+        <Youtube
+          id='youtube'
+          videoId={this.props.playlist.links[this.props.index].linkId}
+          opts={opts}
+          onEnd={this.playNext}
+          onPlay={this.onPlay}
+          onPause={this.pause}
+        />
+        <button onClick={this.shuffle}>
+          Shuffle playlist
+        </button>
+        <button onClick={this.random}>
+          Play random
+        </button>
+        <button onClick={this.playPrevious}>
+          Previous
+        </button>
+        <button onClick={this.playNext}>
+          Next
+        </button>
+        <button onClick={this.showPlaylist}>
+          Show playlist
+        </button>
+      </div>
+    )
   }
 }
 
@@ -197,7 +136,8 @@ const mapStateToProps = (state) => {
     playerPlaying: state.playingPlaylist.playerPlaying,
     playedOnce: state.playingPlaylist.playedOnce,
     currentTime: state.playingPlaylist.currentTime,
-    startTime: state.playingPlaylist.startTime
+    startTime: state.playingPlaylist.startTime,
+    needSeek: state.playingPlaylist.needSeek
   }
 }
 
@@ -207,7 +147,9 @@ const mapDispatchToProps = {
   playPrevious,
   showPlayer,
   playRandom,
-  setCurrentTime
+  setCurrentTime,
+  seekDone,
+  seekRequired
 }
 
 const ConnectedHiddenPlaylist = connect(mapStateToProps, mapDispatchToProps)(HiddenPlaylist)

@@ -1,11 +1,11 @@
-const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, hidden: false, index: 0, playedOnce: false, currentTime: 0, startTime: 0 }, action) => {
+const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, index: 0, needSeek: false, playedOnce: false, currentTime: 0, startTime: 0 }, action) => {
   switch(action.type) {
     case 'INIT_PLAYLIST':
       console.log('INIT_PLAYLIST playlistPlayingReducer')
       return {
         playlist: action.data,
-        hidden: false,
         index: 0,
+        needSeek: false,
         playedOnce: true,
         playerPlaying: true,
         currentTime: 0,
@@ -34,8 +34,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       let newPlaylist = {...state.playlist, links: links}
       return {
         playlist: newPlaylist,
-        hidden: state.hidden,
         index: state.index,
+        needSeek: state.needSeek,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
         currentTime: state.currentTime,
@@ -51,8 +51,8 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       }
       return {
         playlist: state.playlist,
-        hidden: state.hidden,
         index: index,
+        needSeek: state.needSeek,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
         currentTime: state.currentTime,
@@ -68,7 +68,7 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       }
       return {
         playlist: state.playlist,
-        hidden: state.hidden,
+        needSeek: state.needSeek,
         index: indx,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
@@ -79,7 +79,7 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       console.log('PLAY playlistPlayingReducer')
       return {
         playlist: state.playlist,
-        hidden: state.hidden,
+        needSeek: state.needSeek,
         index: action.index,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
@@ -91,7 +91,7 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       console.log('HIDE_PLAYER playlistPlayingReducer')
       return {
         playlist: state.playlist,
-        hidden: true,
+        needSeek: state.needSeek,
         index: state.index,
         playedOnce: true,
         playerPlaying: false,
@@ -102,7 +102,7 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       console.log('SHOW_PLAYER playlistPlayingReducer')
       return {
         playlist: state.playlist,
-        hidden: false,
+        needSeek: state.needSeek,
         index: state.index,
         playedOnce: true,
         playerPlaying: true,
@@ -114,7 +114,7 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       let moddedPlaylist = {...state.playlist, links: [...state.playlist.links, action.data]}
       return {
         playlist: moddedPlaylist,
-        hidden: false,
+        needSeek: state.needSeek,
         index: state.index,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
@@ -131,7 +131,7 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
       }
       return {
         playlist: state.playlist,
-        hidden: state.hidden,
+        needSeek: state.needSeek,
         index: random,
         playedOnce: true,
         playerPlaying: state.playerPlaying,
@@ -141,12 +141,32 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, h
     case 'SET_TIME':
       return {
         playlist: state.playlist,
-        hidden: state.hidden,
+        needSeek: state.needSeek,
         index: state.index,
         playedOnce: state.playedOnce,
         playerPlaying: state.playerPlaying,
         currentTime: action.currentTime,
         startTime: action.startTime
+      }
+    case 'NEED_SEEK':
+      return {
+        playlist: state.playlist,
+        needSeek: true,
+        index: state.index,
+        playedOnce: state.playedOnce,
+        playerPlaying: state.playerPlaying,
+        currentTime: state.currentTime,
+        startTime: state.startTime
+      }
+    case 'SEEK_DONE':
+      return {
+        playlist: state.playlist,
+        needSeek: false,
+        index: state.index,
+        playedOnce: state.playedOnce,
+        playerPlaying: state.playerPlaying,
+        currentTime: state.currentTime,
+        startTime: state.startTime
       }
     /*case 'PLAYING':
       return {
@@ -167,6 +187,22 @@ export const playRandom = () => {
   return async (dispatch) => {
     dispatch({
       type: 'PLAY_RANDOM'
+    })
+  }
+}
+
+export const seekRequired = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'NEED_SEEK'
+    })
+  }
+}
+
+export const seekDone = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'SEEK_DONE'
     })
   }
 }

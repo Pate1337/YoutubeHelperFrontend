@@ -11,96 +11,66 @@ import { showPlayer } from '../reducers/playlistPlayingReducer'
 import { playRandom } from '../reducers/playlistPlayingReducer'
 import { playing } from '../reducers/playlistPlayingReducer'
 import { setCurrentTime } from '../reducers/playlistPlayingReducer'
+import { seekDone } from '../reducers/playlistPlayingReducer'
+import { seekRequired } from '../reducers/playlistPlayingReducer'
 
 class Playlist extends React.Component {
-  /*Laitetaan kaikki statet storeen. Niin arvoja voidaan muuttaa myös
-  muissa komponenteissa, esim. Appin ylhäällä olevassa Playlistissä.*/
-  constructor() {
-    super()
-    this.state = {
-      seekDone: false,
-      paused: true
-    }
-  }
-/*Kutsutaan Reduceria*/
+
   playNext = async () => {
     console.log('playNext')
     await this.props.playNext()
   }
 
-/*Täällä kutsutaan Reduceria*/
+
   shuffle = async (event) => {
     event.preventDefault()
     await this.props.shufflePlaylist()
   }
 
-/*Kutsutaan Reduceria*/
+
   playPrevious = async (event) => {
     event.preventDefault()
     await this.props.playPrevious()
   }
 
-/*Kai se täytyy täälläkin kutsua Reduceria*/
+
   play = async (event) => {
     event.preventDefault()
-    /*Etsitään linkin indeksi taulukossa this.props.playlist.links*/
     const index = this.props.playlist.links.findIndex(l => event.target.id === l._id)
-    console.log('index: ' + index)
     await this.props.play(index)
   }
 
   hidePlayer = async (event) => {
     event.preventDefault()
     await this.props.hidePlayer()
-    /*Laitetaan palkki soimaan*/
-    /*Tähän pitää saada tieto, onko paused video. Jos on, nii myös
-    palkin video pitää laittaa pauselle.*/
-    if (!this.state.paused) {
-      /*Tämä soitin pauselle*/
-      const player = document.getElementById('player')
-      player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-      /*Lähetetään myös palkille pause kutsu, jolloin siellä voidaan
-      ensin asettaa seekTo ja vasta sitten ruveta soittamaan. Mutta
-      sillon siellä on oltava jo tieto mihin seekataan.*/
-      const youtube = document.getElementById('youtube')
-      youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-    }
-    /*Jos täällä saatais currentTime se säästäis 10 renderöintikertaa.*/
-    /*Tämä jälkeen pausessa päästään laittamaan currentTime*/
+
+    const player = document.getElementById('player')
+    player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+
+    await this.props.seekRequired()
+    const youtube = document.getElementById('youtube')
+    youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
   }
 
   setPlayingPlaylist = async (event) => {
-    /*Myös täällä pitää laittaa palkki paussille ja tämä soimaan.*/
     event.preventDefault()
     await this.props.initPlayingPlaylist(this.props.anyPlaylist)
-    /*Palkki pauselle.*/
+
     const youtube = document.getElementById('youtube')
     youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-    /*Palkissa pitää asettaa currentTime, johon sit siikataan onPlayssa*/
-    /*Tästä tuli vahingossa tosi hyvä. Jos laitetaan toiselta soittolistalta
-    biisi soimaan, joka sattuu olemaan sama kuin palkissa soiva toisen
-    soittolistan biisi, niin siitä huolimatta seekataan samaan kohtaan:DD*/
-    /*const player = document.getElementById('player')
-    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-    */
   }
 
   showPlayer = async (event) => {
-    /*Täällä pitää tiesti asettaa paussille palkin soitin.
-    Ja laittaa tämä soitin soimaan.*/
     event.preventDefault()
-    /*Pitää asettaa seekDone falseks. Koska ei sitä ole.*/
-    this.setState({
-      seekDone: false
-    })
     await this.props.showPlayer()
-    /*Palkki pauselle.*/
+
     const youtube = document.getElementById('youtube')
     youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-    /*Palkissa pitää asettaa currentTime, johon sit siikataan onPlayssa*/
-    /*Tämä soimaan.*/
+
+    await this.props.seekRequired()
     const player = document.getElementById('player')
     player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+
   }
 
   random = async (event) => {
@@ -109,37 +79,17 @@ class Playlist extends React.Component {
   }
 
   onPlay = async (event) => {
-    console.log('Playeri soittaa')
-    this.setState({
-      paused: false
-    })
-    /*Tähän seekTo*/
-    if (!this.state.seekDone) {
-      console.log('Nyt kutsutaan seekTo')
-      const readyTime = Date.now()
-      const timeTaken = readyTime - this.props.startTime
-      const timeTakenSec = timeTaken / 1000
-      if ((this.props.currentTime + timeTakenSec) < event.target.getDuration()) {
-        event.target.seekTo(this.props.currentTime + timeTakenSec)
-        console.log('timeTakenSec: ' + timeTakenSec)
-        this.setState({
-          seekDone: true
-        })
-      }
+    console.log('needSeek playlist: ' + this.props.needSeek)
+    if (this.props.needSeek) {
+      console.log('NEED TO SEEK')
+      event.target.seekTo(this.props.currentTime)
+      await this.props.seekDone()
     }
   }
 
   pause = (event) => {
-    /*Jos playerPlaying == false. Normi paussituksen yhteydessä ei tarvi*/
-    /*if (!this.props.playerPlaying) {*/
-      const currentTime = event.target.getCurrentTime()
-      console.log('currentTime: ' + currentTime)
-      this.props.setCurrentTime(currentTime, Date.now())
-      this.setState({
-        seekDone: false,
-        paused: true
-      })
-    /*}*/
+    const currentTime = event.target.getCurrentTime()
+    this.props.setCurrentTime(currentTime, Date.now())
   }
 
   render() {
@@ -267,7 +217,8 @@ const mapStateToProps = (state, ownProps) => {
     playedOnce: state.playingPlaylist.playedOnce,
     playerPlaying: state.playingPlaylist.playerPlaying,
     currentTime: state.playingPlaylist.currentTime,
-    startTime: state.playingPlaylist.startTime
+    startTime: state.playingPlaylist.startTime,
+    needSeek: state.playingPlaylist.needSeek
   }
 }
 
@@ -280,7 +231,9 @@ const mapDispatchToProps = {
   hidePlayer,
   showPlayer,
   playRandom,
-  setCurrentTime
+  setCurrentTime,
+  seekDone,
+  seekRequired
 }
 
 const ConnectedPlaylist = connect(mapStateToProps, mapDispatchToProps)(Playlist)
