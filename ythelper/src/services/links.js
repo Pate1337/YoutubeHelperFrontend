@@ -61,6 +61,7 @@ const addLinkToPlaylist = async (newObject, playlistId) => {
     headers: { 'Authorization': token}
   }
   const response = await axios.post(`/api/playlists/${playlistId}`, newObject, config)
+  console.log('response linkSercive: ' + response.data._id)
   return response.data
 }
 

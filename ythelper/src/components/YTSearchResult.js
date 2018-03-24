@@ -89,7 +89,12 @@ class YTSearchResult extends React.Component {
       /*Pitää lisätä myös playingPlaylistille*/
       if (this.props.playingPlaylist.playlist !== null &&
         playlistId === this.props.playingPlaylist.playlist._id) {
-        await this.props.addToPlayingPlaylist(linkObject)
+        /*TÄÄLLÄ MOKA, linkObjectilla ei edes ole _id:tä!!*/
+        /*Pitää siis hakea äsken lisätty linkki ja lisätä se
+        playingPlaylistille*/
+        const playlist = this.props.playlists.find(p => p._id === playlistId)
+        const link = playlist.links[playlist.links.length - 1]
+        await this.props.addToPlayingPlaylist(link)
       }
       this.setState({
         showPlaylists: false

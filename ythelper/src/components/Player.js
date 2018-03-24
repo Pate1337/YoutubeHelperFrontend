@@ -50,7 +50,9 @@ class Player extends React.Component {
 
   play = async (event) => {
     event.preventDefault()
+    console.log('event.target.id: ' + event.target.id)
     const index = this.props.playlist.links.findIndex(l => event.target.id === l._id)
+    console.log('indeksi: ' + index)
     await this.props.play(index)
   }
 
