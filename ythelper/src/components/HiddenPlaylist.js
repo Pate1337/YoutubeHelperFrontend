@@ -57,6 +57,7 @@ class HiddenPlaylist extends React.Component {
 
   onPlay = async (event) => {
     /*Ensimmäisellä renderöinnillä!*/
+    console.log('AIKA, kun ruvetaan soittamaan playerissä: ' + Date.now())
     if (!this.props.playedOnce || this.props.playerPlaying) {
       event.target.pauseVideo()
     } /*else {

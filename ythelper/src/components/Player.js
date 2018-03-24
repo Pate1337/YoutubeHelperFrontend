@@ -5,7 +5,12 @@ import { playNext, seekDone, setCurrentTime, playRandom, shufflePlaylist,
  playPrevious, play, showPlayer, seekRequired, hidePlayer } from '../reducers/playlistPlayingReducer'
 
 class Player extends React.Component {
-
+  constructor() {
+    super()
+    this.state = {
+      sendSeek: false
+    }
+  }
   playNext = async () => {
     console.log('playNext')
     await this.props.playNext()
@@ -28,9 +33,12 @@ class Player extends React.Component {
   }
 
   pause = (event) => {
-    console.log('pause Player')
-    const currentTime = event.target.getCurrentTime()
-    this.props.setCurrentTime(currentTime, Date.now())
+    console.log('pause Player, aika: ' + Date.now())
+
+    /*const currentTime = event.target.getCurrentTime()
+    console.log('currentTime Playerin pausessa: ' + currentTime)
+    this.props.setCurrentTime(currentTime, Date.now())*/
+
   }
 
   random = async (event) => {
@@ -56,14 +64,29 @@ class Player extends React.Component {
     await this.props.play(index)
   }
 
+  receiveMessage = async (event) => {
+    console.log('event.data: ' + JSON.parse(event.data).info.currentTime)
+    window.removeEventListener("message", this.receiveMessage, false)
+    const youtube = document.getElementById('youtube')
+    const data = {event: 'command', func: 'seekTo', args: [JSON.parse(event.data).info.currentTime, true]}
+    const message = JSON.stringify(data)
+    youtube.contentWindow.postMessage(message, '*')
+    console.log('NYT lähetetään playvideo kutsu, aika : ' + Date.now())
+    youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+    console.log('Playvideo kutsu lähetetty: ' + Date.now())
+  }
+
   hidePlayer = async (event) => {
     event.preventDefault()
     await this.props.hidePlayer()
 
     const player = document.getElementById('player')
+    console.log('Aika kun pause kutsu lähetetään: ' + Date.now())
     player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    window.addEventListener("message", this.receiveMessage, false)
+
     /*await this.props.seekRequired()*/
-    const youtube = document.getElementById('youtube')
+    /*const youtube = document.getElementById('youtube')
     setTimeout(() => {
       const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0,1, true]}
       const message = JSON.stringify(data)
@@ -71,7 +94,7 @@ class Player extends React.Component {
       youtube.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*')
       youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
       youtube.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*')
-    }, 30)
+    }, 30)*/
     /*youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')*/
   }
 
