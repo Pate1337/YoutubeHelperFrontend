@@ -62,14 +62,15 @@ class Player extends React.Component {
 
     const player = document.getElementById('player')
     player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-
     /*await this.props.seekRequired()*/
     const youtube = document.getElementById('youtube')
     setTimeout(() => {
       const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0,1, true]}
       const message = JSON.stringify(data)
       youtube.contentWindow.postMessage(message, '*')
+      youtube.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*')
       youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+      youtube.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*')
     }, 30)
     /*youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')*/
   }
