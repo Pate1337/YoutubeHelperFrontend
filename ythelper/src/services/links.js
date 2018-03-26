@@ -39,7 +39,8 @@ const deleteOneLinkFromUserFavourites = async (linkId) => {
   }
   const url = baseUrl + '/favourites'
   console.log('url: ' + url)
-  const response = await axios.delete(url, linkId, config)
+  console.log('frontind delete fav', linkId)
+  const response = await axios.delete(url, {data: {id: linkId, usertoken: token}}, config)
   console.log('Bäkkärin vastaus poistoon: ' + response)
   return response.data
 }
@@ -82,4 +83,5 @@ const removeLinkFromRelated = async (linkId) => {
 }
 
 export default { getAll, setToken, createAndAddLinkToUserFavourites,
-  createPlaylist, addLinkToPlaylist, addLinksToRelated, removeLinkFromRelated }
+  createPlaylist, addLinkToPlaylist, addLinksToRelated, removeLinkFromRelated,
+  deleteOneLinkFromUserFavourites }
