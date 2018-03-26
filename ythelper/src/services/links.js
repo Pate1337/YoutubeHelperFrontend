@@ -40,7 +40,7 @@ const deleteOneLinkFromUserFavourites = async (linkId) => {
   const url = baseUrl + '/favourites'
   console.log('url: ' + url)
   console.log('frontind delete fav', linkId)
-  const response = await axios.delete(url, {data: {id: linkId}}, config)
+  const response = await axios.delete(url, {data: {id: linkId, usertoken: token}}, config)
   console.log('Bäkkärin vastaus poistoon: ' + response)
   return response.data
 }
