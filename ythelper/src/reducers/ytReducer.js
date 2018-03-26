@@ -49,11 +49,12 @@ export const searchForVideo = (searchObject) => {
   }
 }
 
-export const searchForRelatedVideos = (videoId) => {
+/*export const searchForRelatedVideos = (videoId) => {
   console.log('searchForRelatedVideos ytReducer')
   const query = `part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=20`
+  */
   /*formatItem tähän*/
-  const formatItem = (item) => {
+  /*const formatItem = (item) => {
     return {
       id: item.id.videoId,
       title: item.snippet.title,
@@ -69,7 +70,7 @@ export const searchForRelatedVideos = (videoId) => {
       type: ''
     })
   }
-}
+}*/
 
 export const searchResultInitialization = () => {
   console.log('searchResultInitialization ytReducer')

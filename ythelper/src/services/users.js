@@ -20,4 +20,9 @@ const addUser = async (newUser) => {
   return response.data
 }
 
-export default { getAll, getUserById, addUser }
+const getUsersRelated = async (userId) => {
+  const response = await axios.get(`/api/relateds/${userId}`)
+  return response.data
+}
+
+export default { getAll, getUserById, addUser, getUsersRelated }

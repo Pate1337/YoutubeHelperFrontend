@@ -5,7 +5,9 @@ import { addFavouriteForUser } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
 import { addLinkToPlaylist } from '../reducers/userLinksReducer'
 import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { searchForRelatedVideos } from '../reducers/ytReducer'
+import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
+import { removeRelatedFromUser } from '../reducers/userLinksReducer'
+import { addToUserRelated } from '../reducers/userLinksReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -37,11 +39,18 @@ class YTSearchResult extends React.Component {
     console.log('addToFavourites YTSearchResult')
     event.preventDefault()
 
-    /*Tarkistetaan, onko linkki jo käyttäjän linkeissä.*/
-    const linkExists = this.props.favourites
+    /*Tarkistetaan, onko linkki jo käyttäjän related.*/
+    const linkExists = this.props.usersRelated
       .filter(f => f.linkId === this.props.item.id)
-    /*if (linkExists.length === 0) {*/
-
+    if (linkExists === undefined || linkExists === null || linkExists.length === 0) {
+      /*linkki ei ole käyttäjän related*/
+    } else {
+      /*Käyttäjän relatedeista pitää poistaa kyseinen linkki.*/
+      console.log('LINKKI ON KÄYTTÄJÄN RELATED')
+      console.log('LINKIN ID: ' + linkExists[0]._id)
+      await this.props.removeRelatedFromUser(linkExists[0]._id)
+      /*Tää toimii*/
+    }
       /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
       const linkObject = {
         title: this.props.item.title,
@@ -52,10 +61,52 @@ class YTSearchResult extends React.Component {
       const response = await this.props.addFavouriteForUser(linkObject)
       if (response !== 'error') {
         console.log('lisätty')
-        await this.props.usersInitialization()
+        /*await this.props.usersInitialization()*/
         /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
         voidaan hakea kyseisen videon related videos.*/
-        /*await this.props.searchForRelatedVideos(linkObject.linkId)*/
+        await this.props.searchForRelatedVideos(linkObject.linkId)
+        const relatedLinks = this.props.relatedLinks
+        console.log('Haetut related linkit: ')
+        relatedLinks.forEach(l => {
+          console.log(l.linkId)
+        })
+        /*console.log('relatedVideos.length: ' + relatedLinks.length)*/
+        let linksToAdd = []
+        let found = false
+        for (let i = 0; i < relatedLinks.length; i++) {
+          const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
+          /*favourites = undefined kun ei löydä mitään.*/
+          if (favourites !== undefined) {
+            /*Tällöin linkkiä ei haluta lisätä related*/
+            continue
+          }
+          for (let j = 0; j < this.props.playlists.length; j++) {
+            let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
+            if (playlists !== undefined) {
+              found = true
+              /*Tällä playlistillä oli kyseinen linkki.*/
+            }
+            if (found) {
+              break
+            }
+          }
+          if (found) {
+            /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
+            continue
+          }
+          const usersRelated = this.props.usersRelated.find(l => l.linkId === relatedLinks[i].linkId)
+          if (usersRelated !== undefined) {
+            /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
+            continue
+          }
+          /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
+          relatedLinkseihin*/
+          console.log('Tämä linkki lisätään: ' + relatedLinks[i].title)
+          linksToAdd.push(relatedLinks[i])
+        }
+        console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
+        /*Muuta tämä siten, että yksi kerrallaan lisätään!*/
+        await this.props.addToUserRelated(linksToAdd)
       } else {
         console.log('Ei lisätty')
       }
@@ -168,7 +219,9 @@ const mapStateToProps = (state) => {
     loggedUser: state.loggedUser,
     favourites: state.userLinks.favourites,
     playlists: state.userLinks.playlists,
-    playingPlaylist: state.playingPlaylist
+    playingPlaylist: state.playingPlaylist,
+    usersRelated: state.userLinks.relatedLinks,
+    relatedLinks: state.relatedLinks
   }
 }
 
@@ -177,7 +230,9 @@ const mapDispatchToProps = {
   addLinkToPlaylist,
   usersInitialization,
   addToPlayingPlaylist,
-  searchForRelatedVideos
+  searchForRelatedVideos,
+  removeRelatedFromUser,
+  addToUserRelated
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

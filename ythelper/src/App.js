@@ -15,6 +15,7 @@ import RegisterForm from './components/RegisterForm'
 import PlaylistForm from './components/PlaylistForm'
 import Playlists from './components/Playlists'
 import HiddenPlaylist from './components/HiddenPlaylist'
+import RelatedLinks from './components/RelatedLinks'
 
 class App extends React.Component {
 
@@ -27,6 +28,7 @@ class App extends React.Component {
     /*this.props.usersFavourites()
     this.props.usersPlaylists()*/
     this.props.userLinks()
+    /*this.props.usersRelatedInitialization()*/
   }
 
   render() {
@@ -84,6 +86,7 @@ class App extends React.Component {
           <PlaylistForm />
           <YTSearchBar />
           <YTSearchResults />
+          <RelatedLinks />
         </div>
       )
     }

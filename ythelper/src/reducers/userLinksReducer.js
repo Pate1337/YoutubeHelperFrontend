@@ -4,7 +4,7 @@ import linkService from '../services/links'
 /*Täällä on nyt ongelmia! Aaaa, tätyy jättää formatoimatta backissa
 playlistin lisäyksessä, suosikin lisäyksessa ja uuden linkin lisäyksessä
 soittolistalle! Nyt pitäis kaikki olla kunnossa.*/
-const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => {
+const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [] }, action) => {
   switch(action.type) {
     case 'GET_ALL':
       console.log('GET_ALL userLinksReducer')
@@ -17,13 +17,15 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
       let favouritesC = store.favourites.filter( link => link._id != action.linkId)
       return {
         favourites: favouritesC,
-        playlists: store.playlists
+        playlists: store.playlists,
+        relatedLinks: store.relatedLinks
       }
     case 'ADD_FAVOURITE':
       console.log('ADD_FAVOURITE userLinksReducer')
       return {
         favourites: [...store.favourites, action.data],
-        playlists: store.playlists
+        playlists: store.playlists,
+        relatedLinks: store.relatedLinks
       }
     case 'ADD_LINK_TO_PLAYLIST':
       console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
@@ -42,14 +44,16 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
       })
       return {
         favourites: store.favourites,
-        playlists: playlists
+        playlists: playlists,
+        relatedLinks: store.relatedLinks
       }
       case 'ADD_PLAYLIST':
         console.log('ADD_PLAYLIST userLinksReducer')
         console.log('action.data: ' + action.data._id + action.data.title)
         return {
           favourites: store.favourites,
-          playlists: [...store.playlists, action.data]
+          playlists: [...store.playlists, action.data],
+          relatedLinks: store.relatedLinks
         }
       case 'SHUFFLE_PLAYLIST':
         console.log('SHUFFLE_PLAYLIST userLinksReducer')
@@ -76,7 +80,27 @@ const userLinksReducer = (store = { favourites: [], playlists: [] }, action) => 
         })
       return {
         favourites: store.favourites,
-        playlists: plists
+        playlists: plists,
+        relatedLinks: store.relatedLinks
+      }
+    case 'REMOVE_RELATED':
+      let newRelatedLinks = []
+      store.relatedLinks.forEach(l => {
+        if (l._id !== action.linkId) {
+          newRelatedLinks.push(l)
+        }
+      })
+      return {
+        favourites: store.favourites,
+        playlists: store.playlists,
+        relatedLinks: newRelatedLinks
+      }
+    case 'ADD_RELATED':
+      console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
+      return {
+        favourites: store.favourites,
+        playlists: store.playlists,
+        relatedLinks: [...store.relatedLinks, action.data]
       }
     default:
       return store
@@ -96,7 +120,8 @@ export const userLinks = () => {
         type: 'GET_ALL',
         data: {
           favourites: user.links,
-          playlists: user.playlists
+          playlists: user.playlists,
+          relatedLinks: user.relatedLinks
         }
       })
     }
@@ -170,6 +195,31 @@ export const addPlaylistForUser = (playlistObject) => {
       /*Kaikki samaantapaan kuin linkin lisäämienn playlistiin*/
       return 'error'
     }
+  }
+}
+
+export const removeRelatedFromUser = (linkId) => {
+  return async (dispatch) => {
+    try {
+      await linkService.removeLinkFromRelated(linkId)
+      dispatch({
+        type: 'REMOVE_RELATED',
+        linkId: linkId
+      })
+    } catch (exception) {
+      return 'error'
+    }
+  }
+}
+
+export const addToUserRelated = (linkObjects) => {
+  return async (dispatch) => {
+    const links = await linkService.addLinksToRelated(linkObjects)
+    console.log('addToUserRelated links.length: ' + links.length)
+    dispatch({
+      type: 'ADD_RELATED',
+      data: links
+    })
   }
 }
 

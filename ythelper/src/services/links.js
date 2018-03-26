@@ -65,5 +65,21 @@ const addLinkToPlaylist = async (newObject, playlistId) => {
   return response.data
 }
 
+const addLinksToRelated = async (linkObjects) => {
+  const config = {
+    headers: { 'Authorization': token}
+  }
+  const response = await axios.post('/api/relateds', linkObjects, config)
+  return response.data
+}
+
+const removeLinkFromRelated = async (linkId) => {
+  const config = {
+    headers: { 'Authorization': token}
+  }
+  const response = await axios.delete(`/api/relateds/${linkId}`, config)
+  return response.data
+}
+
 export default { getAll, setToken, createAndAddLinkToUserFavourites,
-  createPlaylist, addLinkToPlaylist }
+  createPlaylist, addLinkToPlaylist, addLinksToRelated, removeLinkFromRelated }
