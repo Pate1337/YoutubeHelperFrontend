@@ -115,10 +115,17 @@ export const removeUserLinks = () => {
 export const removeOneFavouriteLink = (linkId) => {
   console.log('removeOneFavouriteLink userLinksReducer')
   return async (dispatch) => {
-    dispatch({
-      type: 'REMOVE_LINK',
-      linkId: linkId
-    })
+    try {
+      const rmresult = await linkService.deleteOneLinkFromUserFavourites(linkId)
+      console.log('Linkki on poistettu')
+      dispatch({
+        type: 'REMOVE_LINK',
+        linkId: linkId
+      })
+    } catch (e) {
+      return 'error removing the link from favorites'
+    }
+    
   }
 }
 
