@@ -16,6 +16,8 @@ import PlaylistForm from './components/PlaylistForm'
 import Playlists from './components/Playlists'
 import HiddenPlaylist from './components/HiddenPlaylist'
 import RelatedLinks from './components/RelatedLinks'
+import User from './components/User'
+import Users from './components/Users'
 
 class App extends React.Component {
 
@@ -70,19 +72,8 @@ class App extends React.Component {
         <div>
           <LoggedBar />
           <HiddenPlaylist />
-          <h1>Käyttäjät</h1>
-          <ul>
-            {this.props.users.map(u => <li key={u.id}>
-              username: {u.username},
-              id: {u.id},
-              name: {u.name},
-              linkkien määrä: {u.links.length},
-              soittolistojen määrä: {u.playlists.length}
-              </li>
-            )}
-          </ul>
-          <FavouriteLinks />
-          <Playlists />
+          <Users />
+          <User />
           <PlaylistForm />
           <YTSearchBar />
           <YTSearchResults />

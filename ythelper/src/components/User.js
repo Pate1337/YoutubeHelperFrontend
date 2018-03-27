@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Playlists from './Playlists'
+import FavouriteLinks from './FavouriteLinks'
 
 class User extends React.Component {
     render() {
@@ -7,7 +9,7 @@ class User extends React.Component {
             <div>
                 <h2>Tähän käyttäjän nimi</h2>
                 <div>
-                  <h3>Playlists</h3>
+                  <FavouriteLinks />
                   <Playlists />
                 </div>
             </div>
@@ -22,5 +24,6 @@ const mapStateToProps = () => {
 const mapDispatchToProps = {
 
 }
+const ConnectedUser = connect(mapStateToProps, mapDispatchToProps)(User)
 
-export default ConnectedUser (mapStateToProps, mapDispatchToProps)(User)
+export default ConnectedUser
