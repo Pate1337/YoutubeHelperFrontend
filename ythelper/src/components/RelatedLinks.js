@@ -22,9 +22,13 @@ class RelatedLinks extends React.Component {
   }
 }
 
+const sortByCount = (a, b) => {
+  return parseInt(b.count, 10) - parseInt(a.count, 10)
+}
+
 const mapStateToProps = (state) => {
   return {
-    relatedLinks: state.userLinks.relatedLinks
+    relatedLinks: state.userLinks.relatedLinks.sort(sortByCount)
   }
 }
 

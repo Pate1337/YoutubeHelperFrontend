@@ -102,6 +102,21 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         playlists: store.playlists,
         relatedLinks: [...store.relatedLinks, ...action.data]
       }
+    case 'UPDATE_COUNT':
+      let updatedRelatedLinks = []
+      store.relatedLinks.forEach(l => {
+        if (l._id === action.linkId) {
+          let newLink = {...l, count: l.count + 1}
+          updatedRelatedLinks.push(newLink)
+        } else {
+          updatedRelatedLinks.push(l)
+        }
+      })
+      return {
+        favourites: store.favourites,
+        playlists: store.playlists,
+        relatedLinks: updatedRelatedLinks
+      }
     default:
       return store
   }
@@ -236,6 +251,22 @@ export const shufflePlaylist = (playlistId) => {
     dispatch({
       type: 'SHUFFLE_PLAYLIST',
       playlistId: playlistId
+    })
+  }
+}
+
+export const updateRelatedCount = (relatedLinkObject) => {
+  return async (dispatch) => {
+    /*let newRelatedLinks = []
+    relatedLinkObjects.forEach(l => {
+      let newRelatedLink = {...l, count: l.count + 1 }
+      newRelatedLinks.push(newRelatedLink)
+    })*/
+    const newObject = {...relatedLinkObject, count: relatedLinkObject.count + 1}
+    const updatedLink = await linkService.updateRelatedCount(newObject)
+    dispatch({
+      type: 'UPDATE_COUNT',
+      linkId: updatedLink._id
     })
   }
 }

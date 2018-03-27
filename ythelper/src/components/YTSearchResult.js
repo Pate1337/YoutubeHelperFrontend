@@ -8,6 +8,7 @@ import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { removeRelatedFromUser } from '../reducers/userLinksReducer'
 import { addToUserRelated } from '../reducers/userLinksReducer'
+import { updateRelatedCount } from '../reducers/userLinksReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -72,6 +73,7 @@ class YTSearchResult extends React.Component {
         })
         /*console.log('relatedVideos.length: ' + relatedLinks.length)*/
         let linksToAdd = []
+        let updateCounts = []
         let found = false
         for (let i = 0; i < relatedLinks.length; i++) {
           const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
@@ -98,6 +100,9 @@ class YTSearchResult extends React.Component {
           if (usersRelated !== undefined) {
             /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
             /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
+            /*updateCounts.push(l)*/
+            console.log('usersRelated kun ei undefined, pitäis olla object: ' + usersRelated)
+            await this.props.updateRelatedCount(usersRelated)
             continue
           }
           /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
@@ -107,7 +112,12 @@ class YTSearchResult extends React.Component {
         }
         console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
         /*Muuta tämä siten, että yksi kerrallaan lisätään!*/
-        await this.props.addToUserRelated(linksToAdd)
+      /*  if (updateCounts.length !== 0) {
+          await this.props.updateRelatedCounts(updateCounts)
+        }*/
+        if (linksToAdd.length !== 0) {
+          await this.props.addToUserRelated(linksToAdd)
+        }
         /*Tähän vissii viel se kutsu usersInitialization*/
       } else {
         console.log('Ei lisätty')
@@ -234,7 +244,8 @@ const mapDispatchToProps = {
   addToPlayingPlaylist,
   searchForRelatedVideos,
   removeRelatedFromUser,
-  addToUserRelated
+  addToUserRelated,
+  updateRelatedCount
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

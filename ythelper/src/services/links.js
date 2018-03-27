@@ -84,6 +84,11 @@ const removeLinkFromRelated = async (linkId) => {
   return response.data
 }
 
+const updateRelatedCount = async (relatedLinkObject) => {
+  const response = await axios.put('/api/relateds/', relatedLinkObject)
+  return response.data
+}
+
 export default { getAll, setToken, createAndAddLinkToUserFavourites,
   createPlaylist, addLinkToPlaylist, addLinksToRelated, removeLinkFromRelated,
-  deleteOneLinkFromUserFavourites }
+  deleteOneLinkFromUserFavourites, updateRelatedCount }
