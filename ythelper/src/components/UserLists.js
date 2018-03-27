@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Playlists from './Playlists'
 import FavouriteLinks from './FavouriteLinks'
 
-class User extends React.Component {
+class UserLists extends React.Component {
     render() {
         return (
             <div>
@@ -24,6 +24,6 @@ const mapStateToProps = () => {
 const mapDispatchToProps = {
 
 }
-const ConnectedUser = connect(mapStateToProps, mapDispatchToProps)(User)
+const ConnectedUserLists = connect(mapStateToProps, mapDispatchToProps)(UserLists)
 
-export default ConnectedUser
+export default ConnectedUserLists

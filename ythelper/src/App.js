@@ -16,7 +16,7 @@ import PlaylistForm from './components/PlaylistForm'
 import Playlists from './components/Playlists'
 import HiddenPlaylist from './components/HiddenPlaylist'
 import RelatedLinks from './components/RelatedLinks'
-import User from './components/User'
+import UserLists from './components/UserLists'
 import Users from './components/Users'
 
 class App extends React.Component {
@@ -73,7 +73,7 @@ class App extends React.Component {
           <LoggedBar />
           <HiddenPlaylist />
           <Users />
-          <User />
+          <UserLists />
           <PlaylistForm />
           <YTSearchBar />
           <YTSearchResults />

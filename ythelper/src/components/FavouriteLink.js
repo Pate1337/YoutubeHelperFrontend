@@ -36,7 +36,6 @@ class FavouriteLink extends React.Component {
       }
       return (
         <div>
-          <p>{this.props.item.title} <button onClick={this.removeOneFavouriteLink}>Remove From Favorites</button></p>
           <Youtube
             videoId={this.props.item.linkId}
             opts={opts}
@@ -49,7 +48,7 @@ class FavouriteLink extends React.Component {
     } else {
       return (
         <div>
-          <p>{this.props.item.title} <button onClick={this.removeOneFavouriteLink}>Remove From Favorites</button></p>
+          
           <div>
           <img onClick={this.toggleVisibility}
             src={this.props.item.thumbnail}
@@ -57,6 +56,7 @@ class FavouriteLink extends React.Component {
             style={{cursor: 'pointer', display: 'inline-block'}}
           />
           id: {this.props.item.linkId}, title: {this.props.item.title}
+          <button onClick={this.removeOneFavouriteLink}>Remove From Favorites</button>
         </div>
         </div>
       )
