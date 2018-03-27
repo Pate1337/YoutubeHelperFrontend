@@ -2,25 +2,27 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 class User extends React.Component {
-    render() {
-        return (
-            <div>
-                <h2>Tähän käyttäjän nimi</h2>
-                <div>
-                  <h3>Playlists</h3>
-                  <Playlists />
-                </div>
-            </div>
-        )
-    }
+
+  render() {
+    return(
+      <div>
+        <p> Testi </p>
+      </div>
+    )
+  }
 }
 
-const mapStateToProps = () => {
-  
+const mapStateToProps = (state) => {
+  return {
+    loggedUser: state.loggedUser,
+    users: state.users
+  }
 }
 
 const mapDispatchToProps = {
 
 }
 
-export default ConnectedUser (mapStateToProps, mapDispatchToProps)(User)
+ConnectedUser = connect(mapStateToProps, mapDispatchToProps)(User)
+
+export default ConnectedUser
