@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { removeOneFavouriteLink } from '../reducers/userLinksReducer'
+import { usersInitialization } from '../reducers/userReducer'
 
 class FavouriteLink extends React.Component {
   constructor() {
@@ -20,6 +21,7 @@ class FavouriteLink extends React.Component {
     event.preventDefault()
     console.log('test')
     await this.props.removeOneFavouriteLink(this.props.item._id)
+    await this.props.usersInitialization()
   }
 
 }
@@ -31,7 +33,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = {
-  removeOneFavouriteLink
+  removeOneFavouriteLink,
+  usersInitialization
 }
 
 const ConnectedFavouriteLink = connect(mapStateToProps, mapDispatchToProps)(FavouriteLink)
