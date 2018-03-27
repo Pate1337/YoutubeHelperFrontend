@@ -100,7 +100,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       return {
         favourites: store.favourites,
         playlists: store.playlists,
-        relatedLinks: [...store.relatedLinks, action.data]
+        relatedLinks: [...store.relatedLinks, ...action.data]
       }
     default:
       return store
@@ -150,7 +150,7 @@ export const removeOneFavouriteLink = (linkId) => {
     } catch (e) {
       return 'error removing the link from favorites'
     }
-    
+
   }
 }
 

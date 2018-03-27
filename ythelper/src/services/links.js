@@ -70,7 +70,9 @@ const addLinksToRelated = async (linkObjects) => {
   const config = {
     headers: { 'Authorization': token}
   }
+  console.log('AIKA KUN LINKIT LÄHETETÄÄN SERVERILLE: ' + Date.now())
   const response = await axios.post('/api/relateds', linkObjects, config)
+  console.log('AIKA KUN VASTAUS SAADAAN: ' + Date.now())
   return response.data
 }
 
