@@ -7,7 +7,7 @@ class UserLists extends React.Component {
     render() {
         return (
             <div>
-                <h2>Tähän käyttäjän nimi</h2>
+                <h2>{this.props.loggedUser.username}</h2>
                 <div>
                   <FavouriteLinks />
                   <Playlists />
@@ -17,7 +17,11 @@ class UserLists extends React.Component {
     }
 }
 
-const mapStateToProps = () => {
+const mapStateToProps = (state) => {
+  return {
+    loggedUser: state.loggedUser
+  }
+  
   
 }
 
