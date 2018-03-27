@@ -41,14 +41,14 @@ class YTSearchResult extends React.Component {
 
     /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     const linkExists = this.props.usersRelated
-      .filter(f => f.linkId === this.props.item.id)
+      .filter(f => f.link.linkId === this.props.item.id)
     if (linkExists === undefined || linkExists === null || linkExists.length === 0) {
       /*linkki ei ole käyttäjän related*/
     } else {
       /*Käyttäjän relatedeista pitää poistaa kyseinen linkki.*/
       console.log('LINKKI ON KÄYTTÄJÄN RELATED')
-      console.log('LINKIN ID: ' + linkExists[0]._id)
-      await this.props.removeRelatedFromUser(linkExists[0]._id)
+      console.log('LINKIN ID: ' + linkExists[0].link._id)
+      await this.props.removeRelatedFromUser(linkExists[0].link._id)
       /*Tää toimii*/
     }
       /*Pitää varmaan saada myös toi thumbnail tuonne linkkitauluun*/
@@ -94,9 +94,10 @@ class YTSearchResult extends React.Component {
             /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
             continue
           }
-          const usersRelated = this.props.usersRelated.find(l => l.linkId === relatedLinks[i].linkId)
+          const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
           if (usersRelated !== undefined) {
             /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
+            /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
             continue
           }
           /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
@@ -107,6 +108,7 @@ class YTSearchResult extends React.Component {
         console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
         /*Muuta tämä siten, että yksi kerrallaan lisätään!*/
         await this.props.addToUserRelated(linksToAdd)
+        /*Tähän vissii viel se kutsu usersInitialization*/
       } else {
         console.log('Ei lisätty')
       }

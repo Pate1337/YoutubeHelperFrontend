@@ -9,7 +9,7 @@ class RelatedLinks extends React.Component {
         <div>
           <h3>Ehdotukset</h3>
           <ol>
-            {this.props.relatedLinks.map(l => <li key={l._id}>{l.title}</li>)}
+            {this.props.relatedLinks.map(l => <li key={l.link._id}>{l.link.title} count: {l.count}</li>)}
           </ol>
         </div>
       )

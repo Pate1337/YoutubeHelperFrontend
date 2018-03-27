@@ -86,7 +86,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
     case 'REMOVE_RELATED':
       let newRelatedLinks = []
       store.relatedLinks.forEach(l => {
-        if (l._id !== action.linkId) {
+        if (l.link._id !== action.linkId) {
           newRelatedLinks.push(l)
         }
       })
