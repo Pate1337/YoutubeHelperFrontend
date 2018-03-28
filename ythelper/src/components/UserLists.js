@@ -4,25 +4,20 @@ import Playlists from './Playlists'
 import FavouriteLinks from './FavouriteLinks'
 
 class UserLists extends React.Component {
-    render() {
-        return (
-            <div>
-                <h2>{this.props.loggedUser.username}</h2>
-                <div>
-                  <FavouriteLinks />
-                  <Playlists />
-                </div>
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <FavouriteLinks />
+        <Playlists />
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser
   }
-  
-  
 }
 
 const mapDispatchToProps = {
