@@ -235,13 +235,18 @@ export const removeRelatedFromUser = (linkId) => {
 }
 
 export const addToUserRelated = (linkObjects) => {
+
   return async (dispatch) => {
-    const links = await linkService.addLinksToRelated(linkObjects)
-    console.log('addToUserRelated links.length: ' + links.length)
-    dispatch({
-      type: 'ADD_RELATED',
-      data: links
-    })
+    try {
+      const links = await linkService.addLinksToRelated(linkObjects)
+      console.log('addToUserRelated links.length: ' + links.length)
+      dispatch({
+        type: 'ADD_RELATED',
+        data: links
+      })
+    } catch (exception) {
+      return 'error'
+    }
   }
 }
 
@@ -257,17 +262,16 @@ export const shufflePlaylist = (playlistId) => {
 
 export const updateRelatedCount = (relatedLinkObject) => {
   return async (dispatch) => {
-    /*let newRelatedLinks = []
-    relatedLinkObjects.forEach(l => {
-      let newRelatedLink = {...l, count: l.count + 1 }
-      newRelatedLinks.push(newRelatedLink)
-    })*/
-    const newObject = {...relatedLinkObject, count: relatedLinkObject.count + 1}
-    const updatedLink = await linkService.updateRelatedCount(newObject)
-    dispatch({
-      type: 'UPDATE_COUNT',
-      linkId: updatedLink._id
-    })
+    try {
+      const newObject = {...relatedLinkObject, count: relatedLinkObject.count + 1}
+      const updatedLink = await linkService.updateRelatedCount(newObject)
+      dispatch({
+        type: 'UPDATE_COUNT',
+        linkId: updatedLink._id
+      })
+    } catch (exception) {
+      return 'error'
+    }
   }
 }
 

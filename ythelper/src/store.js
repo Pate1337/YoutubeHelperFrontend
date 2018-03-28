@@ -9,6 +9,7 @@ import userLinksReducer from './reducers/userLinksReducer'
 import ytSearchBarReducer from './reducers/ytSearchBarReducer'
 import playlistPlayingReducer from './reducers/playlistPlayingReducer'
 import ytRelatedVideosReducer from './reducers/ytRelatedVideosReducer'
+import serverReducer from './reducers/serverReducer'
 
 const reducer = combineReducers({
   users: userReducer,
@@ -19,7 +20,8 @@ const reducer = combineReducers({
   userLinks: userLinksReducer,
   ytSearchBar: ytSearchBarReducer,
   playingPlaylist: playlistPlayingReducer,
-  relatedLinks: ytRelatedVideosReducer
+  relatedLinks: ytRelatedVideosReducer,
+  serverOnUse: serverReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

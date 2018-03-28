@@ -9,7 +9,7 @@ class RelatedLinks extends React.Component {
         <div>
           <h3>Ehdotukset</h3>
           <ol>
-            {this.props.relatedLinks.map(l => <li key={l.link._id}>{l.link.title} count: {l.count}</li>)}
+            {this.props.relatedLinks.map(l => <li key={l.link._id}>{l.link.title}, id: {l.link.linkId} count: {l.count}</li>)}
           </ol>
         </div>
       )
@@ -27,8 +27,14 @@ const sortByCount = (a, b) => {
 }
 
 const mapStateToProps = (state) => {
+  let relatedLinks
+  if (state.userLinks.relatedLinks.length !== 0) {
+    relatedLinks = state.userLinks.relatedLinks.sort(sortByCount)
+  } else {
+    relatedLinks = state.userLinks.relatedLinks
+  }
   return {
-    relatedLinks: state.userLinks.relatedLinks.sort(sortByCount)
+    relatedLinks: relatedLinks
   }
 }
 
