@@ -28,7 +28,13 @@ class LoggedBar extends React.Component {
               {this.props.loggedUser.username} logged in&nbsp;
               <button onClick={this.logOut}>
                 Logout
-              </button>
+              </button>&nbsp;
+              <Link to='/myFavourites'>
+                My favourites
+              </Link>&nbsp;
+              <Link to='/myPlaylists'>
+                My playlists
+              </Link>
             </div>
           : <div>
               <Link to='/login'>login</Link>&nbsp;

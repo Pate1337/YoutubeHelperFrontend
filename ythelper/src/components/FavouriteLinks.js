@@ -10,29 +10,29 @@ class FavouriteLinks extends React.Component {
     }
   }
 
-  toggleVisibility = () => {
+  /*toggleVisibility = () => {
     this.setState({
       showFavourites: !this.state.showFavourites
     })
-  }
+  }*/
   render() {
     console.log('Rendering FavouriteLinks')
     console.log('favouriteLiks.length: ' + this.props.favouriteLinks.length)
     console.log('link._id: ' + this.props.favouriteLinks[0])
     /*const showFavourites = { display: (this.state.showFavourites) ? '' : 'none' }
     const dontShow = { display: (!this.state.showFavourites) ? 'none' : '' }*/
-    if (this.state.showFavourites) {
+    /*if (this.state.showFavourites) {*/
       return (
         <div>
-          <h2 onClick={this.toggleVisibility} style={{cursor: 'pointer', display: 'inline-block'}}>
-            Favourites (press to hide)
+          <h2>
+            My favourites
           </h2>
           {this.props.favouriteLinks.map(link =>
             <FavouriteLink key={link._id} item={link} />
           )}
         </div>
       )
-    } else {
+  /*  } else {
       return (
         <div>
           <h2 onClick={this.toggleVisibility} style={{cursor: 'pointer', display: 'inline-block'}}>
@@ -40,7 +40,7 @@ class FavouriteLinks extends React.Component {
           </h2>
         </div>
       )
-    }
+    }*/
   }
 
 }
