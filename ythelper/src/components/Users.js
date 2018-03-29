@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Comments from './Comments'
 
 class Users extends React.Component {
   constructor() {
@@ -42,6 +43,7 @@ class Users extends React.Component {
 
           <h3>Näytettävä Käyttäjä</h3>
             <p>{this.state.userToShow}</p>
+            <Comments cuser={this.state.userToShow}/>
             <button onClick={this.hideUser}>Piilota</button>
         </div>
       )
