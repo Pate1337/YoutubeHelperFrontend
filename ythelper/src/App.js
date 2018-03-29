@@ -21,6 +21,7 @@ import Users from './components/Users'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Welcome from './components/Welcome'
 import Home from './components/Home'
+import Menu from './components/Menu'
 
 class App extends React.Component {
 
@@ -45,27 +46,31 @@ class App extends React.Component {
               <Route path='/'
                 render={({history}) => <LoggedBar history={history} />} />
               <h1>YoutubeHelper</h1>
+              <Route path='/'
+                render={() => <Menu />} />
               <Route path='/login'
                 render={({history}) => <LoginForm history={history} />} />
               <Route path='/signup'
                 render={({history}) => <RegisterForm history={history} />} />
               {this.props.loggedUser === null
-                ? <Route path='/'
-                  render={() => <Welcome />} />
+                ? <Route exact path='/'
+                    render={() => <Welcome />} />
                 : <div>
-                    <Route path='/'
-                    render={() => <Home />} />
-                    <Users />
-                    <UserLists />
+                    <Route exact path='/'
+                      render={() => <Home />} />
+                    <Route path='/myFavourites'
+                      render={() => <FavouriteLinks />} />
+                    <Route path='/myPlaylists'
+                      render={() => <Playlists />} />
+                    <Route path='/recommended'
+                      render={() => <RelatedLinks />} />
                     <PlaylistForm />
                   </div>
               }
+              <Route path='/users'
+                render={() => <Users />} />
               <YTSearchBar />
               <YTSearchResults />
-              {this.props.loggedUser === null
-                ? <div></div>
-                : <RelatedLinks />
-              }
             </div>
           </Router>
         </div>
