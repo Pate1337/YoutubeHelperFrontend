@@ -72,7 +72,6 @@ class YTSearchResult extends React.Component {
     })
     /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     let isRelated = false
-    let loaded = true
     let isFavourited = false
     let linkExists
     if (this.props.usersRelated.length !== 0 && this.props.favourites.length !== 0) {
@@ -104,144 +103,74 @@ class YTSearchResult extends React.Component {
         thumbnail: this.props.item.thumbnail,
         linkId: this.props.item.id
       }
-      let favResponse = await this.props.addFavouriteForUser(linkObject)
-      let i = 0
-      while (favResponse === 'error') {
-        console.log('Koitetaan lisätä suosikkeihin uudestaan')
-        favResponse = await this.props.addFavouriteForUser(linkObject)
-        /*Jos käyttäjä rämpyttää favourittia, niin saattaa olla, että
-        se on jo tietokannassa. Tällöin bäkki palauttaa 'error'*/
-        if (i === 0) {
-          i = 1
-          setTimeout(() => {
-            console.log('timeoutti asetettu trueksi 20 sekunnin jälkeen')
-            timeout = true
-          }, 20000)
+      await this.props.addFavouriteForUser(linkObject)
+
+      console.log('lisätty')
+      await this.props.usersInitialization()
+      if (isRelated) {
+        let remResponse = await this.props.removeRelatedFromUser(linkExists[0].link._id)
+        while (remResponse === 'error') {
+          console.log('yritetään poistaa uudestaan')
+          remResponse = await this.props.removeRelatedFromUser(linkExists[0].link._id)
         }
+        console.log('LINKKI POISTETTU KÄYTTÄJÄN EHDOTUKSISTA!')
       }
-      if (!timeout) {
-        console.log('lisätty')
-        await this.props.usersInitialization()
-        if (isRelated) {
-          let remResponse = await this.props.removeRelatedFromUser(linkExists[0].link._id)
-          while (remResponse === 'error') {
-            console.log('yritetään poistaa uudestaan')
-            remResponse = await this.props.removeRelatedFromUser(linkExists[0].link._id)
-          }
-          console.log('LINKKI POISTETTU KÄYTTÄJÄN EHDOTUKSISTA!')
+      /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
+      voidaan hakea kyseisen videon related videos.*/
+      await this.props.searchForRelatedVideos(linkObject.linkId)
+      const relatedLinks = this.props.relatedLinks
+
+      let linksToAdd = []
+      let updateCounts = []
+      let found = false
+      for (let i = 0; i < relatedLinks.length; i++) {
+        const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
+
+        if (favourites !== undefined) {
+          /*Tällöin linkkiä ei haluta lisätä related*/
+          continue
         }
-        /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
-        voidaan hakea kyseisen videon related videos.*/
-        await this.props.searchForRelatedVideos(linkObject.linkId)
-        const relatedLinks = this.props.relatedLinks
-        /*console.log('relatedVideos.length: ' + relatedLinks.length)*/
-        let linksToAdd = []
-        let updateCounts = []
-        let found = false
-        for (let i = 0; i < relatedLinks.length; i++) {
-          const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
-          /*favourites = undefined kun ei löydä mitään.*/
-          if (favourites !== undefined) {
-            /*Tällöin linkkiä ei haluta lisätä related*/
-            continue
-          }
-          for (let j = 0; j < this.props.playlists.length; j++) {
-            let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
-            if (playlists !== undefined) {
-              found = true
-              /*Tällä playlistillä oli kyseinen linkki.*/
-            }
-            if (found) {
-              break
-            }
+        for (let j = 0; j < this.props.playlists.length; j++) {
+          let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
+          if (playlists !== undefined) {
+            found = true
+            /*Tällä playlistillä oli kyseinen linkki.*/
           }
           if (found) {
-            /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
-            continue
-          }
-          const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
-          if (usersRelated !== undefined) {
-            /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
-            /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
-            /*updateCounts.push(l)*/
-            let resp = await this.props.updateRelatedCount(usersRelated)
-            while (resp === 'error') {
-              console.log('YRITETÄÄN UUSIKS')
-              resp = await this.props.updateRelatedCount(usersRelated)
-            }
-            continue
-          }
-          /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
-          relatedLinkseihin*/
-          linksToAdd.push(relatedLinks[i])
-        }
-        console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
-        if (linksToAdd.length !== 0) {
-          let error = await this.props.addToUserRelated(linksToAdd)
-          while (error === 'error') {
-            console.log('YRITETÄÄN UUDESTAAN')
-            error = await this.props.addToUserRelated(linksToAdd)
+            break
           }
         }
-      } else {
-        console.log('LINKKIÄ EI LISÄTTY SUOSIKEIHIN AIKARAJAN TAKIA!')
+        if (found) {
+          /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
+          continue
+        }
+        const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
+        if (usersRelated !== undefined) {
+          /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
+          /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
+          let resp = await this.props.updateRelatedCount(usersRelated)
+          while (resp === 'error') {
+            console.log('YRITETÄÄN UUSIKS')
+            resp = await this.props.updateRelatedCount(usersRelated)
+          }
+          continue
+        }
+        /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
+        relatedLinkseihin*/
+        linksToAdd.push(relatedLinks[i])
+      }
+      console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
+      if (linksToAdd.length !== 0) {
+        let error = await this.props.addToUserRelated(linksToAdd)
+        while (error === 'error') {
+          console.log('YRITETÄÄN UUDESTAAN')
+          error = await this.props.addToUserRelated(linksToAdd)
+        }
       }
     } else {
       console.log('LINKKIÄ EI LISÄTTY SUOSIKEIHIN!')
     }
     await this.props.serverFree()
-    /*  if (response !== 'error') {
-        console.log('lisätty')
-        await this.props.usersInitialization()
-        if (isRelated) {
-          await this.props.removeRelatedFromUser(linkExists[0].link._id)
-          console.log('LINKKI POISTETTU KÄYTTÄJÄN EHDOTUKSISTA!')
-        }
-
-        await this.props.searchForRelatedVideos(linkObject.linkId)
-        const relatedLinks = this.props.relatedLinks
-        let linksToAdd = []
-        let updateCounts = []
-        let found = false
-        for (let i = 0; i < relatedLinks.length; i++) {
-          const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
-          if (favourites !== undefined) {
-            continue
-          }
-          for (let j = 0; j < this.props.playlists.length; j++) {
-            let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
-            if (playlists !== undefined) {
-              found = true
-            }
-            if (found) {
-              break
-            }
-          }
-          if (found) {
-            continue
-          }
-          const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
-          if (usersRelated !== undefined) {
-            let resp = await this.props.updateRelatedCount(usersRelated)
-            while (resp === 'error') {
-              console.log('YRITETÄÄN UUSIKS')
-              resp = await this.props.updateRelatedCount(usersRelated)
-            }
-            continue
-          }
-          linksToAdd.push(relatedLinks[i])
-        }
-        console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
-        if (linksToAdd.length !== 0) {
-          let error = await this.props.addToUserRelated(linksToAdd)
-          while (error === 'error') {
-            console.log('YRITETÄÄN UUDESTAAN')
-            error = await this.props.addToUserRelated(linksToAdd)
-          }
-        }
-      } else {
-        console.log('Ei lisätty')
-      }*/
   }
 
   togglePlaylists = () => {
