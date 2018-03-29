@@ -76,7 +76,7 @@ class YTSearchResult extends React.Component {
     let linkExists
     if (this.props.usersRelated.length !== 0 && this.props.favourites.length !== 0) {
       linkExists = this.props.usersRelated
-        .filter(f => f.link.linkId === this.props.item.id)
+        .filter(f => f.link.linkId === this.props.item.linkId)
       if (linkExists === undefined || linkExists === null || linkExists.length === 0) {
         /*linkki ei ole käyttäjän related*/
         console.log('EI OLE RELATED')
@@ -87,7 +87,7 @@ class YTSearchResult extends React.Component {
       }
       /*Tarkistetaan, onko jo suosikeissa*/
       const favExists = this.props.favourites
-        .filter(l => l.linkId === this.props.item.id)
+        .filter(l => l.linkId === this.props.item.linkId)
       if (favExists === undefined || favExists === null || favExists.length === 0) {
         /*linkki ei ole käyttäjän suosikeissa*/
         console.log('EI OLE FAVORITEISSA')
@@ -101,7 +101,7 @@ class YTSearchResult extends React.Component {
       const linkObject = {
         title: this.props.item.title,
         thumbnail: this.props.item.thumbnail,
-        linkId: this.props.item.id
+        linkId: this.props.item.linkId
       }
       await this.props.addFavouriteForUser(linkObject)
 
@@ -187,7 +187,7 @@ class YTSearchResult extends React.Component {
     /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     let isRelated = false
     const linkExists = this.props.usersRelated
-      .filter(f => f.link.linkId === this.props.item.id)
+      .filter(f => f.link.linkId === this.props.item.linkId)
     if (linkExists === undefined || linkExists === null || linkExists.length === 0) {
       /*linkki ei ole käyttäjän related*/
       console.log('EI OLE RELATED')
@@ -201,7 +201,7 @@ class YTSearchResult extends React.Component {
     const linkObject = {
       title: this.props.item.title,
       thumbnail: this.props.item.thumbnail,
-      linkId: this.props.item.id
+      linkId: this.props.item.linkId
     }
     const response = await this.props.addLinkToPlaylist(linkObject, playlistId)
     if (response !== 'error') {
@@ -282,13 +282,19 @@ class YTSearchResult extends React.Component {
     console.log('Rendering YTSearchResult')
     /*Toi react-youtube on ihan uskomaton lifesaver*/
     /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
-    if (this.state.playVideo) {
-      const showPlaylist = { display: (this.props.loggedUser !== null && this.state.showPlaylistButton) ? '' : 'none' }
-      const showFavourite = { display: (this.props.loggedUser !== null && this.state.showFavouriteButton) ? '' : 'none' }
-      const showPlaylists = { display: (this.state.showPlaylists === true) ? '' : 'none' }
-      console.log('this.state.showPlaylists: ' + this.state.showPlaylists)
-      console.log('this.props.playlists.length: ' + this.props.playlists.length)
-      const opts = {
+    /*Tuleeko pyyntö ehdotukselta vai listaiksesta*/
+    let opts
+    if (this.props.oneLinkOnly) {
+      opts = {
+        height: '315',
+        width: '560',
+        playerVars: {
+          autoplay: 0,
+          rel: 0
+        }
+      }
+    } else {
+      opts = {
         height: '315',
         width: '560',
         playerVars: {
@@ -296,10 +302,18 @@ class YTSearchResult extends React.Component {
           rel: 0
         }
       }
+    }
+    if (this.state.playVideo) {
+      const showPlaylist = { display: (this.props.loggedUser !== null && this.state.showPlaylistButton) ? '' : 'none' }
+      const showFavourite = { display: (this.props.loggedUser !== null && this.state.showFavouriteButton) ? '' : 'none' }
+      const showPlaylists = { display: (this.state.showPlaylists === true) ? '' : 'none' }
+      console.log('this.state.showPlaylists: ' + this.state.showPlaylists)
+      console.log('this.props.playlists.length: ' + this.props.playlists.length)
+
       return (
         <div>
           <Youtube
-            videoId={this.props.item.id}
+            videoId={this.props.item.linkId}
             opts={opts}
             onReady={this.onReady}
             onEnd={this.onEnd}
@@ -334,15 +348,28 @@ class YTSearchResult extends React.Component {
     }
   }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  let oneLinkOnly
+  let item
+  if (ownProps.suggestion !== undefined) {
+    console.log('Saavuttiin ehdotuksesta')
+    oneLinkOnly = true
+    item = ownProps.suggestion
+  } else {
+    console.log('Saavuttiin listauksesta')
+    oneLinkOnly = false
+    item = ownProps.item
+  }
   return {
+    item: item,
     loggedUser: state.loggedUser,
     favourites: state.userLinks.favourites,
     playlists: state.userLinks.playlists,
     playingPlaylist: state.playingPlaylist,
     usersRelated: state.userLinks.relatedLinks,
     relatedLinks: state.relatedLinks,
-    serverOnUse: state.serverOnUse
+    serverOnUse: state.serverOnUse,
+    oneLinkOnly: oneLinkOnly
   }
 }
 

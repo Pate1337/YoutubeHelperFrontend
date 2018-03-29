@@ -1,25 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Youtube from 'react-youtube'
+import YTSearchResult from './YTSearchResult'
 
 class Home extends React.Component {
 
   render() {
-    let random
-    let rLink
-    let opts
-    if (this.props.recommendedLinks !== undefined && this.props.recommendedLinks.length !== 0) {
-      opts = {
-        height: '315',
-        width: '560',
-        playerVars: {
-          autoplay: 0,
-          rel: 0
-        }
-      }
-      random = Math.floor(Math.random() * this.props.recommendedLinks.length)
-      rLink = this.props.recommendedLinks[random]
-    }
     return (
       <div>
         <h3>Welcome {this.props.loggedUser.username}!</h3>
@@ -32,12 +18,7 @@ class Home extends React.Component {
           && this.props.recommendedLinks.length !== 0)
           ? <div>
               <strong>Here is our pick of the day for you:</strong>
-              <div>
-                <Youtube
-                  videoId={rLink.link.linkId}
-                  opts={opts}
-                />
-              </div>
+              <YTSearchResult suggestion={this.props.randomLink} />
             </div>
           : <div></div>
         }
@@ -49,7 +30,8 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    recommendedLinks: state.userLinks.relatedLinks
+    recommendedLinks: state.userLinks.relatedLinks,
+    randomLink: state.userLinks.randomLink
   }
 }
 

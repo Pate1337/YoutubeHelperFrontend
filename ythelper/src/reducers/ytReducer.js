@@ -27,7 +27,7 @@ export const searchForVideo = (searchObject) => {
   /*formatItemissä nyt vaan pari hassua kohtaa*/
   const formatItem = (item) => {
     return {
-      id: item.id.videoId,
+      linkId: item.id.videoId,
       title: item.snippet.title,
       thumbnail: item.snippet.thumbnails.default.url
     }

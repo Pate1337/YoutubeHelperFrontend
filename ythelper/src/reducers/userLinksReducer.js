@@ -4,28 +4,30 @@ import linkService from '../services/links'
 /*Täällä on nyt ongelmia! Aaaa, tätyy jättää formatoimatta backissa
 playlistin lisäyksessä, suosikin lisäyksessa ja uuden linkin lisäyksessä
 soittolistalle! Nyt pitäis kaikki olla kunnossa.*/
-const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [] }, action) => {
+const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null }, action) => {
   switch(action.type) {
     case 'GET_ALL':
       console.log('GET_ALL userLinksReducer')
       return action.data
     case 'REMOVE':
       console.log('REMOVE userLinksReducer')
-      return { favourites: [], playlists: [] }
+      return { favourites: [], playlists: [], relatedLinks: [], randomLink: null }
     case 'REMOVE_LINK':
       console.log('REMOVE_LINK userLinksReducer')
       let favouritesC = store.favourites.filter( link => link._id != action.linkId)
       return {
         favourites: favouritesC,
         playlists: store.playlists,
-        relatedLinks: store.relatedLinks
+        relatedLinks: store.relatedLinks,
+        randomLink: store.randomLink
       }
     case 'ADD_FAVOURITE':
       console.log('ADD_FAVOURITE userLinksReducer')
       return {
         favourites: [...store.favourites, action.data],
         playlists: store.playlists,
-        relatedLinks: store.relatedLinks
+        relatedLinks: store.relatedLinks,
+        randomLink: store.randomLink
       }
     case 'ADD_LINK_TO_PLAYLIST':
       console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
@@ -45,7 +47,8 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       return {
         favourites: store.favourites,
         playlists: playlists,
-        relatedLinks: store.relatedLinks
+        relatedLinks: store.relatedLinks,
+        randomLink: store.randomLink
       }
       case 'ADD_PLAYLIST':
         console.log('ADD_PLAYLIST userLinksReducer')
@@ -53,7 +56,8 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         return {
           favourites: store.favourites,
           playlists: [...store.playlists, action.data],
-          relatedLinks: store.relatedLinks
+          relatedLinks: store.relatedLinks,
+          randomLink: store.randomLink
         }
       case 'SHUFFLE_PLAYLIST':
         console.log('SHUFFLE_PLAYLIST userLinksReducer')
@@ -81,26 +85,36 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       return {
         favourites: store.favourites,
         playlists: plists,
-        relatedLinks: store.relatedLinks
+        relatedLinks: store.relatedLinks,
+        randomLink: store.randomLink
       }
     case 'REMOVE_RELATED':
+      console.log('REMOVE RELATED userLinksService')
       let newRelatedLinks = []
       store.relatedLinks.forEach(l => {
         if (l.link._id !== action.linkId) {
           newRelatedLinks.push(l)
         }
       })
+    /*  let newRandomLink = store.randomLink
+      if (store.randomLink._id === action.linkId) {
+        const randomIndex = Math.floor(Math.random() * newRelatedLinks.length)
+        newRandomLink = newRelatedLinks[randomIndex].link
+        console.log('UUS RANDOM LINKKI ON : ' + newRandomLink.title)
+      }*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
-        relatedLinks: newRelatedLinks
+        relatedLinks: newRelatedLinks,
+        randomLink: store.randomLink
       }
     case 'ADD_RELATED':
       console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
       return {
         favourites: store.favourites,
         playlists: store.playlists,
-        relatedLinks: [...store.relatedLinks, ...action.data]
+        relatedLinks: [...store.relatedLinks, ...action.data],
+        randomLink: store.randomLink
       }
     case 'UPDATE_COUNT':
       let updatedRelatedLinks = []
@@ -115,7 +129,8 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       return {
         favourites: store.favourites,
         playlists: store.playlists,
-        relatedLinks: updatedRelatedLinks
+        relatedLinks: updatedRelatedLinks,
+        randomLink: store.randomLink
       }
     default:
       return store
@@ -131,12 +146,16 @@ export const userLinks = () => {
       const loggedUser = JSON.parse(loggedUserJSON)
       const user = await userService.getUserById(loggedUser.id)
       console.log('user: ' + user)
+      const randomIndex = Math.floor(Math.random() * user.relatedLinks.length)
+      const randomLink = user.relatedLinks[randomIndex].link
+      console.log('RANDOMLINK ALUSSA: ' + randomLink.title)
       dispatch({
         type: 'GET_ALL',
         data: {
           favourites: user.links,
           playlists: user.playlists,
-          relatedLinks: user.relatedLinks
+          relatedLinks: user.relatedLinks,
+          randomLink: randomLink
         }
       })
     }
