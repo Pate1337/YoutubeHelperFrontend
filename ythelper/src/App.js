@@ -18,6 +18,9 @@ import HiddenPlaylist from './components/HiddenPlaylist'
 import RelatedLinks from './components/RelatedLinks'
 import UserLists from './components/UserLists'
 import Users from './components/Users'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import Welcome from './components/Welcome'
+import Home from './components/Home'
 
 class App extends React.Component {
 
@@ -27,50 +30,64 @@ class App extends React.Component {
     this.props.loggedUserInitialization()
     this.props.usersInitialization()
     this.props.searchResultInitialization()
-    /*this.props.usersFavourites()
-    this.props.usersPlaylists()*/
     this.props.userLinks()
-    /*this.props.usersRelatedInitialization()*/
   }
 
   render() {
     console.log('Rendering App')
     console.log('Käyttäjät: ' + this.props.users.length)
-    /*Mun mielestä ihan ok tapa päättää mitä näytetään kun ei olla kirjauduttu
-    tai ollaan kirjauduttu, on laittaa vaan ehtolauseita..*/
-    /*if (this.props.users.length === 0) {
+    /*if (this.props.loggedUser === null) {*/
       return (
         <div>
-          Waiting for database
+          <Router>
+            <div>
+              <HiddenPlaylist />
+              <Route path='/'
+                render={({history}) => <LoggedBar history={history} />} />
+              <h1>YoutubeHelper</h1>
+              <Route path='/login'
+                render={({history}) => <LoginForm history={history} />} />
+              <Route path='/signup'
+                render={({history}) => <RegisterForm history={history} />} />
+              {this.props.loggedUser === null
+                ? <Route path='/'
+                  render={() => <Welcome />} />
+                : <div>
+                    <Route path='/'
+                    render={() => <Home />} />
+                    <Users />
+                    <UserLists />
+                    <PlaylistForm />
+                  </div>
+              }
+              <YTSearchBar />
+              <YTSearchResults />
+              {this.props.loggedUser === null
+                ? <div></div>
+                : <RelatedLinks />
+              }
+            </div>
+          </Router>
+        </div>
+      )
+  /*  } else {
+      return (
+        <div>
+          <Router>
+            <div>
+              <LoggedBar />
+              <HiddenPlaylist />
+              <Users />
+              <UserLists />
+              <PlaylistForm />
+              <YTSearchBar />
+              <YTSearchResults />
+              <RelatedLinks />
+            </div>
+          </Router>
         </div>
       )
     }*/
-    if (this.props.loggedUser === null) {
-      return (
-        <div>
-          <div>
-          <RegisterForm />
-          </div>
-          <LoginForm />
-          <Users />
-          <YTSearchBar />
-          <YTSearchResults />
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <LoggedBar />
-          <HiddenPlaylist />
-          <Users />
-          <UserLists />
-          <PlaylistForm />
-          <YTSearchBar />
-          <YTSearchResults />
-          <RelatedLinks />
-        </div>
-      )
-    }
   }
 }
 

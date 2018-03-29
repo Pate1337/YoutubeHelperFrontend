@@ -15,7 +15,7 @@ class Playlist extends React.Component {
 
   render() {
     console.log('Rendering Playlist')
-    if (this.props.playlist.links.length === 0 ||
+    if (this.props.playingPlaylist.links.length === 0 ||
       this.props.anyPlaylist.links.length === 0) {
       return (
         <div>
@@ -23,7 +23,7 @@ class Playlist extends React.Component {
         </div>
       )
     } else {
-      if (this.props.playlist._id === this.props.anyPlaylist._id &&
+      if (this.props.playingPlaylist._id === this.props.anyPlaylist._id &&
         this.props.playedOnce === true) {
         return (
           <div>
@@ -56,7 +56,7 @@ const mapStateToProps = (state, ownProps) => {
     playlist = state.playingPlaylist.playlist
   }
   return {
-    playlist: playlist,
+    playingPlaylist: playlist,
     anyPlaylist: ownProps.item,
     playedOnce: state.playingPlaylist.playedOnce
   }

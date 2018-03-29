@@ -52,6 +52,7 @@ class RegisterForm extends React.Component {
         password: '',
         pwordCheck: ''
       })
+      this.props.history.push('/')
     }
   }
 
@@ -93,6 +94,9 @@ class RegisterForm extends React.Component {
             Register
           </button>
         </form>
+        <button onClick={() => this.props.history.push('/')}>
+          Hide
+        </button>
       </div>
     )
   }

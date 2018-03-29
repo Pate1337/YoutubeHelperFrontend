@@ -46,10 +46,11 @@ const sortByCount = (a, b) => {
 
 const mapStateToProps = (state) => {
   let relatedLinks
-  if (state.userLinks.relatedLinks.length !== 0) {
-    relatedLinks = state.userLinks.relatedLinks.sort(sortByCount)
-  } else {
+  if (state.userLinks.relatedLinks === null || state.userLinks.relatedLinks === undefined
+    || state.userLinks.relatedLinks.length == 0) {
     relatedLinks = state.userLinks.relatedLinks
+  } else {
+    relatedLinks = state.userLinks.relatedLinks.sort(sortByCount)
   }
   return {
     relatedLinks: relatedLinks

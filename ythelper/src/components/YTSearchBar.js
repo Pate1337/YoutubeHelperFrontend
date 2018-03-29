@@ -60,7 +60,7 @@ class YTSearchBar extends React.Component {
     console.log('Renderöidään YTSearchBar')
     return (
       <div>
-        <h2>Hae Youtubesta</h2>
+        <h2>Search from Youtube</h2>
         <form onSubmit={this.handleSubmit}>
           <input
             type='text'

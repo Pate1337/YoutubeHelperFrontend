@@ -32,6 +32,7 @@ class LoginForm extends React.Component {
     /*Tässä vaiheessa ihan simppeli tarkistus jos kirjautuminen ei onnistu*/
     if (response !== 'error') {
       console.log('Logged in')
+      this.props.history.push('/')
     } else {
       this.setState({
         username: '',
@@ -64,6 +65,9 @@ class LoginForm extends React.Component {
             Login
           </button>
         </form>
+        <button onClick={() => this.props.history.push('/')}>
+          Hide
+        </button>
       </div>
     )
   }

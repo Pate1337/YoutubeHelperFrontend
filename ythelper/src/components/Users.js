@@ -28,7 +28,7 @@ class Users extends React.Component {
     if(this.state.userToShow != null) {
       return (
         <div>
-          <h1>Käyttäjät</h1>
+          <h2>Käyttäjät</h2>
           <ul>
             {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
               username: {u.username},
@@ -39,7 +39,7 @@ class Users extends React.Component {
             </li>
             )}
           </ul>
-          
+
           <h3>Näytettävä Käyttäjä</h3>
             <p>{this.state.userToShow}</p>
             <button onClick={this.hideUser}>Piilota</button>
