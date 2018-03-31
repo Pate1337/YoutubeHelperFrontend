@@ -342,7 +342,7 @@ class YTSearchResult extends React.Component {
             alt={this.props.item.title}
             style={{cursor: 'pointer', display: 'inline-block'}}
           />
-          id: {this.props.item.id}, title: {this.props.item.title}
+          id: {this.props.item.linkId}, title: {this.props.item.title}, count: {this.props.count}
         </div>
       )
     }
@@ -352,13 +352,14 @@ const mapStateToProps = (state, ownProps) => {
   let oneLinkOnly
   let item
   if (ownProps.suggestion !== undefined) {
-    console.log('Saavuttiin ehdotuksesta')
     oneLinkOnly = true
     item = ownProps.suggestion
-  } else {
-    console.log('Saavuttiin listauksesta')
+  } else if (ownProps.item !== undefined) {
     oneLinkOnly = false
     item = ownProps.item
+  } else {
+    oneLinkOnly = false
+    item = ownProps.recommend
   }
   return {
     item: item,

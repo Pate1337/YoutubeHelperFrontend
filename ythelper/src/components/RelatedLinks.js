@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import YTSearchResult from './YTSearchResult'
 
 class RelatedLinks extends React.Component {
   constructor() {
@@ -27,7 +28,7 @@ class RelatedLinks extends React.Component {
             <input value={this.state.filter} onChange={this.handleFilterChange}/>
           </div>
           <ol>
-            {linksToShow.map(l => <li key={l.link._id}>{l.link.title}, id: {l.link.linkId} count: {l.count}</li>)}
+            {linksToShow.map(l => <li key={l.link._id}><YTSearchResult recommend={l.link} count={l.count} /></li>)}
           </ol>
         </div>
       )
@@ -39,6 +40,9 @@ class RelatedLinks extends React.Component {
 
   }
 }
+/*<ol>
+  {linksToShow.map(l => <li key={l.link._id}>{l.link.title}, id: {l.link.linkId} count: {l.count}</li>)}
+</ol>*/
 
 const sortByCount = (a, b) => {
   return parseInt(b.count, 10) - parseInt(a.count, 10)
