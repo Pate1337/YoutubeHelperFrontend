@@ -28,12 +28,12 @@ class Comments extends React.Component {
   handleComment = async (event) => {
     event.preventDefault()
     const sComment = {
-      content: this.state.content,
+      content: this.state.comment,
       receiver: this.props.cuser,
-      sender: this.state.loggedUser
+      sender: this.props.loggedUser.id
     }
     console.log('Comments.js handleComment')
-    const response = await this.props.addComment(sComment)
+    const response = await this.props.addSentComment(sComment)
     this.setState({
       comment: ''
     })

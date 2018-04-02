@@ -23,7 +23,7 @@ const reducer = combineReducers({
   playingPlaylist: playlistPlayingReducer,
   relatedLinks: ytRelatedVideosReducer,
   serverOnUse: serverReducer,
-  //userComments: commentReducer tää reduceri pitää korjata
+  userComments: commentReducer// tää reduceri pitää korjata
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))
