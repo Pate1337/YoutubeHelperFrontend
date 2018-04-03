@@ -1,62 +1,27 @@
 import React from 'react'
-import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
-/*import { addFavouriteForUser } from '../reducers/userLinksReducer'
+import { serverSetOnUse, serverFree } from '../reducers/serverReducer'
+import { addFavouriteForUser, removeRelatedFromUser,
+  updateRelatedCount, addToUserRelated, addLinkToPlaylist } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
-import { addLinkToPlaylist } from '../reducers/userLinksReducer'
-import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
-import { removeRelatedFromUser } from '../reducers/userLinksReducer'
-import { addToUserRelated } from '../reducers/userLinksReducer'
-import { updateRelatedCount } from '../reducers/userLinksReducer'
-import { serverSetOnUse } from '../reducers/serverReducer'
-import { serverFree } from '../reducers/serverReducer'*/
-import { setPlayingVideo } from '../reducers/videoPlayingReducer'
-import AddToUserLinksButtons from './AddToUserLinksButtons'
+import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 
-class YTSearchResult extends React.Component {
-  /*constructor() {
+class AddToUserLinksButtons extends React.Component {
+  constructor() {
     super()
     this.state = {
-      playVideo: false,
-      showPlaylists: false,
-      showFavouriteButton: true,
-      showPlaylistButton: true,
-      target: null
+      showPlaylists: false
     }
-  }*/
-  /*Ehkä myöhemmin laitetaan searchResult stateen tieto siitä onko video
-  näkyvillä vai ei. Tai taas kerran localStorageen.*/
-  /*toggleVisibility = () => {
+  }
+
+  togglePlaylists = () => {
     this.setState({
-      playVideo: !this.state.playVideo
+      showPlaylists: !this.state.showPlaylists
     })
   }
-*/
-/*  onReady = (event) => {
-    console.log('Video on valmis toistettavaksi')
-  }*/
 
-/*  onEnd = (event) => {*/
-    /*Ja tänne saadaankin sitten toiminnallisuus soittolistan luomiseksi :DDD*/
-  /*  console.log('Video on päättynyt')
-}*/
-
-/*  pause = (event) => {
-    this.setState({
-      target: event.target
-    })
-  }
-*/
-  /*onPlay = async (event) => {
-    await this.props.setPlayerTarget(event.target)
-  }
-
-  showPlayerBar = async () => {
-    await this.props.showPlayerBarAndHide()
-  }
-*/
-  /*handleFavourite = async () => {
+  handleFavourite = async () => {
     console.log('this.props.serverOnUse: ' + this.props.serverOnUse)
     const timer = setInterval(() => {
       console.log('intervallia')
@@ -79,34 +44,31 @@ class YTSearchResult extends React.Component {
       }
     }, 1000)
   }
-*/
-/*  addToFavourites = async () => {
 
+  addToFavourites = async () => {
+    /*Backend kunnossa*/
     await this.props.serverSetOnUse()
     console.log('addToFavourites YTSearchResult')
-    this.setState({
-      showFavouriteButton: false
-    })
-
+    /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     let isRelated = false
     let isFavourited = false
     let linkExists
     if (this.props.usersRelated.length !== 0 && this.props.favourites.length !== 0) {
       linkExists = this.props.usersRelated
-        .filter(f => f.link.linkId === this.props.item.linkId)
+        .filter(f => f.link.linkId === this.props.videoId)
       if (linkExists === undefined || linkExists === null || linkExists.length === 0) {
-
+        /*linkki ei ole käyttäjän related*/
         console.log('EI OLE RELATED')
       } else {
-
+        /*Käyttäjän relatedeista pitää poistaa kyseinen linkki.*/
         isRelated = true
-
+        /*Tää toimii*/
       }
-
+      /*Tarkistetaan, onko jo suosikeissa*/
       const favExists = this.props.favourites
-        .filter(l => l.linkId === this.props.item.linkId)
+        .filter(l => l.linkId === this.props.videoId)
       if (favExists === undefined || favExists === null || favExists.length === 0) {
-
+        /*linkki ei ole käyttäjän suosikeissa*/
         console.log('EI OLE FAVORITEISSA')
       } else {
         isFavourited = true
@@ -116,9 +78,9 @@ class YTSearchResult extends React.Component {
     if (!isFavourited) {
       let timeout = false
       const linkObject = {
-        title: this.props.item.title,
-        thumbnail: this.props.item.thumbnail,
-        linkId: this.props.item.linkId
+        title: this.props.link.title,
+        thumbnail: this.props.link.thumbnail,
+        linkId: this.props.videoId
       }
       await this.props.addFavouriteForUser(linkObject)
 
@@ -132,7 +94,8 @@ class YTSearchResult extends React.Component {
         }
         console.log('LINKKI POISTETTU KÄYTTÄJÄN EHDOTUKSISTA!')
       }
-
+      /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
+      voidaan hakea kyseisen videon related videos.*/
       await this.props.searchForRelatedVideos(linkObject.linkId)
       const relatedLinks = this.props.relatedLinks
 
@@ -143,26 +106,27 @@ class YTSearchResult extends React.Component {
         const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
 
         if (favourites !== undefined) {
-
+          /*Tällöin linkkiä ei haluta lisätä related*/
           continue
         }
         for (let j = 0; j < this.props.playlists.length; j++) {
           let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
           if (playlists !== undefined) {
             found = true
-
+            /*Tällä playlistillä oli kyseinen linkki.*/
           }
           if (found) {
             break
           }
         }
         if (found) {
-
+          /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
           continue
         }
         const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
         if (usersRelated !== undefined) {
-
+          /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
+          /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
           let resp = await this.props.updateRelatedCount(usersRelated)
           while (resp === 'error') {
             console.log('YRITETÄÄN UUSIKS')
@@ -170,7 +134,8 @@ class YTSearchResult extends React.Component {
           }
           continue
         }
-
+        /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
+        relatedLinkseihin*/
         linksToAdd.push(relatedLinks[i])
       }
       console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
@@ -186,90 +151,87 @@ class YTSearchResult extends React.Component {
     }
     await this.props.serverFree()
   }
-*/
-/*  togglePlaylists = () => {
-    console.log('togglePlaylists YTSearchResult')
-    this.setState({
-      showPlaylists: !this.state.showPlaylists
-    })
-  }
-*/
-/*  addToPlaylist = async (plistId) => {
 
+  addToPlaylist = async (plistId) => {
+    /*Backend on kunnossa*/
     await this.props.serverSetOnUse()
     console.log('addToPlaylist YTSearchResult')
-
+    /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     let isRelated = false
     const linkExists = this.props.usersRelated
-      .filter(f => f.link.linkId === this.props.item.linkId)
+      .filter(f => f.link.linkId === this.props.videoId)
     if (linkExists === undefined || linkExists === null || linkExists.length === 0) {
-
+      /*linkki ei ole käyttäjän related*/
       console.log('EI OLE RELATED')
     } else {
-
+      /*Käyttäjän relatedeista pitää poistaa kyseinen linkki.*/
       isRelated = true
-
+      /*Tää toimii*/
     }
 
     const playlistId = plistId
     const linkObject = {
-      title: this.props.item.title,
-      thumbnail: this.props.item.thumbnail,
-      linkId: this.props.item.linkId
+      title: this.props.link.title,
+      thumbnail: this.props.link.thumbnail,
+      linkId: this.props.videoId
     }
     const response = await this.props.addLinkToPlaylist(linkObject, playlistId)
     if (response !== 'error') {
       console.log('Linkki lisätty soittolistaan!')
-
+      /*Pitää lisätä myös playingPlaylistille*/
       if (this.props.playingPlaylist.playlist !== null &&
         playlistId === this.props.playingPlaylist.playlist._id) {
-
+        /*TÄÄLLÄ MOKA, linkObjectilla ei edes ole _id:tä!!*/
+        /*Pitää siis hakea äsken lisätty linkki ja lisätä se
+        playingPlaylistille*/
         const playlist = this.props.playlists.find(p => p._id === playlistId)
         const link = playlist.links[playlist.links.length - 1]
         await this.props.addToPlayingPlaylist(link)
       }
-      this.setState({
-        showPlaylists: false
-      })
+
       if (isRelated) {
         await this.props.removeRelatedFromUser(linkExists[0].link._id)
         console.log('LINKKI POISTETTU KÄYTTÄJÄN EHDOTUKSISTA!')
       }
-
+      /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
+      voidaan hakea kyseisen videon related videos.*/
       await this.props.searchForRelatedVideos(linkObject.linkId)
       const relatedLinks = this.props.relatedLinks
-
+      /*console.log('relatedVideos.length: ' + relatedLinks.length)*/
       let linksToAdd = []
       let updateCounts = []
       let found = false
       for (let i = 0; i < relatedLinks.length; i++) {
         const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
-
+        /*favourites = undefined kun ei löydä mitään.*/
         if (favourites !== undefined) {
-
+          /*Tällöin linkkiä ei haluta lisätä related*/
           continue
         }
         for (let j = 0; j < this.props.playlists.length; j++) {
           let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
           if (playlists !== undefined) {
             found = true
-
+            /*Tällä playlistillä oli kyseinen linkki.*/
           }
           if (found) {
             break
           }
         }
         if (found) {
-
+          /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
           continue
         }
         const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
         if (usersRelated !== undefined) {
-
+          /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
+          /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
+          /*updateCounts.push(l)*/
           await this.props.updateRelatedCount(usersRelated)
           continue
         }
-
+        /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
+        relatedLinkseihin*/
         linksToAdd.push(relatedLinks[i])
       }
       console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
@@ -278,138 +240,119 @@ class YTSearchResult extends React.Component {
       }
     } else {
       console.log('Linkkiä ei lisätty soittolistaan')
-      this.setState({
-        showPlaylists: false
-      })
     }
     await this.props.serverFree()
   }
-*/
 
-  playVideo = async () => {
-    await this.props.setPlayingVideo(this.props.item)
-  }
 
   render() {
-    console.log('Rendering YTSearchResult')
-    /*Toi react-youtube on ihan uskomaton lifesaver*/
-    /*Ei haluta edes ladata muita kuin se jonka playVideo muuttui true*/
-    /*Tuleeko pyyntö ehdotukselta vai listaiksesta*/
-    /*let opts
-    if (this.props.oneLinkOnly) {
-      opts = {
-        height: '315',
-        width: '560',
-        playerVars: {
-          autoplay: 0,
-          rel: 0
-        }
-      }
-    } else {
-      opts = {
-        height: '315',
-        width: '560',
-        playerVars: {
-          autoplay: 1,
-          rel: 0
-        }
-      }
-    }*/
-  /*  if (this.state.playVideo) {
-      const showPlaylist = { display: (this.props.loggedUser !== null && this.state.showPlaylistButton) ? '' : 'none' }
-      const showFavourite = { display: (this.props.loggedUser !== null && this.state.showFavouriteButton) ? '' : 'none' }
-      const showPlaylists = { display: (this.state.showPlaylists === true) ? '' : 'none' }
-      console.log('this.state.showPlaylists: ' + this.state.showPlaylists)
-      console.log('this.props.playlists.length: ' + this.props.playlists.length)
+    console.log('Rendering AddToUserLinksButtons')
+    const showFavourite = { display: (this.props.favouritesAvailable) ? '' : 'none' }
+    const showPlaylist = { display: (this.props.availablePlaylists.length !== 0) ? '' : 'none' }
 
-      return (
-        <div>
-          <Youtube
-            videoId={this.props.item.linkId}
-            opts={opts}
-            onReady={this.onReady}
-            onEnd={this.onEnd}
-            onPlay={this.onPlay}
-          />
-          <button onClick={this.toggleVisibility}>
-            Hide
-          </button>
-          <button onClick={this.handleFavourite} style={showFavourite}>
-            Add to Favourites
-          </button>
-          <button onClick={this.togglePlaylists} style={showPlaylist}>
-            Add to Playlist
-          </button>
-          {this.props.playlists.map(p =>
-            <button key={p._id} id={p._id} onClick={this.handlePlaylist} style={showPlaylists}>
+    return (
+      <div>
+        <button onClick={this.handleFavourite} style={showFavourite}>
+          Add to Favourites
+        </button>
+        <button onClick={this.togglePlaylists} style={showPlaylist}>
+          Add to Playlist
+        </button>
+        {(this.props.availablePlaylists.length !== 0 && this.state.showPlaylists)
+          ? this.props.availablePlaylists.map(p =>
+            <button key={p._id} id={p._id} onClick={this.handlePlaylist}>
               Add to {p.title}
-            </button>
-          )}
-          <button onClick={this.showPlayerBar}>
-            hide player
-          </button>
-        </div>
-      )
-    } else {*/
-      return (
-        <div>
-          <img onClick={this.playVideo}
-            src={this.props.item.thumbnail}
-            alt={this.props.item.title}
-            style={{cursor: 'pointer', display: 'inline-block'}}
-          />
-          id: {this.props.item.linkId}, title: {this.props.item.title}, count: {this.props.count}
-          <AddToUserLinksButtons link={this.props.item} />
-        </div>
-      )
-    /*}*/
+            </button>)
+          : <div></div>
+        }
+      </div>
+    )
   }
 }
-/*const mapStateToProps = (state, ownProps) => {
-  let oneLinkOnly
-  let item*/
-  /*Tän voi pitää nii voidaan lisätä toiminnallisuutta riippuen
-  siitä, tullaanko etusivun ehdotuksesta, ehdotuslistauksesta vai
-  Youtube hausta.*/
-/*  if (ownProps.suggestion !== undefined) {
-    oneLinkOnly = true
-    item = ownProps.suggestion
-  } else if (ownProps.item !== undefined) {
-    oneLinkOnly = false
-    item = ownProps.item
-  } else {
-    oneLinkOnly = false
-    item = ownProps.recommend
+
+const mapStateToProps = (state, ownProps) => {
+  /*Otetaan vaan tarvittavat käyttöön.*/
+  /*Ensin tarkistetaan, onko linkki jo suosikeissa.*/
+  const favourites = state.userLinks.favourites
+  const playlists = state.userLinks.playlists
+  /*const videoId = state.playingVideo.link.linkId*/
+  let videoId
+  let favouritesAvailable = true
+  let availablePlaylists = []
+  let link
+  if (ownProps.recommend !== undefined) {
+    videoId = ownProps.recommend.linkId
+    availablePlaylists = state.userLinks.playlists
+    link = ownProps.recommend
+  } else if (ownProps.link !== undefined) {
+    videoId = ownProps.link.linkId
+    link = ownProps.link
+    for (let i = 0; i < favourites.length; i++) {
+      if (favourites[i].linkId === videoId) {
+        favouritesAvailable = false
+        break
+      }
+    }
+    /*Seuraavaksi soittolistat*/
+    for (let i = 0; i < playlists.length; i++) {
+      let found = false
+      for (let j = 0; j < playlists[i].links.length; j++) {
+        if (playlists[i].links[j].linkId === videoId) {
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        availablePlaylists.push(playlists[i])
+      }
+    }
+  } else if (ownProps.favourite !== undefined) {
+    videoId = ownProps.favourite.linkId
+    link = ownProps.favourite
+    favouritesAvailable = false
+    /*Pelkät soittolistat*/
+    for (let i = 0; i < playlists.length; i++) {
+      let found = false
+      for (let j = 0; j < playlists[i].links.length; j++) {
+        if (playlists[i].links[j].linkId === videoId) {
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        availablePlaylists.push(playlists[i])
+      }
+    }
   }
+
   return {
-    item: item,*/
-  /*  loggedUser: state.loggedUser,
-    favourites: state.userLinks.favourites,
-    playlists: state.userLinks.playlists,
-    playingPlaylist: state.playingPlaylist,
-    usersRelated: state.userLinks.relatedLinks,
-    relatedLinks: state.relatedLinks,
+    favourites: favourites,
+    playlists: playlists,
+    videoId: videoId,
+    /*link: state.playingVideo.link,*/
+    link: link,
+    favouritesAvailable: favouritesAvailable,
+    availablePlaylists: availablePlaylists,
     serverOnUse: state.serverOnUse,
-    oneLinkOnly: oneLinkOnly*/
-/*  }
-}*/
+    usersRelated: state.userLinks.relatedLinks,
+    playingPlaylist: state.playingPlaylist,
+    relatedLinks: state.relatedLinks
+  }
+}
 
 const mapDispatchToProps = {
-  /*addFavouriteForUser,
-  addLinkToPlaylist,
-  usersInitialization,
-  addToPlayingPlaylist,
-  searchForRelatedVideos,
-  removeRelatedFromUser,
-  addToUserRelated,
-  updateRelatedCount,
   serverSetOnUse,
-  serverFree,*/
-  /*setPlayerTarget,
-  showPlayerBarAndHide,*/
-  setPlayingVideo
+  addFavouriteForUser,
+  usersInitialization,
+  removeRelatedFromUser,
+  searchForRelatedVideos,
+  updateRelatedCount,
+  addToUserRelated,
+  serverFree,
+  addLinkToPlaylist,
+  addToPlayingPlaylist
 }
 
-const ConnectedYTSearchResult = connect(null, mapDispatchToProps)(YTSearchResult)
+const ConnectedAddToUserLinksButton = connect(mapStateToProps, mapDispatchToProps)(AddToUserLinksButtons)
 
-export default ConnectedYTSearchResult
+export default ConnectedAddToUserLinksButton

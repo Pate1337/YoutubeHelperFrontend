@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
 import { playNext, seekDone, setCurrentTime, playRandom, shufflePlaylist,
@@ -22,11 +22,7 @@ class Player extends React.Component {
     console.log('this.props.currentTime: ' + this.props.currentTime)
     console.log('getCurrentTime: ' + event.target.getCurrentTime())
     if (this.props.playerPlaying) {
-      /*if (this.props.needSeek) {
-        console.log('NEED TO SEEK')
-        event.target.seekTo(this.props.currentTime)
-        await this.props.seekDone()
-      }*/
+
     } else {
       event.target.pauseVideo()
     }
@@ -35,9 +31,6 @@ class Player extends React.Component {
   pause = (event) => {
     console.log('pause Player, aika: ' + Date.now())
 
-    /*const currentTime = event.target.getCurrentTime()
-    console.log('currentTime Playerin pausessa: ' + currentTime)
-    this.props.setCurrentTime(currentTime, Date.now())*/
 
   }
 
@@ -85,17 +78,7 @@ class Player extends React.Component {
     player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
     window.addEventListener("message", this.receiveMessage, false)
 
-    /*await this.props.seekRequired()*/
-    /*const youtube = document.getElementById('youtube')
-    setTimeout(() => {
-      const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0,1, true]}
-      const message = JSON.stringify(data)
-      youtube.contentWindow.postMessage(message, '*')
-      youtube.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*')
-      youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-      youtube.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*')
-    }, 30)*/
-    /*youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')*/
+
   }
 
   showPlayer = async (event) => {
@@ -105,7 +88,7 @@ class Player extends React.Component {
     const youtube = document.getElementById('youtube')
     youtube.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
 
-    /*await this.props.seekRequired()*/
+
     const player = document.getElementById('player')
     setTimeout(() => {
       const data = {event: 'command', func: 'seekTo', args: [this.props.currentTime + 0.1, true]}
@@ -113,7 +96,7 @@ class Player extends React.Component {
       player.contentWindow.postMessage(message, '*')
       player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
     }, 30)
-    /*player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')*/
+
 
   }
 
@@ -191,7 +174,7 @@ class Player extends React.Component {
   }
 }
 
-/*Tää vois varmaan ottaa sen soitettavan biisin propsina..*/
+
 const mapStateToProps = (state) => {
   return {
     playerPlaying: state.playingPlaylist.playerPlaying,
@@ -218,3 +201,4 @@ const mapDispatchToProps = {
 const ConnectedPlayer = connect(mapStateToProps, mapDispatchToProps)(Player)
 
 export default ConnectedPlayer
+*/

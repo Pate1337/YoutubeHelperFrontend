@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Youtube from 'react-youtube'
-import YTSearchResult from './YTSearchResult'
+import RecommendedLink from './RecommendedLink'
 
 class Home extends React.Component {
 
@@ -18,7 +18,7 @@ class Home extends React.Component {
           && this.props.recommendedLinks.length !== 0)
           ? <div>
               <strong>Here is our pick of the day for you:</strong>
-              <YTSearchResult suggestion={this.props.randomLink} />
+              <RecommendedLink recommend={this.props.randomLink} />
             </div>
           : <div></div>
         }

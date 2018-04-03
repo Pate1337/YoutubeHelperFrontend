@@ -9,7 +9,7 @@ class YTSearchResults extends React.Component {
     return (
       <div>
         {this.props.ytSearchResults.map(r =>
-          <YTSearchResult key={r.id} item={r} />
+          <YTSearchResult key={r.linkId} item={r} />
         )}
       </div>
     )

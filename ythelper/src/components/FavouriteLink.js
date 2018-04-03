@@ -3,30 +3,40 @@ import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
 import { removeOneFavouriteLink } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
+import { setPlayingVideo } from '../reducers/videoPlayingReducer'
+import AddToUserLinksButtons from './AddToUserLinksButtons'
 
 class FavouriteLink extends React.Component {
   constructor() {
     super()
     this.state = {
-      playVideo: false,
-      showPlaylists: false
+      showButtons: false
     }
   }
 
-  toggleVisibility = () => {
+/*  toggleVisibility = () => {
     this.setState({
       playVideo: !this.state.playVideo
+    })
+  }*/
+  playVideo = async () => {
+    await this.props.setPlayingVideo(this.props.item)
+  }
+
+  toggleButtons = () => {
+    this.setState({
+      showButtons: !this.state.showButtons
     })
   }
 
   render() {
     console.log('Rendering FavouriteLink')
-    if (this.state.playVideo) {
-      const showButtons = { display: (this.props.loggedUser !== null) ? '' : 'none' }
+  /*  if (this.state.playVideo) {
+      const showButtons = { display: (this.props.loggedUser !== null) ? '' : 'none' }*/
       //const showPlaylists = { display: (this.state.showPlaylists === true) ? '' : 'none' }
       //console.log('this.state.showPlaylists: ' + this.state.showPlaylists)
       //console.log('this.props.playlists.length: ' + this.props.playlists.length)
-      const opts = {
+    /*  const opts = {
         height: '315',
         width: '560',
         playerVars: {
@@ -45,22 +55,24 @@ class FavouriteLink extends React.Component {
           </button>
         </div>
       )
-    } else {
+    } else {*/
       return (
         <div>
-          
-          <div>
-          <img onClick={this.toggleVisibility}
+          <img onClick={this.playVideo}
             src={this.props.item.thumbnail}
             alt={this.props.item.title}
             style={{cursor: 'pointer', display: 'inline-block'}}
           />
           id: {this.props.item.linkId}, title: {this.props.item.title}
           <button onClick={this.removeOneFavouriteLink}>Remove From Favorites</button>
-        </div>
+          {(!this.state.showButtons)
+            ? <button onClick={this.toggleButtons}>Add to</button>
+            : <div><AddToUserLinksButtons favourite={this.props.item} />
+              <button onClick={this.toggleButtons}>Back</button></div>
+          }
         </div>
       )
-    }
+    /*}*/
 
   }
 
@@ -81,7 +93,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
   removeOneFavouriteLink,
-  usersInitialization
+  usersInitialization,
+  setPlayingVideo
 }
 
 const ConnectedFavouriteLink = connect(mapStateToProps, mapDispatchToProps)(FavouriteLink)

@@ -11,6 +11,7 @@ import playlistPlayingReducer from './reducers/playlistPlayingReducer'
 import ytRelatedVideosReducer from './reducers/ytRelatedVideosReducer'
 import serverReducer from './reducers/serverReducer'
 import commentReducer from './reducers/commentReducer'
+import videoPlayingReducer from './reducers/videoPlayingReducer'
 
 const reducer = combineReducers({
   users: userReducer,
@@ -23,7 +24,8 @@ const reducer = combineReducers({
   playingPlaylist: playlistPlayingReducer,
   relatedLinks: ytRelatedVideosReducer,
   serverOnUse: serverReducer,
-  userComments: commentReducer// tää reduceri pitää korjata
+  userComments: commentReducer,// tää reduceri pitää korjata
+  playingVideo: videoPlayingReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

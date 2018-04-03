@@ -22,16 +22,17 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Welcome from './components/Welcome'
 import Home from './components/Home'
 import Menu from './components/Menu'
+import VideoPlayer from './components/VideoPlayer'
 
 class App extends React.Component {
 
 /*ComponentDidMount toinen vaihtoehto*/
-  componentWillMount() {
+  async componentWillMount() {
     console.log('Mounting App')
-    this.props.loggedUserInitialization()
-    this.props.usersInitialization()
-    this.props.searchResultInitialization()
-    this.props.userLinks()
+    await this.props.loggedUserInitialization()
+    await this.props.usersInitialization()
+    await this.props.searchResultInitialization()
+    await this.props.userLinks()
   }
 
   render() {
@@ -48,6 +49,8 @@ class App extends React.Component {
               <h1>YoutubeHelper</h1>
               <Route path='/'
                 render={() => <Menu />} />
+              <Route path='/'
+                render={() => <VideoPlayer />} />
               <Route path='/login'
                 render={({history}) => <LoginForm history={history} />} />
               <Route path='/signup'

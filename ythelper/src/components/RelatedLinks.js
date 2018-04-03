@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import YTSearchResult from './YTSearchResult'
+import RecommendedLink from './RecommendedLink'
 
 class RelatedLinks extends React.Component {
   constructor() {
@@ -28,7 +28,7 @@ class RelatedLinks extends React.Component {
             <input value={this.state.filter} onChange={this.handleFilterChange}/>
           </div>
           <ol>
-            {linksToShow.map(l => <li key={l.link._id}><YTSearchResult recommend={l.link} count={l.count} /></li>)}
+            {linksToShow.map(l => <li key={l.link._id}><RecommendedLink recommend={l.link} count={l.count} /></li>)}
           </ol>
         </div>
       )
