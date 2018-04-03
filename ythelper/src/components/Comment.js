@@ -11,7 +11,7 @@ class Comment extends React.Component {
     console.log('Rendering Comment')
     return (
       <div>
-        <p>TESTI</p>
+        <p>{this.props.received}</p>
       </div>
     )
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addReceivedComment } from '../reducers/commentReducer'
 import { addSentComment } from '../reducers/commentReducer'
+import { allUsersComments } from '../reducers/commentReducer'
 import Comment from './Comment'
 
 class Comments extends React.Component {
@@ -9,11 +10,12 @@ class Comments extends React.Component {
     super(props)
     this.state = {
       showComments: true,
-      comment: ''
+      comment: '',
+      resComments: null
     }
   }
 
-  toggleVisibility = () => {
+  toggleVisibility = async () => {
     this.setState({
       showComments: !this.state.showComments
     })
@@ -39,16 +41,32 @@ class Comments extends React.Component {
     })
   }
 
+  getReceivedComments = async () => {
+    console.log('getReveivedComments')
+    const comments = await this.props.allUsersComments(this.props.cuser)
+    console.log(comments)
+    /*this.setState({
+      resComments: comments
+    })*/ 
+  }
+  
+
 
   render() {
     console.log('Rendering CommentS')
+    console.log(this.props.cuser, ' ', this.props.cuser.id, ' ', this.props.cuser._id)
     console.log(this.props.cuser)
     if(this.state.showComments) {
+      console.log('RENDERING COMMENTS -- ', this.state.resComments)
+      console.log('COMMENTS ', this.props.rComments)
       return (
         <div>
           <h3 onClick={this.toggleVisibility}>Comments (click to hide)</h3>
           <p>Testing</p>
-          <Comment />
+          {this.props.allUsersComments(this.props.cuser).rComments.map(link =>
+            <Comment />
+          )}
+            
           <form onSubmit={this.handleComment}>
             Type a comment to send:
               <input
@@ -75,13 +93,15 @@ class Comments extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    //receivedComments: state.userComments.received
+    //receivedComments: allComments(this.props.cuser)
+    //userComments: state.allUsersComments.rComments
   }
 }
 
 const mapDispatchToProps = {
   addReceivedComment,
-  addSentComment
+  addSentComment,
+  allUsersComments
 }
 
 const ConnectedComments = connect(mapStateToProps, mapDispatchToProps)(Comments)
