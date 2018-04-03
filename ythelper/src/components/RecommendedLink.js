@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
+import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 
 class RecommendedLink extends React.Component {
   constructor() {
@@ -13,6 +14,7 @@ class RecommendedLink extends React.Component {
 
   playVideo = async () => {
     await this.props.setPlayingVideo(this.props.recommend)
+    await this.props.clearPlayingPlaylist()
   }
 
   toggleButtons = () => {
@@ -42,7 +44,8 @@ class RecommendedLink extends React.Component {
 }
 
 const mapDispatchToProps = {
-  setPlayingVideo
+  setPlayingVideo,
+  clearPlayingPlaylist
 }
 
 const ConnectedRecommendedLink = connect(null, mapDispatchToProps)(RecommendedLink)

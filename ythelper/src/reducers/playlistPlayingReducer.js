@@ -176,6 +176,16 @@ const playlistPlayingReducer = (state = { playerPlaying: true, playlist: null, i
         playedOnce: state.playedOnce,
         playing: true
       }*/
+    case 'CLEAR':
+      return {
+        playlist: null,
+        needSeek: state.needSeek,
+        index: state.index,
+        playedOnce: state.playedOnce,
+        playerPlaying: state.playerPlaying,
+        currentTime: state.currentTime,
+        startTime: state.startTime
+      }
     default:
       console.log('default playlistPlayingReducer')
       return state
@@ -297,6 +307,14 @@ export const addToPlayingPlaylist = (linkObject) => {
     dispatch({
       type: 'ADD_LINK',
       data: linkObject
+    })
+  }
+}
+
+export const clearPlayingPlaylist = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'CLEAR'
     })
   }
 }

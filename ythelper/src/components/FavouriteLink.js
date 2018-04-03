@@ -1,10 +1,11 @@
 import React from 'react'
-import Youtube from 'react-youtube'
+/*import Youtube from 'react-youtube'*/
 import { connect } from 'react-redux'
 import { removeOneFavouriteLink } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
+import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 
 class FavouriteLink extends React.Component {
   constructor() {
@@ -21,6 +22,7 @@ class FavouriteLink extends React.Component {
   }*/
   playVideo = async () => {
     await this.props.setPlayingVideo(this.props.item)
+    await this.props.clearPlayingPlaylist()
   }
 
   toggleButtons = () => {
@@ -94,7 +96,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
   removeOneFavouriteLink,
   usersInitialization,
-  setPlayingVideo
+  setPlayingVideo,
+  clearPlayingPlaylist
 }
 
 const ConnectedFavouriteLink = connect(mapStateToProps, mapDispatchToProps)(FavouriteLink)

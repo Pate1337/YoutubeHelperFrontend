@@ -12,9 +12,10 @@ import Youtube from 'react-youtube'
 /*import { setCurrentTime } from '../reducers/playlistPlayingReducer'
 import { seekDone } from '../reducers/playlistPlayingReducer'
 import { seekRequired } from '../reducers/playlistPlayingReducer'*/
-import { setHiddenPlayerTarget } from '../reducers/videoPlayingReducer'
-import { showPlayerAndHide } from '../reducers/videoPlayingReducer'
+import { setHiddenPlayerTarget, showPlayerAndHide, setHiddenPaused,
+  setHiddenPlaying, setPlayingVideo } from '../reducers/videoPlayingReducer'
 import PlaylistButtons from './PlaylistButtons'
+import { playNext } from '../reducers/playlistPlayingReducer'
 
 class HiddenPlaylist extends React.Component {
   /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi
@@ -61,30 +62,30 @@ class HiddenPlaylist extends React.Component {
   onPlay = async (event) => {
     /*Ensimmäisellä renderöinnillä!*/
     console.log('onPlay hiddenPlayer')
+    await this.props.setHiddenPlaying()
     if (this.props.hiddenPlayerTarget === null) {
       event.target.pauseVideo()
       await this.props.setHiddenPlayerTarget(event.target)
     } else if (this.props.playerPlaying) {
       event.target.pauseVideo()
     }
-  /*  console.log('AIKA, kun ruvetaan soittamaan playerissä: ' + Date.now())
-    if (!this.props.playedOnce || this.props.playerPlaying) {
-      event.target.pauseVideo()
-    }*/
-
   }
 
   pause = async (event) => {
     console.log('pause HiddenPlayer')
-    /*const currentTime = event.target.getCurrentTime()
-    console.log('gecurrentTime() pausessa: ' + currentTime)
-    await this.props.setCurrentTime(currentTime, Date.now())
-    console.log('this.props.currentTime pausessa: ' + this.props.currentTime)*/
+    await this.props.setHiddenPaused()
   }
 
   showPlayer = async () => {
     console.log('showPlayer hiddenPlaylist')
     await this.props.showPlayerAndHide()
+  }
+
+  onEnd = async () => {
+    if (this.props.playingPlaylist.playlist !== null) {
+      await this.props.playNext()
+      await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[this.props.index])
+    }
   }
 
 
@@ -110,7 +111,7 @@ class HiddenPlaylist extends React.Component {
           id='youtube'
           videoId={this.props.videoId}
           opts={opts}
-          onEnd={this.playNext}
+          onEnd={this.onEnd}
           onPlay={this.onPlay}
           onPause={this.pause}
         />
@@ -147,7 +148,9 @@ const mapStateToProps = (state) => {
   /*  needSeek: state.playingPlaylist.needSeek,*/
     hiddenPlayerTarget: state.playingVideo.hiddenPlayerTarget,
     playerPlaying: state.playingVideo.playerPlaying,
-    videoId: state.playingVideo.link.linkId
+    videoId: state.playingVideo.link.linkId,
+    playingPlaylist: state.playingPlaylist,
+    index: state.playingPlaylist.index
   }
 }
 
@@ -161,7 +164,11 @@ const mapDispatchToProps = {
 /*  seekDone,
   seekRequired,*/
   setHiddenPlayerTarget,
-  showPlayerAndHide
+  showPlayerAndHide,
+  setHiddenPaused,
+  setHiddenPlaying,
+  setPlayingVideo,
+  playNext
 }
 
 const ConnectedHiddenPlaylist = connect(mapStateToProps, mapDispatchToProps)(HiddenPlaylist)

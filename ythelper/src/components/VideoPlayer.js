@@ -1,9 +1,11 @@
 import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
-import { showPlayerBarAndHide, setPlayerTarget } from '../reducers/videoPlayingReducer'
+import { showPlayerBarAndHide, setPlayerTarget, setPlayerPaused,
+  setPlayerPlaying, setPlayingVideo } from '../reducers/videoPlayingReducer'
 import PlaylistButtons from './PlaylistButtons'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
+import { playNext } from '../reducers/playlistPlayingReducer'
 
 class VideoPlayer extends React.Component {
 
@@ -14,6 +16,7 @@ class VideoPlayer extends React.Component {
 */
   onPlay = async (event) => {
     console.log('onPlay VideoPlayer')
+    await this.props.setPlayerPlaying()
     if (this.props.playerTarget === null) {
       console.log('playerTarget === null, joten pauseVideo ja asetetaan')
       event.target.pauseVideo()
@@ -25,8 +28,16 @@ class VideoPlayer extends React.Component {
     await this.props.showPlayerBarAndHide()
   }
 
-  pause = (event) => {
-    console.log('pause Player, aika: ' + Date.now())
+  pause = async (event) => {
+    console.log('pause Player')
+    await this.props.setPlayerPaused()
+  }
+
+  onEnd = async () => {
+    if (this.props.playingPlaylist.playlist !== null) {
+      await this.props.playNext()
+      await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[this.props.index])
+    }
   }
 
   render() {
@@ -49,6 +60,7 @@ class VideoPlayer extends React.Component {
             opts={opts}
             onPlay={this.onPlay}
             onPause={this.pause}
+            onEnd={this.onEnd}
           />
           <button onClick={this.hidePlayer}>
             Hide player
@@ -65,13 +77,19 @@ const mapStateToProps = (state) => {
   return {
     link: state.playingVideo.link,
     playerPlaying: state.playingVideo.playerPlaying,
-    playerTarget: state.playingVideo.playerTarget
+    playerTarget: state.playingVideo.playerTarget,
+    playingPlaylist: state.playingPlaylist,
+    index: state.playingPlaylist.index
   }
 }
 
 const mapDispatchToProps = {
   showPlayerBarAndHide,
-  setPlayerTarget
+  setPlayerTarget,
+  setPlayerPaused,
+  setPlayerPlaying,
+  setPlayingVideo,
+  playNext
 }
 
 const ConnectedVideoPlayer = connect(mapStateToProps, mapDispatchToProps)(VideoPlayer)

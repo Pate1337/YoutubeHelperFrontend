@@ -13,6 +13,7 @@ import { serverSetOnUse } from '../reducers/serverReducer'
 import { serverFree } from '../reducers/serverReducer'*/
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
+import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 
 class YTSearchResult extends React.Component {
   /*constructor() {
@@ -288,6 +289,7 @@ class YTSearchResult extends React.Component {
 
   playVideo = async () => {
     await this.props.setPlayingVideo(this.props.item)
+    await this.props.clearPlayingPlaylist()
   }
 
   render() {
@@ -407,7 +409,8 @@ const mapDispatchToProps = {
   serverFree,*/
   /*setPlayerTarget,
   showPlayerBarAndHide,*/
-  setPlayingVideo
+  setPlayingVideo,
+  clearPlayingPlaylist
 }
 
 const ConnectedYTSearchResult = connect(null, mapDispatchToProps)(YTSearchResult)
