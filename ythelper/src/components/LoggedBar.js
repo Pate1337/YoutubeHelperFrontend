@@ -5,6 +5,8 @@ import { removeLoggedUser } from '../reducers/loggedUserReducer'
 import { removePlaylists } from '../reducers/playlistsReducer'*/
 import { removeUserLinks } from '../reducers/userLinksReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
+import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
+import { clearPlayingVideo } from '../reducers/videoPlayingReducer'
 import { Link } from 'react-router-dom'
 
 class LoggedBar extends React.Component {
@@ -15,6 +17,8 @@ class LoggedBar extends React.Component {
     this.props.removeLoggedUser()
     this.props.removeUserLinks()
     this.props.clearSearchResults()
+    this.props.clearPlayingPlaylist()
+    this.props.clearPlayingVideo()
     window.localStorage.removeItem('ytSearchBar')
     this.props.history.push('/')
   }
@@ -56,7 +60,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   removeLoggedUser,
   removeUserLinks,
-  clearSearchResults
+  clearSearchResults,
+  clearPlayingPlaylist,
+  clearPlayingVideo
 }
 
 const ConnectedLoggedBar = connect(mapStateToProps, mapDispatchToProps)(LoggedBar)

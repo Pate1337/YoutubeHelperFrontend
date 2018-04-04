@@ -16,6 +16,7 @@ import { setHiddenPlayerTarget, showPlayerAndHide, setHiddenPaused,
   setHiddenPlaying, setPlayingVideo } from '../reducers/videoPlayingReducer'
 import PlaylistButtons from './PlaylistButtons'
 import { playNext } from '../reducers/playlistPlayingReducer'
+import AddToUserLinksButtons from './AddToUserLinksButtons'
 
 class HiddenPlaylist extends React.Component {
   /*Lisätään linkin lisäyksen yhteydessä videon pituus, saadaan toi
@@ -91,6 +92,7 @@ class HiddenPlaylist extends React.Component {
 
   render() {
     console.log('Renderin hiddenPlaylist')
+    /* || !this.props.playedOnce tohon showBariin nii saa näkyyn heti alus*/
     const showBar = { display: (this.props.playerPlaying === false) ? '' : 'none',
       backgroundColor: 'black', color: 'white'}
     const opts = {
@@ -106,7 +108,13 @@ class HiddenPlaylist extends React.Component {
     }
     return (
       <div id='playlistBar' style={showBar}>
-
+        {(this.props.playingPlaylist.playlist !== null)
+          ? <div>
+              Playing {this.props.playingPlaylist.playlist.title}:&nbsp;
+              {this.props.videoTitle}
+            </div>
+          : <div>Playing {this.props.videoTitle}</div>
+        }
         <Youtube
           id='youtube'
           videoId={this.props.videoId}
@@ -119,6 +127,7 @@ class HiddenPlaylist extends React.Component {
           Show player
         </button>
         <PlaylistButtons />
+        <AddToUserLinksButtons link={this.props.link} />
       </div>
     )
   }
@@ -149,8 +158,11 @@ const mapStateToProps = (state) => {
     hiddenPlayerTarget: state.playingVideo.hiddenPlayerTarget,
     playerPlaying: state.playingVideo.playerPlaying,
     videoId: state.playingVideo.link.linkId,
+    videoTitle: state.playingVideo.link.title,
+    link: state.playingVideo.link,
     playingPlaylist: state.playingPlaylist,
-    index: state.playingPlaylist.index
+    index: state.playingPlaylist.index,
+    playedOnce: state.playingVideo.playedOnce
   }
 }
 

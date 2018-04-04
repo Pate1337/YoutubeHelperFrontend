@@ -1,11 +1,11 @@
-const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbnail: 'juu', linkId: '1d28Amj7WiQ'}, playerPaused: true, hiddenPaused: true, currentTime: 0, hiddenPlayerTarget: null, playerTarget: null, playerPlaying: false }, action) => {
+const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbnail: 'juu', linkId: '1d28Amj7WiQ'}, playerPaused: true, hiddenPaused: true, playedOnce: false, hiddenPlayerTarget: null, playerTarget: null, playerPlaying: true }, action) => {
   switch (action.type) {
     case 'SET_HIDDEN_PLAYER_TARGET':
       return {
         link: store.link,
         playerPaused: store.playerPaused,
         hiddenPaused: store.hiddenPaused,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: action.data,
         playerTarget: store.playerTarget,
         playerPlaying: store.playerPlaying
@@ -15,7 +15,7 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: store.link,
         playerPaused: store.playerPaused,
         hiddenPaused: store.hiddenPaused,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: action.data,
         playerPlaying: store.playerPlaying
@@ -31,7 +31,7 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: store.link,
         playerPaused: false,
         hiddenPaused: true,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
         playerPlaying: true
@@ -47,7 +47,7 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: store.link,
         playerPaused: true,
         hiddenPaused: false,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
         playerPlaying: false
@@ -57,17 +57,17 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: action.data,
         playerPaused: false,
         hiddenPaused: true,
-        currentTime: 0,
+        playedOnce: true,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
-        playerPlaying: true
+        playerPlaying: store.playerPlaying
       }
     case 'SET_PLAYER_PAUSED':
       return {
         link: store.link,
         playerPaused: true,
         hiddenPaused: store.hiddenPaused,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
         playerPlaying: store.playerPlaying
@@ -77,7 +77,7 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: store.link,
         playerPaused: false,
         hiddenPaused: store.hiddenPaused,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
         playerPlaying: store.playerPlaying
@@ -87,7 +87,7 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: store.link,
         playerPaused: store.playerPaused,
         hiddenPaused: true,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
         playerPlaying: store.playerPlaying
@@ -97,10 +97,20 @@ const videoPlayingReducer = (store = { link: {_id: '123', title: 'testi', thumbn
         link: store.link,
         playerPaused: store.playerPaused,
         hiddenPaused: false,
-        currentTime: store.currentTime,
+        playedOnce: store.playedOnce,
         hiddenPlayerTarget: store.hiddenPlayerTarget,
         playerTarget: store.playerTarget,
         playerPlaying: store.playerPlaying
+      }
+    case 'CLEAR_VIDEO':
+      return {
+        link: {_id: '123', title: 'testi', thumbnail: 'juu', linkId: '1d28Amj7WiQ'},
+        playerPaused: true,
+        hiddenPaused: true,
+        playedOnce: false,
+        hiddenPlayerTarget: null,
+        playerTarget: null,
+        playerPlaying: true
       }
     default:
       return store
@@ -178,6 +188,14 @@ export const setHiddenPlaying = () => {
   return async (dispatch) => {
     dispatch({
       type: 'SET_HIDDEN_PLAYING'
+    })
+  }
+}
+
+export const clearPlayingVideo = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'CLEAR_VIDEO'
     })
   }
 }

@@ -21,6 +21,8 @@ class VideoPlayer extends React.Component {
       console.log('playerTarget === null, joten pauseVideo ja asetetaan')
       event.target.pauseVideo()
       await this.props.setPlayerTarget(event.target)
+    } else if (!this.props.playerPlaying) {
+      event.target.pauseVideo()
     }
   }
 
@@ -42,7 +44,7 @@ class VideoPlayer extends React.Component {
 
   render() {
     console.log('Rendering VideoPlayer')
-    const showPlayer = { display: (this.props.playerPlaying) ? '' : 'none' }
+    const showPlayer = { display: (this.props.playerPlaying && this.props.playedOnce) ? '' : 'none' }
     const opts = {
       height: '315',
       width: '560',
@@ -79,7 +81,8 @@ const mapStateToProps = (state) => {
     playerPlaying: state.playingVideo.playerPlaying,
     playerTarget: state.playingVideo.playerTarget,
     playingPlaylist: state.playingPlaylist,
-    index: state.playingPlaylist.index
+    index: state.playingPlaylist.index,
+    playedOnce: state.playingVideo.playedOnce
   }
 }
 

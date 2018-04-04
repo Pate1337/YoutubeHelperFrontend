@@ -118,6 +118,15 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       }
     case 'UPDATE_COUNT':
       let updatedRelatedLinks = []
+      store.relatedLinks.forEach(rl => {
+        let found = action.links.find(l => l === rl._id)
+        if (found !== undefined) {
+          updatedRelatedLinks.push({...rl, count: rl.count + 1})
+        } else {
+          updatedRelatedLinks.push(rl)
+        }
+      })
+      /*let updatedRelatedLinks = []
       store.relatedLinks.forEach(l => {
         if (l._id === action.linkId) {
           let newLink = {...l, count: l.count + 1}
@@ -125,7 +134,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         } else {
           updatedRelatedLinks.push(l)
         }
-      })
+      })*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -279,15 +288,31 @@ export const shufflePlaylist = (playlistId) => {
   }
 }
 
-export const updateRelatedCount = (relatedLinkObject) => {
+export const updateRelatedCount = (relatedLinkObjects) => {
   return async (dispatch) => {
     try {
-      const newObject = {...relatedLinkObject, count: relatedLinkObject.count + 1}
+      let newObjects = []
+      for (let i = 0; i < relatedLinkObjects.length; i++) {
+        let newObject = {...relatedLinkObjects[i], count: relatedLinkObjects[i].count + 1}
+        const updatedLink = await linkService.updateRelatedCount(newObject)
+        newObjects.push(updatedLink._id)
+        console.log('Päivitetty linkki')
+      }
+      /*relatedLinkObjects.forEach(rl => {
+        let newObject = {...rl, count: rl.count + 1}
+        const updatedLink = await linkService.updateRelatedCount(newObject)
+        newObjects.push(updatedLink._id)
+      })*/
+      dispatch({
+        type: 'UPDATE_COUNT',
+        links: newObjects
+      })
+      /*const newObject = {...relatedLinkObject, count: relatedLinkObject.count + 1}
       const updatedLink = await linkService.updateRelatedCount(newObject)
       dispatch({
         type: 'UPDATE_COUNT',
         linkId: updatedLink._id
-      })
+      })*/
     } catch (exception) {
       return 'error'
     }

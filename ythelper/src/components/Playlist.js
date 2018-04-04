@@ -72,18 +72,16 @@ class Playlist extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-/*  let playlist
+  let playlist
   if (state.playingPlaylist.playlist === null) {
-    playlist = state.userLinks.playlists
-      .find(p => p._id === ownProps.item._id)
-  } else {
+    playlist = ownProps.item
+  } else if (state.playingPlaylist.playlist._id === ownProps.item._id) {
     playlist = state.playingPlaylist.playlist
-  }*/
+  } else {
+    playlist = ownProps.item
+  }
   return {
-    /*playingPlaylist: playlist,
-    anyPlaylist: ownProps.item,*/
-    /*playedOnce: state.playingPlaylist.playedOnce*/
-    playlist: ownProps.item
+    playlist: playlist
   }
 }
 /*

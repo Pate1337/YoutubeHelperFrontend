@@ -127,11 +127,12 @@ class AddToUserLinksButtons extends React.Component {
         if (usersRelated !== undefined) {
           /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
           /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
-          let resp = await this.props.updateRelatedCount(usersRelated)
+          /*let resp = await this.props.updateRelatedCount(usersRelated)
           while (resp === 'error') {
             console.log('YRITETÄÄN UUSIKS')
             resp = await this.props.updateRelatedCount(usersRelated)
-          }
+          }*/
+          updateCounts.push(usersRelated)
           continue
         }
         /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
@@ -139,6 +140,10 @@ class AddToUserLinksButtons extends React.Component {
         linksToAdd.push(relatedLinks[i])
       }
       console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
+      console.log('updateCounts: ' + updateCounts.length)
+      if (updateCounts.length !== 0 ) {
+        await this.props.updateRelatedCount(updateCounts)
+      }
       if (linksToAdd.length !== 0) {
         let error = await this.props.addToUserRelated(linksToAdd)
         while (error === 'error') {
@@ -150,6 +155,7 @@ class AddToUserLinksButtons extends React.Component {
       console.log('LINKKIÄ EI LISÄTTY SUOSIKEIHIN!')
     }
     await this.props.serverFree()
+    console.log('server free')
   }
 
   addToPlaylist = async (plistId) => {
@@ -197,6 +203,7 @@ class AddToUserLinksButtons extends React.Component {
       voidaan hakea kyseisen videon related videos.*/
       await this.props.searchForRelatedVideos(linkObject.linkId)
       const relatedLinks = this.props.relatedLinks
+      console.log('Yotuube apista tulleet linkit: ' + relatedLinks.length)
       /*console.log('relatedVideos.length: ' + relatedLinks.length)*/
       let linksToAdd = []
       let updateCounts = []
@@ -226,8 +233,9 @@ class AddToUserLinksButtons extends React.Component {
         if (usersRelated !== undefined) {
           /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
           /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
-          /*updateCounts.push(l)*/
-          await this.props.updateRelatedCount(usersRelated)
+          console.log('Related oli käyttäjän relatedeissa')
+          updateCounts.push(usersRelated)
+          /*await this.props.updateRelatedCount(usersRelated)*/
           continue
         }
         /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
@@ -235,6 +243,10 @@ class AddToUserLinksButtons extends React.Component {
         linksToAdd.push(relatedLinks[i])
       }
       console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
+      console.log('Countti päivitetään: ' + updateCounts.length)
+      if (updateCounts.length !== 0) {
+        await this.props.updateRelatedCount(updateCounts)
+      }
       if (linksToAdd.length !== 0) {
         await this.props.addToUserRelated(linksToAdd)
       }
@@ -242,6 +254,7 @@ class AddToUserLinksButtons extends React.Component {
       console.log('Linkkiä ei lisätty soittolistaan')
     }
     await this.props.serverFree()
+    console.log('server free')
   }
 
 
@@ -280,7 +293,11 @@ const mapStateToProps = (state, ownProps) => {
   let favouritesAvailable = true
   let availablePlaylists = []
   let link
-  if (ownProps.recommend !== undefined) {
+  if (state.loggedUser === null) {
+    videoId = ownProps.link.linkId
+    link = ownProps.link
+    favouritesAvailable = false
+  } else if (ownProps.recommend !== undefined) {
     videoId = ownProps.recommend.linkId
     availablePlaylists = state.userLinks.playlists
     link = ownProps.recommend
