@@ -61,19 +61,22 @@ class App extends React.Component {
                 : <div>
                     <Route exact path='/'
                       render={() => <Home />} />
-                    <Route path='/myFavourites'
-                      render={() => <FavouriteLinks />} />
+                    <Route path='/myPlaylists'
+                      render={() => <PlaylistForm />} />
                     <Route path='/myPlaylists'
                       render={() => <Playlists />} />
-                    <Route path='/recommended'
-                      render={() => <RelatedLinks />} />
-                    <PlaylistForm />
                   </div>
               }
+              <Route path='/myFavourites'
+                render={() => <FavouriteLinks />} />
+              <Route path='/recommended'
+                render={() => <RelatedLinks />} />
               <Route path='/users'
                 render={() => <Users />} />
-              <YTSearchBar />
-              <YTSearchResults />
+              <Route path='/search'
+                render={() => <YTSearchBar />} />
+              <Route path='/search'
+                render={() => <YTSearchResults />} />
             </div>
           </Router>
         </div>

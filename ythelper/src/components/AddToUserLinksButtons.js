@@ -299,8 +299,27 @@ const mapStateToProps = (state, ownProps) => {
     favouritesAvailable = false
   } else if (ownProps.recommend !== undefined) {
     videoId = ownProps.recommend.linkId
-    availablePlaylists = state.userLinks.playlists
+    /*availablePlaylists = state.userLinks.playlists*/
     link = ownProps.recommend
+    for (let i = 0; i < favourites.length; i++) {
+      if (favourites[i].linkId === videoId) {
+        favouritesAvailable = false
+        break
+      }
+    }
+    /*Seuraavaksi soittolistat*/
+    for (let i = 0; i < playlists.length; i++) {
+      let found = false
+      for (let j = 0; j < playlists[i].links.length; j++) {
+        if (playlists[i].links[j].linkId === videoId) {
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        availablePlaylists.push(playlists[i])
+      }
+    }
   } else if (ownProps.link !== undefined) {
     videoId = ownProps.link.linkId
     link = ownProps.link

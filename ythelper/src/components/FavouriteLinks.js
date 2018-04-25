@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import FavouriteLink from './FavouriteLink'
+import { Link } from 'react-router-dom'
 
 class FavouriteLinks extends React.Component {
   constructor() {
@@ -22,6 +23,7 @@ class FavouriteLinks extends React.Component {
     /*const showFavourites = { display: (this.state.showFavourites) ? '' : 'none' }
     const dontShow = { display: (!this.state.showFavourites) ? 'none' : '' }*/
     /*if (this.state.showFavourites) {*/
+    if (this.props.loggedUser !== null) {
       return (
         <div>
           <h2>
@@ -32,6 +34,17 @@ class FavouriteLinks extends React.Component {
           )}
         </div>
       )
+    } else {
+      return (
+        <div>
+          <h2>
+            My favourites
+          </h2>
+          Favourites are only for signed up users.
+          <Link to='/signup'>Create an account</Link> now!
+        </div>
+      )
+    }
   /*  } else {
       return (
         <div>

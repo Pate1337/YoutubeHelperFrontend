@@ -98,13 +98,13 @@ class HiddenPlaylist extends React.Component {
     const opts = {
       height: '45',
       width: '400',
+      frameborder: 0,
       playerVars: {
         autoplay: 1,
         rel: 0,
         autohide: 0,
         showinfo: 0
-      },
-      frameborder: 0
+      }
     }
     return (
       <div id='playlistBar' style={showBar}>

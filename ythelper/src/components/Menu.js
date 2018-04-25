@@ -18,6 +18,9 @@ class Menu extends React.Component {
         <NavLink exact to='/recommended' activeStyle={activeStyle}>
           Recommended
         </NavLink>&nbsp;
+        <NavLink exact to='/search' activeStyle={activeStyle}>
+          Search
+        </NavLink>&nbsp;
       </div>
     )
   }

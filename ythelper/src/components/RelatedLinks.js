@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import RecommendedLink from './RecommendedLink'
+import { Link } from 'react-router-dom'
 
 class RelatedLinks extends React.Component {
   constructor() {
@@ -32,10 +33,19 @@ class RelatedLinks extends React.Component {
           </ol>
         </div>
       )
-    } else {
+    } else if (this.props.loggedUser === null) {
       return (
-        <div>Ei ehdotuksia</div>
+        <div>
+          <h2>Recommended</h2>
+          Recommendations are only for signed up users.&nbsp;
+          <Link to='/signup'>Sign up</Link> now!
+        </div>
       )
+    } else {
+      <div>
+        <h2>Recommended</h2>
+        Search from Youtube and add a video to your favourites or playlists in order to get recommendations.
+      </div>
     }
 
   }
@@ -57,7 +67,8 @@ const mapStateToProps = (state) => {
     relatedLinks = state.userLinks.relatedLinks.sort(sortByCount)
   }
   return {
-    relatedLinks: relatedLinks
+    relatedLinks: relatedLinks,
+    loggedUser: state.loggedUser
   }
 }
 
