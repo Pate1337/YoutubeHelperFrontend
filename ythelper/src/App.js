@@ -23,6 +23,7 @@ import Welcome from './components/Welcome'
 import Home from './components/Home'
 import Menu from './components/Menu'
 import VideoPlayer from './components/VideoPlayer'
+import { Container } from 'semantic-ui-react'
 
 class App extends React.Component {
 
@@ -40,7 +41,7 @@ class App extends React.Component {
     console.log('Käyttäjät: ' + this.props.users.length)
     /*if (this.props.loggedUser === null) {*/
       return (
-        <div>
+        <Container>
           <Router>
             <div>
               <HiddenPlaylist />
@@ -79,7 +80,7 @@ class App extends React.Component {
                 render={() => <YTSearchResults />} />
             </div>
           </Router>
-        </div>
+        </Container>
       )
   /*  } else {
       return (
