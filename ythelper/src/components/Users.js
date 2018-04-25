@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Comments from './Comments'
+import { allUsersComments } from '../reducers/commentReducer'
 
 class Users extends React.Component {
   constructor() {
@@ -10,9 +11,11 @@ class Users extends React.Component {
     }
   }
 
-  showUser = (id, event) => {
+  showUser = async (id, event) => {
     event.preventDefault()
     console.log('Users.js lista onclickin id:', id)
+    await allUsersComments(id)
+    //console.log('USERS - ', result)
     this.setState({
       userToShow: id
     })
@@ -73,7 +76,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-
+  //uutta
+  allUsersComments
 }
 const ConnectedUsers = connect(mapStateToProps, mapDispatchToProps)(Users)
 

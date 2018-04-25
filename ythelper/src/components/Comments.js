@@ -16,6 +16,7 @@ class Comments extends React.Component {
   }
 
   toggleVisibility = async () => {
+    //await allUsersComments(this.props.cuser)
     this.setState({
       showComments: !this.state.showComments
     })
@@ -57,13 +58,13 @@ class Comments extends React.Component {
     console.log(this.props.cuser, ' ', this.props.cuser.id, ' ', this.props.cuser._id)
     console.log(this.props.cuser)
     if(this.state.showComments) {
-      console.log('RENDERING COMMENTS -- ', this.state.resComments)
-      console.log('COMMENTS ', this.props.rComments)
+      console.log('RENDERING COMMENTS -- ', this.props.userComments)
+      console.log('COMMENTS ', this.props.userComments.rComments)
       return (
         <div>
           <h3 onClick={this.toggleVisibility}>Comments (click to hide)</h3>
           <p>Testing</p>
-          {this.props.allUsersComments(this.props.cuser).rComments.map(link =>
+          {this.props.userComments.rComments.map(link =>
             <Comment />
           )}
             
@@ -93,8 +94,9 @@ class Comments extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
+
     //receivedComments: allComments(this.props.cuser)
-    //userComments: state.allUsersComments.rComments
+    userComments: state.userComments
   }
 }
 

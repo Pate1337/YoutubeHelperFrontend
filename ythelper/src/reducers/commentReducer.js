@@ -3,9 +3,9 @@ import userService from '../services/users'
 
 const commentReducer = (store = { rComments: [], sentComments: [] }, action) => {
   switch (action.type) {
-    case 'GET_ALL':
+    case 'GET_COMMENTS_ID':
       console.log('GET_ALL commentReducer')
-      console.log('GET ALL COMMENT REDUCER',action.data)
+      console.log('GET ALL COMMENT REDUCER', action.data)
       return action.data
     case 'ADD_RECEIVED_COMMENT':
       console.log('ADD_RECEIVED_COMMENT commentReducer')
@@ -24,28 +24,30 @@ const commentReducer = (store = { rComments: [], sentComments: [] }, action) => 
   }
 }
 
-export const allUsersComments = (userP) => {
+export const allUsersComments = async (userP) => {
   console.log('allUsersComments commentReducer', userP)
+  const user = await userService.getUserById(userP)
+  console.log('user: ' + user.rComments[0].content)
+  //Tää returnin paska ei ilmeisesti tee yhtään mitään
   return async (dispatch) => {
     //console.log('voiko täälä edes logata vai mitä vittua')
-    try {
-      const loggedUserJSON = window.localStorage.getItem('loggedUser')
-      if (loggedUserJSON) {
-        //const loggedUser = JSON.parse(loggedUserJSON)
-        const user = await userService.getUserById(userP)
-        console.log('user: ' + user)
-        dispatch({
-          type: 'GET_ALL',
-          data: {
-            rComments: user.rComments || null,
-            sentComments: user.sentComments || null
-          }
-        })
+    //try {
+    //const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    //if (loggedUserJSON != null) {
+    //const loggedUser = JSON.parse(loggedUserJSON)
+
+    dispatch({
+      type: 'GET_COMMENTS_ID',
+      data: {
+        rComments: user.rComments,
+        sentComments: user.sentComments
       }
-    } catch (e) {
+    })
+    //}
+    /*} catch (e) {
       console.log('vitun paska heitti catchiin')
       return 'error'
-    }
+    }*/
   }
 }
 
