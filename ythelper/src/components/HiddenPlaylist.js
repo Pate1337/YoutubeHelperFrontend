@@ -93,8 +93,7 @@ class HiddenPlaylist extends React.Component {
   render() {
     console.log('Renderin hiddenPlaylist')
     /* || !this.props.playedOnce tohon showBariin nii saa näkyyn heti alus*/
-    const showBar = { display: (this.props.playerPlaying === false) ? '' : 'none',
-      backgroundColor: 'black', color: 'white'}
+    const showBar = { display: (this.props.playerPlaying === false) ? '' : 'none'}
     const opts = {
       height: '45',
       width: '400',

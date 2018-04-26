@@ -24,6 +24,7 @@ import Home from './components/Home'
 import Menu from './components/Menu'
 import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
+import { Grid, Segment } from 'semantic-ui-react'
 
 class App extends React.Component {
 
@@ -41,15 +42,16 @@ class App extends React.Component {
     console.log('Käyttäjät: ' + this.props.users.length)
     /*if (this.props.loggedUser === null) {*/
       return (
-        <Container>
+        <div>
           <Router>
             <div>
-              <HiddenPlaylist />
+
               <Route path='/'
                 render={({history}) => <LoggedBar history={history} />} />
-              <h1>YoutubeHelper</h1>
-              <Route path='/'
-                render={() => <Menu />} />
+              <Container>
+              <Grid>
+              <Grid.Column>
+
               <Route path='/'
                 render={() => <VideoPlayer />} />
               <Route path='/login'
@@ -78,9 +80,12 @@ class App extends React.Component {
                 render={() => <YTSearchBar />} />
               <Route path='/search'
                 render={() => <YTSearchResults />} />
+              </Grid.Column>
+              </Grid>
+              </Container>
             </div>
           </Router>
-        </Container>
+        </div>
       )
   /*  } else {
       return (
