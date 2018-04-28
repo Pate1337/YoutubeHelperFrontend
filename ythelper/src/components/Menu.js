@@ -5,17 +5,25 @@ import { setActiveItem } from '../reducers/menuReducer'
 import { connect } from 'react-redux'
 
 class Menu extends React.Component {
-  constructor() {
+  /*constructor() {
     super()
     this.state = {
-      activeItem: 'home'
+      activeItem: window.location.pathname
     }
-  }
+  }*/
   handleItemClick = async (event, { name }) => {
     console.log('name = ' + name)
-    this.setState({
-      activeItem: name
-    })
+    if (name === 'home') {
+      await this.props.setActiveItem('/')
+      /*this.setState({
+        activeItem: '/'
+      })*/
+    } else {
+      await this.props.setActiveItem('/' + name)
+      /*this.setState({
+        activeItem: '/' + name
+      })*/
+    }
     /*await this.props.setActiveItem(name)*/
     let address = '/' + name
     if (name === 'home') {
@@ -28,15 +36,15 @@ class Menu extends React.Component {
       backgroundColor: "grey"
     }*/
     console.log('Render Menu')
-    const activeItem = this.state.activeItem
+    const activeItem = this.props.activeItem
     console.log('activeItem: ' + activeItem)
     return (
       <Segment inverted>
         <MenuItem inverted pointing secondary>
-          <MenuItem.Item as={Nav} to='/' name='home' onClick={this.handleItemClick}/>
-          <MenuItem.Item as={Nav} to='/users' name='users' onClick={this.handleItemClick}/>
-          <MenuItem.Item as={Nav} to='/recommended' name='recommended' onClick={this.handleItemClick}/>
-          <MenuItem.Item as={Nav} to='/search' name='search' onClick={this.handleItemClick}/>
+          <MenuItem.Item name='home' active={activeItem === '/'} onClick={this.handleItemClick}/>
+          <MenuItem.Item name='users' active={activeItem === '/users'} onClick={this.handleItemClick}/>
+          <MenuItem.Item name='recommended' active={activeItem === '/recommended'} onClick={this.handleItemClick}/>
+          <MenuItem.Item name='search' active={activeItem === '/search'} onClick={this.handleItemClick}/>
         </MenuItem>
       </Segment>
     )

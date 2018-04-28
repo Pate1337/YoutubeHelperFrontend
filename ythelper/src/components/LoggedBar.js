@@ -25,7 +25,7 @@ class LoggedBar extends React.Component {
     this.props.clearPlayingPlaylist()
     this.props.clearPlayingVideo()
     window.localStorage.removeItem('ytSearchBar')
-    this.props.setActiveItem('home')
+    this.props.setActiveItem('/')
     this.props.history.push('/')
   }
   /*Täytyy tolle menulle tehdä nyt ilmeisesti myös menuReducer, missä

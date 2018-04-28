@@ -1,9 +1,10 @@
-const menuReducer = (state = 'home', action) => {
+const menuReducer = (state = window.location.pathname, action) => {
   switch (action.type) {
     case 'SET_ACTIVE':
       console.log('menuReducer active: ' + action.data)
       return action.data
     default:
+      console.log('DEFAULTTI menuReducer: ' + state)
       return state
   }
 }

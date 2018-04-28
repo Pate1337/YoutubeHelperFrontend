@@ -34,7 +34,7 @@ class LoginForm extends React.Component {
     if (response !== 'error') {
       console.log('Logged in')
       this.props.history.push('/')
-      await this.props.setActiveItem('home')
+      await this.props.setActiveItem('/')
     } else {
       this.setState({
         username: '',

@@ -42,10 +42,12 @@ class RelatedLinks extends React.Component {
         </div>
       )
     } else {
-      <div>
-        <h2>Recommended</h2>
-        Search from Youtube and add a video to your favourites or playlists in order to get recommendations.
-      </div>
+      return (
+        <div>
+          <h2>Recommended</h2>
+          Search from Youtube and add a video to your favourites or playlists in order to get recommendations.
+        </div>
+      )
     }
 
   }
