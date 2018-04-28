@@ -35,6 +35,9 @@ class App extends React.Component {
     await this.props.usersInitialization()
     await this.props.searchResultInitialization()
     await this.props.userLinks()
+    /*Tänne pakko käyttää window.location.pathname et saadaan refreshin
+    yhteydessä oleva urli. Ja se asetetaan menuReduceriin*/
+    console.log('PATHNAME: ' + window.location.pathname)
   }
 
   render() {

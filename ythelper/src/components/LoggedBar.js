@@ -7,6 +7,7 @@ import { removeUserLinks } from '../reducers/userLinksReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { clearPlayingVideo } from '../reducers/videoPlayingReducer'
+import { setActiveItem } from '../reducers/menuReducer'
 import { Link } from 'react-router-dom'
 import { Grid, Segment } from 'semantic-ui-react'
 import HiddenPlaylist from './HiddenPlaylist'
@@ -24,15 +25,18 @@ class LoggedBar extends React.Component {
     this.props.clearPlayingPlaylist()
     this.props.clearPlayingVideo()
     window.localStorage.removeItem('ytSearchBar')
+    this.props.setActiveItem('home')
     this.props.history.push('/')
   }
-
+  /*Täytyy tolle menulle tehdä nyt ilmeisesti myös menuReducer, missä
+  vaan activeItem. Login ja Logout yhteydessä asetetaan activeItem = home,
+  muuten Menussa handleItemClickissä asetetaan activeItem = name*/
   render() {
     console.log('Rendering LoggedBar')
     return (
       <div>
-        {this.props.loggedUser !== null
-          ? <Grid columns='equal' inverted doubling divided celled>
+
+            <Grid columns='equal' inverted doubling divided celled>
               <Grid.Row color='black' textAlign='center'>
                 <Grid.Column width={2}>
                   <Segment color='black' inverted>logo</Segment>
@@ -40,21 +44,28 @@ class LoggedBar extends React.Component {
                 <Grid.Column>
                   <HiddenPlaylist />
                 </Grid.Column>
-                <Grid.Column width={2}>
+                {this.props.loggedUser !== null
+                ? <Grid.Column width={2}>
                   <Segment color='black' inverted>
                     <Link to='/myFavourites'>
                       My favourites
                     </Link>&nbsp;
                   </Segment>
                 </Grid.Column>
-                <Grid.Column width={2}>
+                : <Grid.Column width={2}>
+                </Grid.Column>}
+                {this.props.loggedUser !== null
+                ? <Grid.Column width={2}>
                   <Segment color='black' inverted>
                     <Link to='/myPlaylists'>
                       My playlists
                     </Link>
                   </Segment>
                 </Grid.Column>
-                <Grid.Column width={5}>
+                : <Grid.Column width={2}>
+                </Grid.Column>}
+                {this.props.loggedUser !== null
+                ? <Grid.Column width={5}>
                   <Segment color='black' inverted>
                     {this.props.loggedUser.username} logged in&nbsp;
                     <button onClick={this.logOut}>
@@ -62,45 +73,25 @@ class LoggedBar extends React.Component {
                     </button>&nbsp;
                   </Segment>
                 </Grid.Column>
-              </Grid.Row>
-              <Grid.Row color='black' centered>
-
-                  <Route path='/'
-                    render={({history}) => <Menu history={history} />} />
-
-              </Grid.Row>
-            </Grid>
-          : <Grid columns='equal' inverted doubling divided celled>
-              <Grid.Row color='black' textAlign='center'>
-                <Grid.Column width={2}>
-                  <Segment color='black' inverted>logo</Segment>
-                </Grid.Column>
-                <Grid.Column>
-                  <HiddenPlaylist />
-                </Grid.Column>
-                <Grid.Column width={2}>
-                </Grid.Column>
-                <Grid.Column width={2}>
-                </Grid.Column>
-                <Grid.Column width={5}>
+                : <Grid.Column width={5}>
                   <Segment color='black' inverted>
                     <Link to='/login'>Login</Link>&nbsp; OR <Link to='/signup'>Create an account</Link>
                   </Segment>
-                </Grid.Column>
+                </Grid.Column>}
               </Grid.Row>
               <Grid.Row color='black' centered>
 
-                  <Route path='/'
-                    render={({history}) => <Menu history={history} />} />
+              <Route path='/'
+                render={({history}) => <Menu history={history} />} />
 
               </Grid.Row>
             </Grid>
-          }
       </div>
     )
   }
 }
-
+/*<Route path='/'
+  render={({history}) => <Menu history={history} />} />*/
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser
@@ -112,7 +103,8 @@ const mapDispatchToProps = {
   removeUserLinks,
   clearSearchResults,
   clearPlayingPlaylist,
-  clearPlayingVideo
+  clearPlayingVideo,
+  setActiveItem
 }
 
 const ConnectedLoggedBar = connect(mapStateToProps, mapDispatchToProps)(LoggedBar)

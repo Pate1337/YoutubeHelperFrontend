@@ -1,6 +1,8 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Menu as MenuItem, Segment } from 'semantic-ui-react'
+import { setActiveItem } from '../reducers/menuReducer'
+import { connect } from 'react-redux'
 
 class Menu extends React.Component {
   constructor() {
@@ -9,11 +11,12 @@ class Menu extends React.Component {
       activeItem: 'home'
     }
   }
-  handleItemClick = (event, { name }) => {
+  handleItemClick = async (event, { name }) => {
     console.log('name = ' + name)
     this.setState({
       activeItem: name
     })
+    /*await this.props.setActiveItem(name)*/
     let address = '/' + name
     if (name === 'home') {
       address = '/'
@@ -24,19 +27,29 @@ class Menu extends React.Component {
     /*const activeStyle = {
       backgroundColor: "grey"
     }*/
-    const { activeItem } = this.state
+    console.log('Render Menu')
+    const activeItem = this.state.activeItem
+    console.log('activeItem: ' + activeItem)
     return (
       <Segment inverted>
         <MenuItem inverted pointing secondary>
-          <MenuItem.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-          <MenuItem.Item name='users' active={activeItem === 'users'} onClick={this.handleItemClick} />
-          <MenuItem.Item name='recommended' active={activeItem === 'recommended'} onClick={this.handleItemClick} />
-          <MenuItem.Item name='search' active={activeItem === 'search'} onClick={this.handleItemClick} />
+          <MenuItem.Item as={Nav} to='/' name='home' onClick={this.handleItemClick}/>
+          <MenuItem.Item as={Nav} to='/users' name='users' onClick={this.handleItemClick}/>
+          <MenuItem.Item as={Nav} to='/recommended' name='recommended' onClick={this.handleItemClick}/>
+          <MenuItem.Item as={Nav} to='/search' name='search' onClick={this.handleItemClick}/>
         </MenuItem>
       </Segment>
     )
   }
 }
+/*active={activeItem === 'home'} onClick={this.handleItemClick}*/
+const Nav = props => (
+  <NavLink
+    exact
+    {...props}
+    activeClassName='active'
+  />
+)
 
 /*<div>
   <NavLink exact to='/' activeStyle={activeStyle}>
@@ -52,4 +65,16 @@ class Menu extends React.Component {
     Search
   </NavLink>&nbsp;
 </div>*/
-export default Menu
+
+const mapStateToProps = (state) => {
+  return {
+    activeItem: state.activeItem
+  }
+}
+
+const mapDispatchToProps = {
+  setActiveItem
+}
+
+const ConnectedMenu = connect(mapStateToProps, mapDispatchToProps)(Menu)
+export default ConnectedMenu

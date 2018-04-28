@@ -12,6 +12,7 @@ import ytRelatedVideosReducer from './reducers/ytRelatedVideosReducer'
 import serverReducer from './reducers/serverReducer'
 import commentReducer from './reducers/commentReducer'
 import videoPlayingReducer from './reducers/videoPlayingReducer'
+import menuReducer from './reducers/menuReducer'
 
 const reducer = combineReducers({
   users: userReducer,
@@ -25,7 +26,8 @@ const reducer = combineReducers({
   relatedLinks: ytRelatedVideosReducer,
   serverOnUse: serverReducer,
   userComments: commentReducer,// tää reduceri pitää korjata
-  playingVideo: videoPlayingReducer
+  playingVideo: videoPlayingReducer,
+  activeItem: menuReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

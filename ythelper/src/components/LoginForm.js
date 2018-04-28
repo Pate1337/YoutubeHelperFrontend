@@ -4,6 +4,7 @@ import { addLoggedUser } from '../reducers/loggedUserReducer'
 /*import { usersFavourites } from '../reducers/favouriteLinksReducer'
 import { usersPlaylists } from '../reducers/playlistsReducer'*/
 import { userLinks } from '../reducers/userLinksReducer'
+import { setActiveItem } from '../reducers/menuReducer'
 
 class LoginForm extends React.Component {
   constructor() {
@@ -33,6 +34,7 @@ class LoginForm extends React.Component {
     if (response !== 'error') {
       console.log('Logged in')
       this.props.history.push('/')
+      await this.props.setActiveItem('home')
     } else {
       this.setState({
         username: '',
@@ -77,7 +79,8 @@ const mapDispatchToProps = {
   addLoggedUser,
   /*usersFavourites,
   usersPlaylists*/
-  userLinks
+  userLinks,
+  setActiveItem
 }
 
 const ConnectedLoginForm = connect(null, mapDispatchToProps)(LoginForm)
