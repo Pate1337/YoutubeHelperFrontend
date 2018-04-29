@@ -24,9 +24,15 @@ import Home from './components/Home'
 import Menu from './components/Menu'
 import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
-import { Grid, Segment } from 'semantic-ui-react'
+import { Grid, Segment, Sticky } from 'semantic-ui-react'
 
 class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+
+    }
+  }
 
 /*ComponentDidMount toinen vaihtoehto*/
   async componentWillMount() {
@@ -40,17 +46,23 @@ class App extends React.Component {
     console.log('PATHNAME: ' + window.location.pathname)
   }
 
+  handleContextRef = contextRef => this.setState({ contextRef })
+
   render() {
     console.log('Rendering App')
     console.log('Käyttäjät: ' + this.props.users.length)
+    /*const { contextRef } = this.state*/
     /*if (this.props.loggedUser === null) {*/
       return (
+        <Grid>
+        <Grid.Column>
         <div>
           <Router>
             <div>
-
+              
               <Route path='/'
                 render={({history}) => <LoggedBar history={history} />} />
+
               <Container>
               <Grid>
               <Grid.Column>
@@ -89,6 +101,8 @@ class App extends React.Component {
             </div>
           </Router>
         </div>
+        </Grid.Column>
+        </Grid>
       )
   /*  } else {
       return (

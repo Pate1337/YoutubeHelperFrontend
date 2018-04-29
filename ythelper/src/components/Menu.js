@@ -40,7 +40,7 @@ class Menu extends React.Component {
     console.log('activeItem: ' + activeItem)
     return (
       <Segment inverted>
-        <MenuItem inverted pointing secondary>
+        <MenuItem inverted pointing secondary widths={4}>
           <MenuItem.Item name='home' active={activeItem === '/'} onClick={this.handleItemClick}/>
           <MenuItem.Item name='users' active={activeItem === '/users'} onClick={this.handleItemClick}/>
           <MenuItem.Item name='recommended' active={activeItem === '/recommended'} onClick={this.handleItemClick}/>
@@ -51,13 +51,13 @@ class Menu extends React.Component {
   }
 }
 /*active={activeItem === 'home'} onClick={this.handleItemClick}*/
-const Nav = props => (
+/*const Nav = props => (
   <NavLink
     exact
     {...props}
     activeClassName='active'
   />
-)
+)*/
 
 /*<div>
   <NavLink exact to='/' activeStyle={activeStyle}>

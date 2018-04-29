@@ -9,7 +9,7 @@ import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { clearPlayingVideo } from '../reducers/videoPlayingReducer'
 import { setActiveItem } from '../reducers/menuReducer'
 import { Link } from 'react-router-dom'
-import { Grid, Segment } from 'semantic-ui-react'
+import { Grid, Segment, Button } from 'semantic-ui-react'
 import HiddenPlaylist from './HiddenPlaylist'
 import Menu from './Menu'
 import { Route } from 'react-router-dom'
@@ -28,13 +28,23 @@ class LoggedBar extends React.Component {
     this.props.setActiveItem('/')
     this.props.history.push('/')
   }
+
+  handleButtonClick = async (event, { content }) => {
+    if (content === 'Login') {
+      await this.props.setActiveItem('/login')
+      this.props.history.push('/login')
+    } else if (content === 'Sign up') {
+      await this.props.setActiveItem('/signup')
+      this.props.history.push('/signup')
+    }
+  }
   /*Täytyy tolle menulle tehdä nyt ilmeisesti myös menuReducer, missä
   vaan activeItem. Login ja Logout yhteydessä asetetaan activeItem = home,
   muuten Menussa handleItemClickissä asetetaan activeItem = name*/
   render() {
     console.log('Rendering LoggedBar')
     return (
-      <div>
+
 
             <Grid columns='equal' inverted doubling divided celled>
               <Grid.Row color='black' textAlign='center'>
@@ -75,21 +85,28 @@ class LoggedBar extends React.Component {
                 </Grid.Column>
                 : <Grid.Column width={5}>
                   <Segment color='black' inverted>
-                    <Link to='/login'>Login</Link>&nbsp; OR <Link to='/signup'>Create an account</Link>
+                    <Button.Group>
+                      <Button basic color='blue' onClick={this.handleButtonClick} content='Login' />
+                      <Button.Or />
+                      <Button basic color='blue' onClick={this.handleButtonClick} content='Sign up' />
+                    </Button.Group>
                   </Segment>
                 </Grid.Column>}
               </Grid.Row>
               <Grid.Row color='black' centered>
-
+              <Grid.Column>
               <Route path='/'
                 render={({history}) => <Menu history={history} />} />
-
+              </Grid.Column>
               </Grid.Row>
             </Grid>
-      </div>
+      
     )
   }
 }
+/*<Segment color='black' inverted>
+  <Link to='/login'>Login</Link>&nbsp; OR <Link to='/signup'>Create an account</Link>
+</Segment>*/
 /*<Route path='/'
   render={({history}) => <Menu history={history} />} />*/
 const mapStateToProps = (state) => {
