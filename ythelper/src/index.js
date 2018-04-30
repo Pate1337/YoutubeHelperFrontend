@@ -8,6 +8,8 @@ import { Provider } from 'react-redux'
 
 const render = () => {
   console.log('render index.js')
+  /*Tää tulee todennäköisesti aiheuttaan häslinkiä jossain vaiheessa*/
+  window.scrollTo(0, 0)
   ReactDOM.render(
     <Provider store={store}>
       <App />

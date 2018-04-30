@@ -27,12 +27,12 @@ import { Container } from 'semantic-ui-react'
 import { Grid, Segment, Sticky } from 'semantic-ui-react'
 
 class App extends React.Component {
-  constructor() {
+  /*constructor() {
     super()
     this.state = {
 
     }
-  }
+  }*/
 
 /*ComponentDidMount toinen vaihtoehto*/
   async componentWillMount() {
@@ -41,28 +41,32 @@ class App extends React.Component {
     await this.props.usersInitialization()
     await this.props.searchResultInitialization()
     await this.props.userLinks()
-    /*Tänne pakko käyttää window.location.pathname et saadaan refreshin
-    yhteydessä oleva urli. Ja se asetetaan menuReduceriin*/
-    console.log('PATHNAME: ' + window.location.pathname)
   }
 
-  handleContextRef = contextRef => this.setState({ contextRef })
+  /*handleContextRef = contextRef => this.setState({ contextRef })*/
 
   render() {
     console.log('Rendering App')
     console.log('Käyttäjät: ' + this.props.users.length)
+    const loggedBarStyle = {
+      position: 'fixed',
+      top: 0,
+      width: '100%'
+    }
+    const mainPageStyle = {
+      marginTop: '200px'
+    }
+    const overflow = {
+      overflow: 'hidden'
+    }
     /*const { contextRef } = this.state*/
     /*if (this.props.loggedUser === null) {*/
       return (
-        <Grid>
-        <Grid.Column>
-        <div>
+        <div style={overflow}>
           <Router>
             <div>
-              
-              <Route path='/'
-                render={({history}) => <LoggedBar history={history} />} />
 
+              <div style={mainPageStyle}>
               <Container>
               <Grid>
               <Grid.Column>
@@ -98,30 +102,15 @@ class App extends React.Component {
               </Grid.Column>
               </Grid>
               </Container>
-            </div>
-          </Router>
-        </div>
-        </Grid.Column>
-        </Grid>
-      )
-  /*  } else {
-      return (
-        <div>
-          <Router>
-            <div>
-              <LoggedBar />
-              <HiddenPlaylist />
-              <Users />
-              <UserLists />
-              <PlaylistForm />
-              <YTSearchBar />
-              <YTSearchResults />
-              <RelatedLinks />
+              </div>
+              <div style={loggedBarStyle}>
+              <Route path='/'
+                render={({history}) => <LoggedBar history={history} />} />
+              </div>
             </div>
           </Router>
         </div>
       )
-    }*/
   }
 }
 

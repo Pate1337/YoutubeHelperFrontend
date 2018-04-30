@@ -38,15 +38,12 @@ class LoggedBar extends React.Component {
       this.props.history.push('/signup')
     }
   }
-  /*Täytyy tolle menulle tehdä nyt ilmeisesti myös menuReducer, missä
-  vaan activeItem. Login ja Logout yhteydessä asetetaan activeItem = home,
-  muuten Menussa handleItemClickissä asetetaan activeItem = name*/
+
   render() {
     console.log('Rendering LoggedBar')
     return (
 
-
-            <Grid columns='equal' inverted doubling divided celled>
+            <Grid columns='equal' inverted doubling>
               <Grid.Row color='black' textAlign='center'>
                 <Grid.Column width={2}>
                   <Segment color='black' inverted>logo</Segment>
@@ -100,7 +97,6 @@ class LoggedBar extends React.Component {
               </Grid.Column>
               </Grid.Row>
             </Grid>
-      
     )
   }
 }
