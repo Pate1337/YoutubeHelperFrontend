@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Dimmer, Icon, Image, Item, Button } from 'semantic-ui-react'
+import { Dimmer, Icon, Image, Item, Button, Popup } from 'semantic-ui-react'
 
 class RecommendedLink extends React.Component {
   constructor() {
@@ -59,17 +59,28 @@ class RecommendedLink extends React.Component {
           <Item.Header>{this.props.recommend.title}</Item.Header>
           <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
           <Item.Extra>
-            {(!this.state.showButtons)
-              ? <Button floated='right' onClick={this.toggleButtons}>Add to</Button>
-              : <div><AddToUserLinksButtons recommend={this.props.recommend} />
-                <button onClick={this.toggleButtons}>Back</button></div>
-              }
+            <Popup
+              trigger={<Button compact color='blue' icon floated='right' onClick={this.toggleButtons}>
+                  <Icon name='add' size='large' />
+                </Button>}
+              content={<AddToUserLinksButtons recommend={this.props.recommend} />}
+              position='top right'
+              on='click'
+              hideOnScroll
+            />
           </Item.Extra>
         </Item.Content>
       </Item>
     )
   }
 }
+/*{(!this.state.showButtons)
+  ? <Button icon floated='right' onClick={this.toggleButtons}>
+      <Icon name='add' />
+    </Button>
+  : <div><AddToUserLinksButtons recommend={this.props.recommend} />
+    <button onClick={this.toggleButtons}>Back</button></div>
+  }*/
 /*id: {this.props.recommend.linkId}, title: {this.props.recommend.title}, count: {this.props.count}
 {(!this.state.showButtons)
   ? <button onClick={this.toggleButtons}>Add to</button>

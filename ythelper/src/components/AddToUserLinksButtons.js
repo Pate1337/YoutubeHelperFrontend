@@ -6,6 +6,7 @@ import { addFavouriteForUser, removeRelatedFromUser,
 import { usersInitialization } from '../reducers/userReducer'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
+import { Button, Icon } from 'semantic-ui-react'
 
 class AddToUserLinksButtons extends React.Component {
   constructor() {
@@ -264,25 +265,28 @@ class AddToUserLinksButtons extends React.Component {
     const showPlaylist = { display: (this.props.availablePlaylists.length !== 0) ? '' : 'none' }
 
     return (
-      <div>
-        <button onClick={this.handleFavourite} style={showFavourite}>
-          Add to Favourites
-        </button>
-        <button onClick={this.togglePlaylists} style={showPlaylist}>
-          Add to Playlist
-        </button>
-        {(this.props.availablePlaylists.length !== 0 && this.state.showPlaylists)
+      <div style={{width: '210px'}}>
+        <h4>Add to</h4>
+        <Button basic color='blue' fluid icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
+          <Icon name='add' />
+          Favourites
+        </Button>
+        {(this.props.availablePlaylists.length !== 0)
           ? this.props.availablePlaylists.map(p =>
-            <button key={p._id} id={p._id} onClick={this.handlePlaylist}>
-              Add to {p.title}
-            </button>)
+            <Button basic color='blue' fluid icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}>
+              <Icon name='add' />
+              {p.title}
+            </Button>)
           : <div></div>
         }
       </div>
     )
   }
 }
-
+/*<Button basic color='blue' fluid icon labelPosition='left' onClick={this.togglePlaylists} style={showPlaylist}>
+  <Icon name='add' />
+  Playlist
+</Button>*/
 const mapStateToProps = (state, ownProps) => {
   /*Otetaan vaan tarvittavat käyttöön.*/
   /*Ensin tarkistetaan, onko linkki jo suosikeissa.*/
