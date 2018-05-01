@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Dimmer, Icon, Image } from 'semantic-ui-react'
+import { Dimmer, Icon, Image, Item, Button } from 'semantic-ui-react'
 
 class RecommendedLink extends React.Component {
   constructor() {
@@ -42,8 +42,9 @@ class RecommendedLink extends React.Component {
         <Icon name='play' size='huge' />
       </div>
     )
+    /*Dimmerissä zIndex: 0 koska searchbar*/
     return (
-      <div>
+      <Item>
         <Dimmer.Dimmable
           as={Image}
           dimmed={active}
@@ -52,18 +53,29 @@ class RecommendedLink extends React.Component {
           onMouseLeave={this.handleHide}
           src={this.props.recommend.thumbnail}
           onClick={this.playVideo}
-          style={{cursor: 'pointer', display: 'inline-block'}}
+          style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
         />
-        id: {this.props.recommend.linkId}, title: {this.props.recommend.title}, count: {this.props.count}
-        {(!this.state.showButtons)
-          ? <button onClick={this.toggleButtons}>Add to</button>
-          : <div><AddToUserLinksButtons recommend={this.props.recommend} />
-            <button onClick={this.toggleButtons}>Back</button></div>
-        }
-      </div>
+        <Item.Content>
+          <Item.Header>{this.props.recommend.title}</Item.Header>
+          <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
+          <Item.Extra>
+            {(!this.state.showButtons)
+              ? <Button floated='right' onClick={this.toggleButtons}>Add to</Button>
+              : <div><AddToUserLinksButtons recommend={this.props.recommend} />
+                <button onClick={this.toggleButtons}>Back</button></div>
+              }
+          </Item.Extra>
+        </Item.Content>
+      </Item>
     )
   }
 }
+/*id: {this.props.recommend.linkId}, title: {this.props.recommend.title}, count: {this.props.count}
+{(!this.state.showButtons)
+  ? <button onClick={this.toggleButtons}>Add to</button>
+  : <div><AddToUserLinksButtons recommend={this.props.recommend} />
+    <button onClick={this.toggleButtons}>Back</button></div>
+}*/
 /*<img onClick={this.playVideo}
   src={this.props.recommend.thumbnail}
   alt={this.props.recommend.title}

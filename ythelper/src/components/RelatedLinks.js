@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import RecommendedLink from './RecommendedLink'
 import { Link } from 'react-router-dom'
+import { Item, Sticky, Grid, Input, Segment } from 'semantic-ui-react'
 
 class RelatedLinks extends React.Component {
   constructor() {
@@ -11,28 +12,41 @@ class RelatedLinks extends React.Component {
     }
   }
 
+  handleContextRef = contextRef => this.setState({ contextRef })
+
   handleFilterChange = (event) => {
     this.setState({
       filter: event.target.value
     })
   }
   render() {
+    const onTop = {
+      position: 'relative',
+      zIndex: 1
+    }
+    const { contextRef } = this.state
     if (this.props.relatedLinks !== undefined && this.props.relatedLinks.length !== 0) {
       const linksToShow =
         this.props.relatedLinks.filter(rLink =>
           rLink.link.title.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1)
       return (
-        <div>
+        <Grid>
+        <Grid.Column>
+        <div ref={this.handleContextRef}>
           <h2>Recommended</h2>
-          <div>
-            Search from recommended
-            <input value={this.state.filter} onChange={this.handleFilterChange}/>
-          </div>
-          <ol>
-            {linksToShow.map(l => <li key={l.link._id}><RecommendedLink recommend={l.link} count={l.count} /></li>)}
-          </ol>
+          <Sticky context={contextRef} offset={185} style={onTop}>
+            <Input fluid icon='search' value={this.state.filter} onChange={this.handleFilterChange} placeholder='Search...' />
+          </Sticky>
+          <Item.Group divided>
+            {linksToShow.map(l => <RecommendedLink key={l.link._id} recommend={l.link} count={l.count} />)}
+          </Item.Group>
         </div>
+        </Grid.Column>
+        </Grid>
       )
+      /*<ol>
+        {linksToShow.map(l => <li key={l.link._id}><RecommendedLink recommend={l.link} count={l.count} /></li>)}
+      </ol>*/
     } else if (this.props.loggedUser === null) {
       return (
         <div>

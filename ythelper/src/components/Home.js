@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Youtube from 'react-youtube'
 import RecommendedLink from './RecommendedLink'
+import { Item } from 'semantic-ui-react'
 
 class Home extends React.Component {
 
@@ -18,7 +19,9 @@ class Home extends React.Component {
           && this.props.recommendedLinks.length !== 0)
           ? <div>
               <strong>Here is our pick of the day for you:</strong>
-              <RecommendedLink recommend={this.props.randomLink} />
+              <Item.Group>
+                <RecommendedLink recommend={this.props.randomLink} />
+              </Item.Group>
             </div>
           : <div></div>
         }
