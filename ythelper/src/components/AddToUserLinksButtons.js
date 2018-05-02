@@ -267,18 +267,20 @@ class AddToUserLinksButtons extends React.Component {
     return (
       <div style={{width: '210px'}}>
         <h4>Add to</h4>
-        <Button basic color='blue' fluid icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
+        <Button.Group vertical fluid basic color='blue'>
+        <Button color='blue' icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
           <Icon name='add' />
           Favourites
         </Button>
         {(this.props.availablePlaylists.length !== 0)
           ? this.props.availablePlaylists.map(p =>
-            <Button basic color='blue' fluid icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}>
+            <Button color='blue' icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}>
               <Icon name='add' />
               {p.title}
             </Button>)
           : <div></div>
         }
+        </Button.Group>
       </div>
     )
   }

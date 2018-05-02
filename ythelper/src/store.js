@@ -13,6 +13,7 @@ import serverReducer from './reducers/serverReducer'
 import commentReducer from './reducers/commentReducer'
 import videoPlayingReducer from './reducers/videoPlayingReducer'
 import menuReducer from './reducers/menuReducer'
+import notificationReducer from './reducers/notificationReducer'
 
 const reducer = combineReducers({
   users: userReducer,
@@ -27,7 +28,8 @@ const reducer = combineReducers({
   serverOnUse: serverReducer,
   userComments: commentReducer,// tää reduceri pitää korjata
   playingVideo: videoPlayingReducer,
-  activeItem: menuReducer
+  activeItem: menuReducer,
+  notification: notificationReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

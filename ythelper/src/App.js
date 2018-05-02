@@ -25,6 +25,7 @@ import Menu from './components/Menu'
 import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
 import { Grid, Segment, Sticky } from 'semantic-ui-react'
+import Notification from './components/Notification'
 
 class App extends React.Component {
   /*constructor() {
@@ -70,7 +71,7 @@ class App extends React.Component {
               <Container>
               <Grid>
               <Grid.Column>
-
+              <Notification />
               <Route path='/'
                 render={() => <VideoPlayer />} />
               <Route path='/login'

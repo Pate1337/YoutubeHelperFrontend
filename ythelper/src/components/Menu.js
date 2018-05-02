@@ -42,9 +42,9 @@ class Menu extends React.Component {
       <Segment inverted>
         <MenuItem inverted pointing secondary widths={4}>
           <MenuItem.Item name='home' active={activeItem === '/'} onClick={this.handleItemClick} content={<Icon name='home' size='large' />}/>
-          <MenuItem.Item name='users' active={activeItem === '/users'} onClick={this.handleItemClick}/>
-          <MenuItem.Item name='recommended' active={activeItem === '/recommended'} onClick={this.handleItemClick}/>
-          <MenuItem.Item name='search' active={activeItem === '/search'} onClick={this.handleItemClick}/>
+          <MenuItem.Item name='users' active={activeItem === '/users'} onClick={this.handleItemClick} content={<Icon name='users' size='large' />}/>
+          <MenuItem.Item name='recommended' active={activeItem === '/recommended'} onClick={this.handleItemClick} content={<Icon name='book' size='large' />}/>
+          <MenuItem.Item name='search' active={activeItem === '/search'} onClick={this.handleItemClick} content={<div><Icon name='youtube' size='large' /><Icon name='search' size='large' /></div>}/>
         </MenuItem>
       </Segment>
     )
