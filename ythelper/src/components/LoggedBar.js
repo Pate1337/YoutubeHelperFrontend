@@ -54,34 +54,34 @@ class LoggedBar extends React.Component {
             <HiddenPlaylist />
           </Grid.Column>
           {this.props.loggedUser !== null
-            ? <Grid.Column width={2}>
+            ? <Grid.Column width={4}>
                 <Segment color='black' inverted>
                   <Link to='/myFavourites'>
-                    My favourites
+                    Favourites
                   </Link>&nbsp;
                 </Segment>
               </Grid.Column>
-            : <Grid.Column width={2}>
+            : <Grid.Column width={4}>
               </Grid.Column>
           }
           {this.props.loggedUser !== null
-            ? <Grid.Column width={2}>
+            ? <Grid.Column width={3}>
                 <Segment color='black' inverted>
                   <Link to='/myPlaylists'>
-                    My playlists
+                    Playlists
                   </Link>
                 </Segment>
               </Grid.Column>
-            : <Grid.Column width={2}>
+            : <Grid.Column width={3}>
               </Grid.Column>
           }
           {this.props.loggedUser !== null
             ? <Grid.Column width={5}>
                 <Segment color='black' inverted>
-                  {this.props.loggedUser.username} logged in&nbsp;
-                  <button onClick={this.logOut}>
-                    Logout
-                  </button>&nbsp;
+                  {this.props.loggedUser.username}&nbsp;
+                  <Button inverted size='mini' icon onClick={this.logOut}>
+                    <Icon name='sign out' />
+                  </Button>&nbsp;
                 </Segment>
               </Grid.Column>
             : <Grid.Column width={5}>

@@ -15,7 +15,7 @@ class VideoPlayer extends React.Component {
       computerStyle: {
         position: 'relative',
         width: '80%',
-        height: '600px'
+        height: '500px'
       },
       mobileStyle: {
         position: 'relative',
@@ -44,7 +44,7 @@ class VideoPlayer extends React.Component {
         bottom: '1%',
         zIndex: 1000,
         width: '50%',
-        height: '20%'
+        height: '25%'
       },
       popup: false
     }
@@ -120,13 +120,14 @@ class VideoPlayer extends React.Component {
     } else {
       opts = {
         width: '100%',
-        height: '80%',
+        height: '90%',
         playerVars: {
           autoplay: 1,
           rel: 0
         }
       }
     }
+    let changePlayerIcon = null
     let style = null
     if (!this.state.popup) {
       if (window.innerWidth <= 600) {
@@ -134,6 +135,7 @@ class VideoPlayer extends React.Component {
       } else {
         style = this.state.computerStyle
       }
+      changePlayerIcon = 'compress'
     } else {
       if (window.innerWidth <= 600) {
         style = this.state.mobilePopup
@@ -142,11 +144,12 @@ class VideoPlayer extends React.Component {
       } else {
         style = this.state.bigComputerPopup
       }
+      changePlayerIcon = 'expand'
     }
     console.log('IKKUNAN KOKO' + window.innerWidth + ', ' + window.innerHeight )
     return (
         <div style={showPlayer}>
-          <Grid celled>
+          <Grid>
           <Grid.Column style={style}>
           {(this.props.playingPlaylist.playlist !== null)
             ? <div style={showButtons}>
@@ -164,16 +167,18 @@ class VideoPlayer extends React.Component {
           />
 
           <div>
-          <button onClick={this.changePosition}>
-            Change position
-          </button>
+          <Button icon floated='right' onClick={this.changePosition}>
+            <Icon name={changePlayerIcon} size='large' />
+          </Button>
           <div style={showButtons}>
-          <button onClick={this.hidePlayer}>
-            Hide player
-          </button>
-          <PlaylistButtons />
+          <Button.Group floated='left'>
+            <PlaylistButtons />
+          </Button.Group>
+          <Button icon floated='right' onClick={this.hidePlayer}>
+            <Icon name='hide' size='large' />
+          </Button>
           <Popup
-            trigger={<Button compact color='blue' icon>
+            trigger={<Button floated='right' color='blue' icon>
                 <Icon name='add' size='large' />
               </Button>}
             content={<AddToUserLinksButtons link={this.props.link} />}

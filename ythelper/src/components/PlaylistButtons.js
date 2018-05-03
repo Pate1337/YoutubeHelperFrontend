@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { playNext, playPrevious, shufflePlaylist, playRandom } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
+import { Icon, Button } from 'semantic-ui-react'
 
 class PlaylistButtons extends React.Component {
 
@@ -33,24 +34,24 @@ class PlaylistButtons extends React.Component {
     return (
       <div>
         <div style={showPlaylistButtons}>
-          <button onClick={this.shuffle}>
-            Shuffle playlist
-          </button>
-          <button onClick={this.random}>
-            Play random
-          </button>
-          <button onClick={this.playPrevious}>
-            Previous
-          </button>
-          <button onClick={this.playNext}>
-            Next
-          </button>
+          <Button icon onClick={this.playPrevious}>
+            <Icon name='step backward' size='large' />
+          </Button>
+          <Button icon onClick={this.shuffle}>
+            <Icon name='shuffle' size='large' />
+          </Button>
+          <Button icon onClick={this.playNext}>
+            <Icon name='step forward' size='large' />
+          </Button>
         </div>
       </div>
     )
   }
 }
-
+/*Random otettu pois
+<Button icon onClick={this.random}>
+  Play random
+</Button>*/
 const mapStateToProps = (state) => {
   return {
     playingPlaylist: state.playingPlaylist.playlist,

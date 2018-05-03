@@ -55,7 +55,7 @@ class App extends React.Component {
       width: '100%'
     }
     const mainPageStyle = {
-      marginTop: '220px'
+      marginTop: '200px'
     }
     const overflow = {
       overflow: 'hidden'
