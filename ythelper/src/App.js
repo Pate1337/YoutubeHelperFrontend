@@ -55,7 +55,7 @@ class App extends React.Component {
       width: '100%'
     }
     const mainPageStyle = {
-      marginTop: '200px'
+      marginTop: '220px'
     }
     const overflow = {
       overflow: 'hidden'
@@ -66,7 +66,6 @@ class App extends React.Component {
         <div style={overflow}>
           <Router>
             <div>
-
               <div style={mainPageStyle}>
               <Container>
               <Grid>
