@@ -7,6 +7,7 @@ import { usersInitialization } from '../reducers/userReducer'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Button, Icon } from 'semantic-ui-react'
+import { setNotification, hideNotification } from '../reducers/notificationReducer'
 
 class AddToUserLinksButtons extends React.Component {
   constructor() {
@@ -84,6 +85,10 @@ class AddToUserLinksButtons extends React.Component {
         linkId: this.props.videoId
       }
       await this.props.addFavouriteForUser(linkObject)
+      await this.props.setNotification(`${linkObject.title} added to favourites`, '', 'success', true)
+      setTimeout(async () => {
+        await this.props.hideNotification(`${linkObject.title} added to favourites`)
+      }, 4000)
 
       console.log('lisätty')
       await this.props.usersInitialization()
@@ -154,6 +159,10 @@ class AddToUserLinksButtons extends React.Component {
       }
     } else {
       console.log('LINKKIÄ EI LISÄTTY SUOSIKEIHIN!')
+      await this.props.setNotification(`${this.props.link.title} is already in favourites`, '', 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification(`${this.props.link.title} is already in favourites`)
+      }, 4000)
     }
     await this.props.serverFree()
     console.log('server free')
@@ -185,6 +194,10 @@ class AddToUserLinksButtons extends React.Component {
     const response = await this.props.addLinkToPlaylist(linkObject, playlistId)
     if (response !== 'error') {
       console.log('Linkki lisätty soittolistaan!')
+      await this.props.setNotification(`${linkObject.title} added to playlist`, '', 'success', true)
+      setTimeout(async () => {
+        await this.props.hideNotification(`${linkObject.title} added to playlist`)
+      }, 4000)
       /*Pitää lisätä myös playingPlaylistille*/
       if (this.props.playingPlaylist.playlist !== null &&
         playlistId === this.props.playingPlaylist.playlist._id) {
@@ -253,6 +266,10 @@ class AddToUserLinksButtons extends React.Component {
       }
     } else {
       console.log('Linkkiä ei lisätty soittolistaan')
+      await this.props.setNotification(`${this.props.link.title} is already in playlist`, '', 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification(`${this.props.link.title} is already in playlist`)
+      }, 4000)
     }
     await this.props.serverFree()
     console.log('server free')
@@ -414,7 +431,9 @@ const mapDispatchToProps = {
   addToUserRelated,
   serverFree,
   addLinkToPlaylist,
-  addToPlayingPlaylist
+  addToPlayingPlaylist,
+  setNotification,
+  hideNotification
 }
 
 const ConnectedAddToUserLinksButton = connect(mapStateToProps, mapDispatchToProps)(AddToUserLinksButtons)

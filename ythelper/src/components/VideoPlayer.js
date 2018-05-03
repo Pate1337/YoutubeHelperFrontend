@@ -6,9 +6,20 @@ import { showPlayerBarAndHide, setPlayerTarget, setPlayerPaused,
 import PlaylistButtons from './PlaylistButtons'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { playNext } from '../reducers/playlistPlayingReducer'
+import { Grid, Popup, Icon, Button } from 'semantic-ui-react'
 
 class VideoPlayer extends React.Component {
-
+  constructor() {
+    super()
+    this.state = {
+      position: {
+        position: 'relative',
+        borderStyle: 'solid',
+        width: '100%',
+        height: '100%'
+      }
+    }
+  }
 /*  playNext = async () => {
     console.log('playNext')
     await this.props.playNext()
@@ -42,20 +53,45 @@ class VideoPlayer extends React.Component {
     }
   }
 
+  changePosition = (event) => {
+    event.preventDefault()
+    this.setState({
+      position: {
+        right: '1%',
+        position: 'fixed',
+        top: '10%',
+        zIndex: 1000,
+        borderStyle: 'solid',
+        width: '50%',
+        height: '50%'
+      }
+    })
+  }
+
   render() {
     console.log('Rendering VideoPlayer')
-    const showPlayer = { display: (this.props.playerPlaying && this.props.playedOnce) ? '' : 'none' }
+    const showPlayer = { display: (this.props.playerPlaying && this.props.playedOnce) ? '' : 'none', width: '100%', height: '500px', borderStyle: 'solid'}
     const opts = {
-      height: '315',
-      width: '560',
+      width: '80%',
+      height: '80%',
       playerVars: {
         autoplay: 1,
         rel: 0
       }
     }
     return (
-      <div>
         <div style={showPlayer}>
+          <div style={this.state.position}>
+          <Grid style={{width: '100%', height: '100%', borderStyle: 'solid'}}>
+          <Grid.Column streched='true'>
+          {(this.props.playingPlaylist.playlist !== null)
+            ? <div>
+                <h3>Playing {this.props.playingPlaylist.playlist.title}:&nbsp;
+                {this.props.link.title}</h3>
+              </div>
+            : <div><h3>Playing {this.props.link.title}</h3></div>
+          }
+
           <Youtube
             id='player'
             videoId={this.props.link.linkId}
@@ -64,12 +100,27 @@ class VideoPlayer extends React.Component {
             onPause={this.pause}
             onEnd={this.onEnd}
           />
+          <div>
           <button onClick={this.hidePlayer}>
             Hide player
           </button>
+          <button onClick={this.changePosition}>
+            Change position
+          </button>
           <PlaylistButtons />
-          <AddToUserLinksButtons link={this.props.link} />
-        </div>
+          <Popup
+            trigger={<Button compact color='blue' icon floated='right'>
+                <Icon name='add' size='large' />
+              </Button>}
+            content={<AddToUserLinksButtons link={this.props.link} />}
+            position='top right'
+            on='click'
+            hideOnScroll
+          />
+          </div>
+          </Grid.Column>
+          </Grid>
+          </div>
       </div>
     )
   }
