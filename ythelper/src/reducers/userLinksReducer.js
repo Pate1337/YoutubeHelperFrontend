@@ -9,7 +9,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
     case 'GET_ALL':
       console.log('GET_ALL userLinksReducer')
       return action.data
-    case 'REMOVE':
+    case 'REMOVE_ALL':
       console.log('REMOVE userLinksReducer')
       return { favourites: [], playlists: [], relatedLinks: [], randomLink: null }
     case 'REMOVE_LINK':
@@ -96,6 +96,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           newRelatedLinks.push(l)
         }
       })
+      newRelatedLinks.sort(sortByCount)
     /*  let newRandomLink = store.randomLink
       if (store.randomLink._id === action.linkId) {
         const randomIndex = Math.floor(Math.random() * newRelatedLinks.length)
@@ -110,10 +111,12 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       }
     case 'ADD_RELATED':
       console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
+      let addedRelateds = [...store.relatedLinks, ...action.data]
+      addedRelateds.sort(sortByCount)
       return {
         favourites: store.favourites,
         playlists: store.playlists,
-        relatedLinks: [...store.relatedLinks, ...action.data],
+        relatedLinks: addedRelateds,
         randomLink: store.randomLink
       }
     case 'UPDATE_COUNT':
@@ -135,6 +138,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           updatedRelatedLinks.push(l)
         }
       })*/
+      updatedRelatedLinks.sort(sortByCount)
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -144,6 +148,10 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
     default:
       return store
   }
+}
+
+const sortByCount = (a, b) => {
+  return parseInt(b.count, 10) - parseInt(a.count, 10)
 }
 
 /*Nyt saadaan molemmat hoidettua yhdellä tietokantahaulla!!!*/
@@ -158,12 +166,13 @@ export const userLinks = () => {
       const randomIndex = Math.floor(Math.random() * user.relatedLinks.length)
       const randomLink = user.relatedLinks[randomIndex].link
       console.log('RANDOMLINK ALUSSA: ' + randomLink.title)
+      const relatedLinks = user.relatedLinks.sort(sortByCount)
       dispatch({
         type: 'GET_ALL',
         data: {
           favourites: user.links,
           playlists: user.playlists,
-          relatedLinks: user.relatedLinks,
+          relatedLinks: relatedLinks,
           randomLink: randomLink
         }
       })
@@ -175,7 +184,7 @@ export const removeUserLinks = () => {
   console.log('removeUserLinks userLinksReducer')
   return async (dispatch) => {
     dispatch({
-      type: 'REMOVE'
+      type: 'REMOVE_ALL'
     })
   }
 }
