@@ -15,7 +15,7 @@ class VideoPlayer extends React.Component {
       computerStyle: {
         position: 'relative',
         width: '80%',
-        height: '500px'
+        height: '550px'
       },
       mobileStyle: {
         position: 'relative',

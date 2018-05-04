@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Comments from './Comments'
 import { allUsersComments } from '../reducers/commentReducer'
+import { Grid } from 'semantic-ui-react'
 
 class Users extends React.Component {
   constructor() {
@@ -31,7 +32,8 @@ class Users extends React.Component {
   render() {
     if(this.state.userToShow != null) {
       return (
-        <div>
+        <Grid>
+        <Grid.Column>
           <h2>Käyttäjät</h2>
           <ul>
             {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
@@ -48,11 +50,14 @@ class Users extends React.Component {
             <p>{this.state.userToShow}</p>
             <Comments cuser={this.state.userToShow}/>
             <button onClick={this.hideUser}>Piilota</button>
-        </div>
+        </Grid.Column>
+        </Grid>
       )
     }
     return (
-      <div>
+
+        <Grid>
+        <Grid.Column>
         <h1>Käyttäjät</h1>
         <ul>
           {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
@@ -64,7 +69,9 @@ class Users extends React.Component {
           </li>
           )}
         </ul>
-      </div>
+        </Grid.Column>
+        </Grid>
+      
     )
   }
 }

@@ -2,13 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Youtube from 'react-youtube'
 import RecommendedLink from './RecommendedLink'
-import { Item } from 'semantic-ui-react'
+import { Item, Grid } from 'semantic-ui-react'
 
 class Home extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{marginTop: '10px'}}>
+      <Grid>
+      <Grid.Column>
         <h3>Welcome {this.props.loggedUser.username}!</h3>
         <p>Start by searching videos from Youtube.</p>
         <p>
@@ -25,6 +27,8 @@ class Home extends React.Component {
             </div>
           : <div></div>
         }
+      </Grid.Column>
+      </Grid>
       </div>
     )
   }

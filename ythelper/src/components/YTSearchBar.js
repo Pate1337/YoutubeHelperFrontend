@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { searchForVideo } from '../reducers/ytReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { updateSearchBar } from '../reducers/ytSearchBarReducer'
+import { Grid } from 'semantic-ui-react'
 
 class YTSearchBar extends React.Component {
   constructor() {
@@ -59,7 +60,8 @@ class YTSearchBar extends React.Component {
   render() {
     console.log('Renderöidään YTSearchBar')
     return (
-      <div>
+      <Grid>
+      <Grid.Column>
         <h2>Search from Youtube</h2>
         <form onSubmit={this.handleSubmit}>
           <input
@@ -82,7 +84,8 @@ class YTSearchBar extends React.Component {
             <option value='50' selected={(this.state.maxResults.toString() === '50') ? true : false}>50</option>
           </select>
         </form>
-      </div>
+      </Grid.Column>
+      </Grid>
     )
   }
 }

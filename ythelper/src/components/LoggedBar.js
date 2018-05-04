@@ -44,7 +44,7 @@ class LoggedBar extends React.Component {
     return (
 
       <Grid columns='equal' inverted doubling>
-        <Grid.Row color='black' textAlign='center'>
+        <Grid.Row verticalAlign='top' color='black' textAlign='center' style={{height: '56px'}}>
           <Grid.Column width={2}>
             <Segment color='black' inverted>
               logo
@@ -78,7 +78,6 @@ class LoggedBar extends React.Component {
           {this.props.loggedUser !== null
             ? <Grid.Column width={5}>
                 <Segment color='black' inverted>
-                  {this.props.loggedUser.username}&nbsp;
                   <Button inverted size='mini' icon onClick={this.logOut}>
                     <Icon name='sign out' />
                   </Button>&nbsp;
@@ -86,7 +85,7 @@ class LoggedBar extends React.Component {
               </Grid.Column>
             : <Grid.Column width={5}>
                 <Segment color='black' inverted>
-                  <Button.Group>
+                  <Button.Group size='mini'>
                     <Button basic color='blue' onClick={this.handleButtonClick} content='Login' />
                     <Button.Or />
                     <Button basic color='blue' onClick={this.handleButtonClick} content='Sign up' />
@@ -95,7 +94,7 @@ class LoggedBar extends React.Component {
               </Grid.Column>
           }
         </Grid.Row>
-        <Grid.Row color='black' centered>
+        <Grid.Row color='black' centered style={{height: '56px'}}>
           <Grid.Column>
             <Route path='/'
               render={({history}) => <Menu history={history} />} />
@@ -105,6 +104,7 @@ class LoggedBar extends React.Component {
     )
   }
 }
+/*{this.props.loggedUser.username}&nbsp;*/
 /*<Segment color='black' inverted>
   <Link to='/login'>Login</Link>&nbsp; OR <Link to='/signup'>Create an account</Link>
 </Segment>*/

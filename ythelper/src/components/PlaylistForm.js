@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addPlaylistForUser } from '../reducers/userLinksReducer'
 import { usersInitialization } from '../reducers/userReducer'
+import { Grid } from 'semantic-ui-react'
 
 class PlaylistForm extends React.Component {
   constructor() {
@@ -60,7 +61,8 @@ class PlaylistForm extends React.Component {
   render() {
     console.log('Rendering PlaylistFrom')
     return (
-      <div>
+      <Grid>
+      <Grid.Column>
         <h2>Create a playlist</h2>
         <form onSubmit={this.handleSubmit}>
           Name:
@@ -74,7 +76,8 @@ class PlaylistForm extends React.Component {
             Add new playlist
           </button>
         </form>
-      </div>
+      </Grid.Column>
+      </Grid>
     )
   }
 }

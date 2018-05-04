@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import FavouriteLink from './FavouriteLink'
 import { Link } from 'react-router-dom'
+import { Grid } from 'semantic-ui-react'
 
 class FavouriteLinks extends React.Component {
   constructor() {
@@ -25,24 +26,29 @@ class FavouriteLinks extends React.Component {
     /*if (this.state.showFavourites) {*/
     if (this.props.loggedUser !== null) {
       return (
-        <div>
+        <Grid>
+          <Grid.Column>
+
           <h2>
             My favourites
           </h2>
           {this.props.favouriteLinks.map(link =>
             <FavouriteLink key={link._id} item={link} />
           )}
-        </div>
+        </Grid.Column>
+        </Grid>
       )
     } else {
       return (
-        <div>
+        <Grid>
+        <Grid.Column>
           <h2>
             My favourites
           </h2>
           Favourites are only for signed up users.
           <Link to='/signup'>Create an account</Link> now!
-        </div>
+        </Grid.Column>
+        </Grid>
       )
     }
   /*  } else {
