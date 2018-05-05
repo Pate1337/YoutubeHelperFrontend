@@ -23,6 +23,10 @@ class RelatedLinks extends React.Component {
   }
 
   handlePaginationChange = (event, { activePage }) => {
+    window.scrollTo({
+      top: 0,
+      behaviour: 'smooth'
+    })
     this.setState({
       activePage
     })
@@ -66,7 +70,7 @@ class RelatedLinks extends React.Component {
         i++
       }
       return (
-        <Grid style={{borderStyle: 'solid'}}>
+        <Grid>
         <Grid.Column>
         <div ref={this.handleContextRef}>
           <h2>Recommended</h2>
