@@ -52,7 +52,8 @@ class App extends React.Component {
     const loggedBarStyle = {
       position: 'fixed',
       top: 0,
-      width: '100%'
+      width: '100%',
+      zIndex: 100
     }
     const mainPageStyle = {
       marginTop: '160px'

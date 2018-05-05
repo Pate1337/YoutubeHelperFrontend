@@ -66,11 +66,11 @@ class RelatedLinks extends React.Component {
         i++
       }
       return (
-        <Grid>
+        <Grid style={{borderStyle: 'solid'}}>
         <Grid.Column>
         <div ref={this.handleContextRef}>
           <h2>Recommended</h2>
-          <Sticky context={contextRef} offset={130} style={onTop}>
+          <Sticky context={contextRef} offset={135} style={onTop}>
             <Input fluid icon='search' value={this.state.filter} onChange={this.handleFilterChange} placeholder='Search...' />
           </Sticky>
           <div style={{marginTop: '20px'}}>

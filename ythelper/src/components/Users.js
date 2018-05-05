@@ -71,7 +71,7 @@ class Users extends React.Component {
         </ul>
         </Grid.Column>
         </Grid>
-      
+
     )
   }
 }

@@ -104,7 +104,7 @@ class VideoPlayer extends React.Component {
 }*/
   render() {
     console.log('Rendering VideoPlayer')
-    const showPlayer = { display: (this.props.playerPlaying && this.props.playedOnce) ? '' : 'none'}
+    const showPlayer = { display: (this.props.playerPlaying && this.props.playedOnce) ? '' : 'none', marginBottom: '10px'}
     const showButtons = { display: (window.innerWidth <= 600 && this.state.popup) ? 'none' : ''}
     const clickVideo = { onClick: (window.innerWidth <= 600 && this.state.popup) ? '' : this.changePosition }
     let opts = null
@@ -166,7 +166,7 @@ class VideoPlayer extends React.Component {
             onEnd={this.onEnd}
           />
 
-          <div>
+          <div style={{position: 'relative', zIndex: 20}}>
           <Button icon floated='right' onClick={this.changePosition}>
             <Icon name={changePlayerIcon} size='large' />
           </Button>
