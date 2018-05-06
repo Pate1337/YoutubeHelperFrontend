@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNewUser } from '../reducers/userReducer'
+import { Grid} from 'semantic-ui-react'
 
 class RegisterForm extends React.Component {
   constructor() {
@@ -59,45 +60,47 @@ class RegisterForm extends React.Component {
   render() {
     console.log('Renderöidään uuden käyttäjän rekisteröinti formi')
     return (
-      <div>
-        <h2>Register a new user</h2>
-        <form onSubmit={this.handleRegistering}>
-          Username:
+      <Grid>
+        <Grid.Column>
+          <h2>Register a new user</h2>
+          <form onSubmit={this.handleRegistering}>
+            Username:
             <input
-            type='text'
-            name='username'
-            value={this.state.username}
-            onChange={this.handleRegisterFieldChange}
-          />
-          Name:
+              type='text'
+              name='username'
+              value={this.state.username}
+              onChange={this.handleRegisterFieldChange}
+            />
+            Name:
             <input
-            type='text'
-            name='name'
-            value={this.state.name}
-            onChange={this.handleRegisterFieldChange}
-          />
-          Password:
+              type='text'
+              name='name'
+              value={this.state.name}
+              onChange={this.handleRegisterFieldChange}
+            />
+            Password:
             <input
-            type='password'
-            name='password'
-            value={this.state.password}
-            onChange={this.handleRegisterFieldChange}
-          />
-          <p style={{ color: this.state.colors }}>Re-Enter Password:</p>
-          <input
-            type='password'
-            name='pwordCheck'
-            value={this.state.pwordCheck}
-            onChange={this.handleRegisterFieldChange}
-          />
-          <button type='submit'>
-            Register
+              type='password'
+              name='password'
+              value={this.state.password}
+              onChange={this.handleRegisterFieldChange}
+            />
+            <p style={{ color: this.state.colors }}>Re-Enter Password:</p>
+            <input
+              type='password'
+              name='pwordCheck'
+              value={this.state.pwordCheck}
+              onChange={this.handleRegisterFieldChange}
+            />
+            <button type='submit'>
+              Register
+            </button>
+          </form>
+          <button onClick={() => this.props.history.push('/')}>
+            Hide
           </button>
-        </form>
-        <button onClick={() => this.props.history.push('/')}>
-          Hide
-        </button>
-      </div>
+        </Grid.Column>
+      </Grid>
     )
   }
 }

@@ -42,7 +42,6 @@ class RecommendedLink extends React.Component {
         <Icon name='play' size='huge' />
       </div>
     )
-    /*Dimmerissä zIndex: 0 koska searchbar*/
     return (
       <Item>
         <Dimmer.Dimmable
@@ -74,24 +73,7 @@ class RecommendedLink extends React.Component {
     )
   }
 }
-/*{(!this.state.showButtons)
-  ? <Button icon floated='right' onClick={this.toggleButtons}>
-      <Icon name='add' />
-    </Button>
-  : <div><AddToUserLinksButtons recommend={this.props.recommend} />
-    <button onClick={this.toggleButtons}>Back</button></div>
-  }*/
-/*id: {this.props.recommend.linkId}, title: {this.props.recommend.title}, count: {this.props.count}
-{(!this.state.showButtons)
-  ? <button onClick={this.toggleButtons}>Add to</button>
-  : <div><AddToUserLinksButtons recommend={this.props.recommend} />
-    <button onClick={this.toggleButtons}>Back</button></div>
-}*/
-/*<img onClick={this.playVideo}
-  src={this.props.recommend.thumbnail}
-  alt={this.props.recommend.title}
-  style={{cursor: 'pointer', display: 'inline-block'}}
-/>*/
+
 const mapDispatchToProps = {
   setPlayingVideo,
   clearPlayingPlaylist

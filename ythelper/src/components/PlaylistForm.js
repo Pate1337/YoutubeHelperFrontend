@@ -22,30 +22,12 @@ class PlaylistForm extends React.Component {
       const playlistObject = {
         title: this.state.title
       }
-      /*Samaan tapaan kuin suosikkien lisääminen.*/
-      /*Ja tänne kanssa state.playlistin läpikäynti. Ei päästetä eteenpäin
-      jos samanniminen soittolista on jo!!!!*/
-      /*const alreadyExists = this.props.playlists
-        .filter(p => p.title === this.state.title)
-      if (alreadyExists.length === 0) {
-        await this.props.addPlaylistForUser(playlistObject)
-        this.setState({
-          title: ''
-        })
-      } else {
-        console.log('Samanniminen soittolista on jo olemassa!')
-        this.setState({
-          title: ''
-        })
-      }*/
       const response = await this.props.addPlaylistForUser(playlistObject)
       if (response !== 'error') {
         console.log('soittolista lisätty!')
         this.setState({
           title: ''
         })
-        /*Onpahan ainakin kaikki tiedot ajantasalla, mukaanlukien muiden
-        käyttäjien reaaliaikaset lisäykset. Luulis vaa olevan aika hidasta.*/
         await this.props.usersInitialization()
       } else {
         console.log('Soittolistaa ei lisätty!')
@@ -62,21 +44,21 @@ class PlaylistForm extends React.Component {
     console.log('Rendering PlaylistFrom')
     return (
       <Grid>
-      <Grid.Column>
-        <h2>Create a playlist</h2>
-        <form onSubmit={this.handleSubmit}>
-          Name:
-          <input
-            type='text'
-            name='title'
-            value={this.state.title}
-            onChange={this.handleFieldChange}
-          />
-          <button type='submit'>
-            Add new playlist
-          </button>
-        </form>
-      </Grid.Column>
+        <Grid.Column>
+          <h2>Create a playlist</h2>
+          <form onSubmit={this.handleSubmit}>
+            Name:
+            <input
+              type='text'
+              name='title'
+              value={this.state.title}
+              onChange={this.handleFieldChange}
+            />
+            <button type='submit'>
+              Add new playlist
+            </button>
+          </form>
+        </Grid.Column>
       </Grid>
     )
   }

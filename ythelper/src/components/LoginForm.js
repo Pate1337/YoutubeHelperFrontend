@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addLoggedUser } from '../reducers/loggedUserReducer'
-/*import { usersFavourites } from '../reducers/favouriteLinksReducer'
-import { usersPlaylists } from '../reducers/playlistsReducer'*/
 import { userLinks } from '../reducers/userLinksReducer'
 import { setActiveItem } from '../reducers/menuReducer'
 import { Form, Button, Segment, TransitionablePortal, Message } from 'semantic-ui-react'
@@ -29,10 +27,7 @@ class LoginForm extends React.Component {
       password: this.state.password
     }
     const response = await this.props.addLoggedUser(user)
-    /*this.props.usersFavourites()
-    this.props.usersPlaylists()*/
     this.props.userLinks()
-    /*Tässä vaiheessa ihan simppeli tarkistus jos kirjautuminen ei onnistu*/
     if (response !== 'error') {
       console.log('Logged in')
       this.props.history.push('/')
@@ -85,25 +80,9 @@ class LoginForm extends React.Component {
     )
   }
 }
-/*<TransitionablePortal open={this.state.error} transition={{animation: 'slide right', duration: 400}}>
 
-    <Message
-      error={false}
-      success={false}
-      warning={true}
-      header='Wrong username or password'
-      content='moi'
-      style={{left: '10%', position: 'fixed', top: '90%', zIndex: 1000}}
-    />
-
-</TransitionablePortal>*/
-/*<button onClick={() => this.props.history.push('/')}>
-  Hide
-</button>*/
 const mapDispatchToProps = {
   addLoggedUser,
-  /*usersFavourites,
-  usersPlaylists*/
   userLinks,
   setActiveItem,
   setNotification,

@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { removeLoggedUser } from '../reducers/loggedUserReducer'
-/*import { removeFavourites } from '../reducers/favouriteLinksReducer'
-import { removePlaylists } from '../reducers/playlistsReducer'*/
 import { removeUserLinks } from '../reducers/userLinksReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
@@ -10,7 +8,6 @@ import { clearPlayingVideo } from '../reducers/videoPlayingReducer'
 import { setActiveItem } from '../reducers/menuReducer'
 import { Link } from 'react-router-dom'
 import { Grid, Segment, Button, Icon } from 'semantic-ui-react'
-import HiddenPlaylist from './HiddenPlaylist'
 import Menu from './Menu'
 import { Route } from 'react-router-dom'
 
@@ -42,7 +39,6 @@ class LoggedBar extends React.Component {
   render() {
     console.log('Rendering LoggedBar')
     return (
-
       <Grid columns='equal' inverted doubling>
         <Grid.Row verticalAlign='top' color='black' textAlign='center' style={{height: '56px'}}>
           <Grid.Column width={2}>
@@ -51,7 +47,7 @@ class LoggedBar extends React.Component {
             </Segment>
           </Grid.Column>
           <Grid.Column>
-            <HiddenPlaylist />
+
           </Grid.Column>
           {this.props.loggedUser !== null
             ? <Grid.Column width={4}>
@@ -72,8 +68,7 @@ class LoggedBar extends React.Component {
                   </Link>
                 </Segment>
               </Grid.Column>
-            : <Grid.Column width={3}>
-              </Grid.Column>
+            : <Grid.Column width={3}></Grid.Column>
           }
           {this.props.loggedUser !== null
             ? <Grid.Column width={5}>
@@ -104,12 +99,7 @@ class LoggedBar extends React.Component {
     )
   }
 }
-/*{this.props.loggedUser.username}&nbsp;*/
-/*<Segment color='black' inverted>
-  <Link to='/login'>Login</Link>&nbsp; OR <Link to='/signup'>Create an account</Link>
-</Segment>*/
-/*<Route path='/'
-  render={({history}) => <Menu history={history} />} />*/
+
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser

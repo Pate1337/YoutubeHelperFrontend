@@ -19,7 +19,6 @@ class PlaylistLink extends React.Component {
   }
 
   playVideo = async () => {
-    /*await this.props.setPlayingVideo(this.props.link)*/
     if (this.props.playingPlaylist.playlist === null) {
       console.log('playingPlaylist === null')
       await this.props.initPlayingPlaylist(this.props.playlist)

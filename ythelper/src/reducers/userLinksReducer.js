@@ -1,9 +1,6 @@
 import userService from '../services/users'
 import linkService from '../services/links'
 
-/*Täällä on nyt ongelmia! Aaaa, tätyy jättää formatoimatta backissa
-playlistin lisäyksessä, suosikin lisäyksessa ja uuden linkin lisäyksessä
-soittolistalle! Nyt pitäis kaikki olla kunnossa.*/
 const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null }, action) => {
   switch(action.type) {
     case 'GET_ALL':
@@ -59,35 +56,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           relatedLinks: store.relatedLinks,
           randomLink: store.randomLink
         }
-      case 'SHUFFLE_PLAYLIST':
-        console.log('SHUFFLE_PLAYLIST userLinksReducer')
-        /*Etsitään soittolista ja muokataan tietyn soittolistan linkkejä*/
-        let plists = []
-        store.playlists.forEach(p => {
-          if (p._id === action.playlistId) {
-            /*Tätä muokataan. Fisher-Yates Shuffling Algorithm.*/
-            let links = p.links
-            let i
-            let j
-            let temp
-            for (i = links.length - 1; i > 0; i--) {
-              j = Math.floor(Math.random() * (i + 1))
-              temp = links[i]
-              links[i] = links[j]
-              links[j] = temp
-            }
-            let newPlaylist = {...p, links: links}
-            plists.push(newPlaylist)
-          } else {
-            plists.push(p)
-          }
-        })
-      return {
-        favourites: store.favourites,
-        playlists: plists,
-        relatedLinks: store.relatedLinks,
-        randomLink: store.randomLink
-      }
     case 'REMOVE_RELATED':
       console.log('REMOVE RELATED userLinksService')
       let newRelatedLinks = []
@@ -97,12 +65,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         }
       })
       newRelatedLinks.sort(sortByCount)
-    /*  let newRandomLink = store.randomLink
-      if (store.randomLink._id === action.linkId) {
-        const randomIndex = Math.floor(Math.random() * newRelatedLinks.length)
-        newRandomLink = newRelatedLinks[randomIndex].link
-        console.log('UUS RANDOM LINKKI ON : ' + newRandomLink.title)
-      }*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -129,15 +91,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           updatedRelatedLinks.push(rl)
         }
       })
-      /*let updatedRelatedLinks = []
-      store.relatedLinks.forEach(l => {
-        if (l._id === action.linkId) {
-          let newLink = {...l, count: l.count + 1}
-          updatedRelatedLinks.push(newLink)
-        } else {
-          updatedRelatedLinks.push(l)
-        }
-      })*/
       updatedRelatedLinks.sort(sortByCount)
       return {
         favourites: store.favourites,
@@ -224,9 +177,6 @@ export const addLinkToPlaylist = (linkObject, playlistId) => {
 
 export const addFavouriteForUser = (linkObject) => {
   console.log('addFavouriteForUser userLinksReducer')
-  /*YTSearchResultissa on jo tarkistettu ettei käyttäjällä ole jo kyseistä
-  linkkiä suosikeissa.*/
-
   return async (dispatch) => {
     try {
       const link = await linkService.createAndAddLinkToUserFavourites(linkObject)
@@ -242,7 +192,6 @@ export const addFavouriteForUser = (linkObject) => {
 
 export const addPlaylistForUser = (playlistObject) => {
   console.log('addPlaylistForUser userLinksReducer')
-  /*Backendi tuskin vielä kunnossa*/
   return async (dispatch) => {
     try {
       const playlist = await linkService.createPlaylist(playlistObject)
@@ -251,7 +200,6 @@ export const addPlaylistForUser = (playlistObject) => {
         data: playlist
       })
     } catch (exception) {
-      /*Kaikki samaantapaan kuin linkin lisäämienn playlistiin*/
       return 'error'
     }
   }
@@ -272,7 +220,6 @@ export const removeRelatedFromUser = (linkId) => {
 }
 
 export const addToUserRelated = (linkObjects) => {
-
   return async (dispatch) => {
     try {
       const links = await linkService.addLinksToRelated(linkObjects)
@@ -287,16 +234,6 @@ export const addToUserRelated = (linkObjects) => {
   }
 }
 
-export const shufflePlaylist = (playlistId) => {
-  console.log('shufflePlaylist userLinksReducer')
-  return async (dispatch) => {
-    dispatch({
-      type: 'SHUFFLE_PLAYLIST',
-      playlistId: playlistId
-    })
-  }
-}
-
 export const updateRelatedCount = (relatedLinkObjects) => {
   return async (dispatch) => {
     try {
@@ -307,21 +244,10 @@ export const updateRelatedCount = (relatedLinkObjects) => {
         newObjects.push(updatedLink._id)
         console.log('Päivitetty linkki')
       }
-      /*relatedLinkObjects.forEach(rl => {
-        let newObject = {...rl, count: rl.count + 1}
-        const updatedLink = await linkService.updateRelatedCount(newObject)
-        newObjects.push(updatedLink._id)
-      })*/
       dispatch({
         type: 'UPDATE_COUNT',
         links: newObjects
       })
-      /*const newObject = {...relatedLinkObject, count: relatedLinkObject.count + 1}
-      const updatedLink = await linkService.updateRelatedCount(newObject)
-      dispatch({
-        type: 'UPDATE_COUNT',
-        linkId: updatedLink._id
-      })*/
     } catch (exception) {
       return 'error'
     }

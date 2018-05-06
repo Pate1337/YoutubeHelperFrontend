@@ -12,18 +12,11 @@ class FavouriteLinks extends React.Component {
     }
   }
 
-  /*toggleVisibility = () => {
-    this.setState({
-      showFavourites: !this.state.showFavourites
-    })
-  }*/
   render() {
     console.log('Rendering FavouriteLinks')
     console.log('favouriteLiks.length: ' + this.props.favouriteLinks.length)
     console.log('link._id: ' + this.props.favouriteLinks[0])
-    /*const showFavourites = { display: (this.state.showFavourites) ? '' : 'none' }
-    const dontShow = { display: (!this.state.showFavourites) ? 'none' : '' }*/
-    /*if (this.state.showFavourites) {*/
+
     if (this.props.loggedUser !== null) {
       return (
         <Grid>
@@ -51,15 +44,6 @@ class FavouriteLinks extends React.Component {
         </Grid>
       )
     }
-  /*  } else {
-      return (
-        <div>
-          <h2 onClick={this.toggleVisibility} style={{cursor: 'pointer', display: 'inline-block'}}>
-            Favourites (press to show) ({this.props.favouriteLinks.length})
-          </h2>
-        </div>
-      )
-    }*/
   }
 
 }
@@ -67,7 +51,6 @@ class FavouriteLinks extends React.Component {
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
-    /*favouriteLinks: state.favouriteLinks*/
     favouriteLinks: state.userLinks.favourites
   }
 }

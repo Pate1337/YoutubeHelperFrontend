@@ -61,30 +61,30 @@ class YTSearchBar extends React.Component {
     console.log('Renderöidään YTSearchBar')
     return (
       <Grid>
-      <Grid.Column>
-        <h2>Search from Youtube</h2>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type='text'
-            name='text'
-            value={this.state.text}
-            onChange={this.handleSearchFieldChange}
-          />
-          <button type='submit'>
-            Search
-          </button>
-          <button type='button' onClick={this.clearResults}>
-            Clear search results
-          </button>
-          Max results:
-          <select name='maxResults' onChange={this.handleSearchFieldChange}>
-            <option value='5' selected={(this.state.maxResults.toString() === '5') ? true : false}>5</option>
-            <option value='10' selected={(this.state.maxResults.toString() === '10') ? true : false}>10</option>
-            <option value='25' selected={(this.state.maxResults.toString() === '25') ? true : false}>25</option>
-            <option value='50' selected={(this.state.maxResults.toString() === '50') ? true : false}>50</option>
-          </select>
-        </form>
-      </Grid.Column>
+        <Grid.Column>
+          <h2>Search from Youtube</h2>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type='text'
+              name='text'
+              value={this.state.text}
+              onChange={this.handleSearchFieldChange}
+            />
+            <button type='submit'>
+              Search
+            </button>
+            <button type='button' onClick={this.clearResults}>
+              Clear search results
+            </button>
+            Max results:
+            <select name='maxResults' onChange={this.handleSearchFieldChange}>
+              <option value='5' selected={(this.state.maxResults.toString() === '5') ? true : false}>5</option>
+              <option value='10' selected={(this.state.maxResults.toString() === '10') ? true : false}>10</option>
+              <option value='25' selected={(this.state.maxResults.toString() === '25') ? true : false}>25</option>
+              <option value='50' selected={(this.state.maxResults.toString() === '50') ? true : false}>50</option>
+            </select>
+          </form>
+        </Grid.Column>
       </Grid>
     )
   }

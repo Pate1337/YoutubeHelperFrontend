@@ -48,7 +48,6 @@ class AddToUserLinksButtons extends React.Component {
   }
 
   addToFavourites = async () => {
-    /*Backend kunnossa*/
     await this.props.serverSetOnUse()
     console.log('addToFavourites YTSearchResult')
     /*Tarkistetaan, onko linkki jo käyttäjän related.*/
@@ -93,11 +92,11 @@ class AddToUserLinksButtons extends React.Component {
       console.log('lisätty')
       await this.props.usersInitialization()
       if (isRelated) {
-        let remResponse = await this.props.removeRelatedFromUser(linkExists[0].link._id)
-        while (remResponse === 'error') {
+        await this.props.removeRelatedFromUser(linkExists[0].link._id)
+        /*while (remResponse === 'error') {
           console.log('yritetään poistaa uudestaan')
           remResponse = await this.props.removeRelatedFromUser(linkExists[0].link._id)
-        }
+        }*/
         console.log('LINKKI POISTETTU KÄYTTÄJÄN EHDOTUKSISTA!')
       }
       /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
@@ -151,11 +150,11 @@ class AddToUserLinksButtons extends React.Component {
         await this.props.updateRelatedCount(updateCounts)
       }
       if (linksToAdd.length !== 0) {
-        let error = await this.props.addToUserRelated(linksToAdd)
-        while (error === 'error') {
+        await this.props.addToUserRelated(linksToAdd)
+        /*while (error === 'error') {
           console.log('YRITETÄÄN UUDESTAAN')
           error = await this.props.addToUserRelated(linksToAdd)
-        }
+        }*/
       }
     } else {
       console.log('LINKKIÄ EI LISÄTTY SUOSIKEIHIN!')

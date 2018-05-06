@@ -23,10 +23,22 @@ class RelatedLinks extends React.Component {
   }
 
   handlePaginationChange = (event, { activePage }) => {
-    window.scrollTo({
-      top: 0,
-      behaviour: 'smooth'
-    })
+    if (window.innerWidth <= 750 && this.props.playerPlaying) {
+      window.scrollTo({
+        top: 353,
+        behaviour: 'smooth'
+      })
+    } else if (this.props.playerPlaying) {
+      window.scrollTo({
+        top: 603,
+        behaviour: 'smooth'
+      })
+    } else {
+      window.scrollTo({
+        top: 53,
+        behaviour: 'smooth'
+      })
+    }
     this.setState({
       activePage
     })
@@ -39,7 +51,7 @@ class RelatedLinks extends React.Component {
     }
     let boundaryRange = 1
     let showEllipsis = true
-    if (window.innerWidth <= 600) {
+    if (window.innerWidth <= 750) {
       boundaryRange = 0
       showEllipsis = false
     }
@@ -71,94 +83,78 @@ class RelatedLinks extends React.Component {
       }
       return (
         <Grid>
-        <Grid.Column>
-        <div ref={this.handleContextRef}>
-          <h2>Recommended</h2>
-          <Sticky context={contextRef} offset={135} style={onTop}>
-            <Input fluid icon='search' value={this.state.filter} onChange={this.handleFilterChange} placeholder='Search...' />
-          </Sticky>
-          <div style={{marginTop: '20px'}}>
-            <Pagination
-              inverted
-              activePage={this.state.activePage}
-              boundaryRange={boundaryRange}
-              onPageChange={this.handlePaginationChange}
-              siblingRange={1}
-              totalPages={totalPages}
-              ellipsisItem={content}
-              firstItem={{ content: <Icon name='angle double left' />, icon: true }}
-              lastItem={{ content: <Icon name='angle double right' />, icon: true }}
-              prevItem={{ content: <Icon name='angle left' />, icon: true }}
-              nextItem={{ content: <Icon name='angle right' />, icon: true }}
-            />
-          </div>
-          <Item.Group divided>
-            {linksAtPage.map(l => <RecommendedLink key={l.link._id} recommend={l.link} count={l.count} />)}
-          </Item.Group>
-          <div>
-            <Pagination
-              inverted
-              activePage={this.state.activePage}
-              boundaryRange={boundaryRange}
-              onPageChange={this.handlePaginationChange}
-              siblingRange={1}
-              totalPages={totalPages}
-              ellipsisItem={content}
-              firstItem={{ content: <Icon name='angle double left' />, icon: true }}
-              lastItem={{ content: <Icon name='angle double right' />, icon: true }}
-              prevItem={{ content: <Icon name='angle left' />, icon: true }}
-              nextItem={{ content: <Icon name='angle right' />, icon: true }}
-            />
-          </div>
-        </div>
-        </Grid.Column>
+          <Grid.Column>
+            <div ref={this.handleContextRef}>
+              <h2>Recommended</h2>
+              <Sticky context={contextRef} offset={135} style={onTop}>
+                <Input fluid icon='search' value={this.state.filter} onChange={this.handleFilterChange} placeholder='Search from recommendations...' />
+              </Sticky>
+              <div style={{marginTop: '20px'}}>
+                <Pagination
+                  inverted
+                  activePage={this.state.activePage}
+                  boundaryRange={boundaryRange}
+                  onPageChange={this.handlePaginationChange}
+                  siblingRange={1}
+                  totalPages={totalPages}
+                  ellipsisItem={content}
+                  firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                  lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                  prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                  nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                />
+              </div>
+              <Item.Group divided>
+                {linksAtPage.map(l => <RecommendedLink key={l.link._id} recommend={l.link} count={l.count} />)}
+              </Item.Group>
+              <div>
+                <Pagination
+                  inverted
+                  activePage={this.state.activePage}
+                  boundaryRange={boundaryRange}
+                  onPageChange={this.handlePaginationChange}
+                  siblingRange={1}
+                  totalPages={totalPages}
+                  ellipsisItem={content}
+                  firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                  lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                  prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                  nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                />
+              </div>
+            </div>
+          </Grid.Column>
         </Grid>
       )
-      /*<ol>
-        {linksToShow.map(l => <li key={l.link._id}><RecommendedLink recommend={l.link} count={l.count} /></li>)}
-      </ol>*/
     } else if (this.props.loggedUser === null) {
       return (
         <Grid>
-        <Grid.Column>
-          <h2>Recommended</h2>
-          Recommendations are only for signed up users.&nbsp;
-          <Link to='/signup'>Sign up</Link> now!
-        </Grid.Column>
+          <Grid.Column>
+            <h2>Recommended</h2>
+            Recommendations are only for signed up users.&nbsp;
+            <Link to='/signup'>Sign up</Link> now!
+          </Grid.Column>
         </Grid>
       )
     } else {
       return (
         <Grid>
-        <Grid.Column>
-          <h2>Recommended</h2>
-          Search from Youtube and add a video to your favourites or playlists in order to get recommendations.
-        </Grid.Column>
+          <Grid.Column>
+            <h2>Recommended</h2>
+            Search from Youtube and add a video to your favourites or playlists in order to get recommendations.
+          </Grid.Column>
         </Grid>
       )
     }
 
   }
 }
-/*<ol>
-  {linksToShow.map(l => <li key={l.link._id}>{l.link.title}, id: {l.link.linkId} count: {l.count}</li>)}
-</ol>*/
-
-const sortByCount = (a, b) => {
-  return parseInt(b.count, 10) - parseInt(a.count, 10)
-}
 
 const mapStateToProps = (state) => {
-/*  let relatedLinks
-  if (state.userLinks.relatedLinks === null || state.userLinks.relatedLinks === undefined
-    || state.userLinks.relatedLinks.length == 0) {
-    relatedLinks = state.userLinks.relatedLinks
-  } else {
-    relatedLinks = state.userLinks.relatedLinks
-  }*/
   return {
     relatedLinks: state.userLinks.relatedLinks,
-    loggedUser: state.loggedUser
+    loggedUser: state.loggedUser,
+    playerPlaying: state.playingVideo.playerPlaying
   }
 }
 

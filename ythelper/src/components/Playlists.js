@@ -9,12 +9,12 @@ class Playlists extends React.Component {
     console.log('Rendering Playlists')
     return (
       <Grid>
-      <Grid.Column>
-        <h2>Playlists</h2>
-        {this.props.playlists.map(playlist =>
-          <Playlist key={playlist._id} item={playlist} />
-        )}
-      </Grid.Column>
+        <Grid.Column>
+          <h2>Playlists</h2>
+          {this.props.playlists.map(playlist =>
+            <Playlist key={playlist._id} item={playlist} />
+          )}
+        </Grid.Column>
       </Grid>
     )
   }

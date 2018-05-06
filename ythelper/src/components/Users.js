@@ -33,45 +33,43 @@ class Users extends React.Component {
     if(this.state.userToShow != null) {
       return (
         <Grid>
-        <Grid.Column>
-          <h2>Käyttäjät</h2>
-          <ul>
-            {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
-              username: {u.username},
+          <Grid.Column>
+            <h2>Käyttäjät</h2>
+            <ul>
+              {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
+                username: {u.username},
                 id: {u.id},
                 name: {u.name},
                 linkkien määrä: {u.links.length},
                 soittolistojen määrä: {u.playlists.length}
-            </li>
-            )}
-          </ul>
+                </li>
+              )}
+            </ul>
 
-          <h3>Näytettävä Käyttäjä</h3>
+            <h3>Näytettävä Käyttäjä</h3>
             <p>{this.state.userToShow}</p>
             <Comments cuser={this.state.userToShow}/>
             <button onClick={this.hideUser}>Piilota</button>
-        </Grid.Column>
+          </Grid.Column>
         </Grid>
       )
     }
     return (
-
-        <Grid>
+      <Grid>
         <Grid.Column>
-        <h1>Käyttäjät</h1>
-        <ul>
-          {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
-            username: {u.username},
+          <h1>Käyttäjät</h1>
+          <ul>
+            {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
+              username: {u.username},
               id: {u.id},
               name: {u.name},
               linkkien määrä: {u.links.length},
               soittolistojen määrä: {u.playlists.length}
-          </li>
-          )}
-        </ul>
+            </li>
+            )}
+          </ul>
         </Grid.Column>
-        </Grid>
-
+      </Grid>
     )
   }
 }

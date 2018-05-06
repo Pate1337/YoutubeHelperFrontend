@@ -8,13 +8,10 @@ import YTSearchResults from './components/YTSearchResults'
 import LoginForm from './components/LoginForm'
 import LoggedBar from './components/LoggedBar'
 import FavouriteLinks from './components/FavouriteLinks'
-/*import { usersFavourites } from './reducers/favouriteLinksReducer'
-import { usersPlaylists } from './reducers/playlistsReducer'*/
 import { userLinks } from './reducers/userLinksReducer'
 import RegisterForm from './components/RegisterForm'
 import PlaylistForm from './components/PlaylistForm'
 import Playlists from './components/Playlists'
-import HiddenPlaylist from './components/HiddenPlaylist'
 import RelatedLinks from './components/RelatedLinks'
 import UserLists from './components/UserLists'
 import Users from './components/Users'
@@ -28,14 +25,7 @@ import { Grid, Segment, Sticky } from 'semantic-ui-react'
 import Notification from './components/Notification'
 
 class App extends React.Component {
-  /*constructor() {
-    super()
-    this.state = {
 
-    }
-  }*/
-
-/*ComponentDidMount toinen vaihtoehto*/
   async componentWillMount() {
     console.log('Mounting App')
     await this.props.loggedUserInitialization()
@@ -43,8 +33,6 @@ class App extends React.Component {
     await this.props.searchResultInitialization()
     await this.props.userLinks()
   }
-
-  /*handleContextRef = contextRef => this.setState({ contextRef })*/
 
   render() {
     console.log('Rendering App')
@@ -61,57 +49,55 @@ class App extends React.Component {
     const overflow = {
       overflow: 'hidden'
     }
-    /*const { contextRef } = this.state*/
-    /*if (this.props.loggedUser === null) {*/
-      return (
-        <div style={overflow}>
-          <Router>
-            <div>
-              <div style={mainPageStyle}>
+    return (
+      <div style={overflow}>
+        <Router>
+          <div>
+            <div style={mainPageStyle}>
               <Container>
-              <Grid>
-              <Grid.Column>
-              <Notification />
-              <Route path='/'
-                render={() => <VideoPlayer />} />
-              <Route path='/login'
-                render={({history}) => <LoginForm history={history} />} />
-              <Route path='/signup'
-                render={({history}) => <RegisterForm history={history} />} />
-              {this.props.loggedUser === null
-                ? <Route exact path='/'
-                    render={() => <Welcome />} />
-                : <div>
-                    <Route exact path='/'
-                      render={() => <Home />} />
-                    <Route path='/myPlaylists'
-                      render={() => <PlaylistForm />} />
-                    <Route path='/myPlaylists'
-                      render={() => <Playlists />} />
-                  </div>
-              }
-              <Route path='/myFavourites'
-                render={() => <FavouriteLinks />} />
-              <Route path='/recommended'
-                render={() => <RelatedLinks />} />
-              <Route path='/users'
-                render={() => <Users />} />
-              <Route path='/search'
-                render={() => <YTSearchBar />} />
-              <Route path='/search'
-                render={() => <YTSearchResults />} />
-              </Grid.Column>
-              </Grid>
+                <Grid>
+                  <Grid.Column>
+                    <Notification />
+                    <Route path='/'
+                      render={() => <VideoPlayer />} />
+                    <Route path='/login'
+                      render={({history}) => <LoginForm history={history} />} />
+                    <Route path='/signup'
+                      render={({history}) => <RegisterForm history={history} />} />
+                    {this.props.loggedUser === null
+                      ? <Route exact path='/'
+                        render={() => <Welcome />} />
+                      : <div>
+                          <Route exact path='/'
+                            render={() => <Home />} />
+                          <Route path='/myPlaylists'
+                            render={() => <PlaylistForm />} />
+                          <Route path='/myPlaylists'
+                            render={() => <Playlists />} />
+                        </div>
+                    }
+                    <Route path='/myFavourites'
+                      render={() => <FavouriteLinks />} />
+                    <Route path='/recommended'
+                      render={() => <RelatedLinks />} />
+                    <Route path='/users'
+                      render={() => <Users />} />
+                    <Route path='/search'
+                      render={() => <YTSearchBar />} />
+                    <Route path='/search'
+                      render={() => <YTSearchResults />} />
+                  </Grid.Column>
+                </Grid>
               </Container>
-              </div>
-              <div style={loggedBarStyle}>
+            </div>
+            <div style={loggedBarStyle}>
               <Route path='/'
                 render={({history}) => <LoggedBar history={history} />} />
-              </div>
             </div>
-          </Router>
-        </div>
-      )
+          </div>
+        </Router>
+      </div>
+    )
   }
 }
 
@@ -128,8 +114,6 @@ const mapDispatchToProps = {
   usersInitialization,
   searchResultInitialization,
   loggedUserInitialization,
-/*  usersFavourites,
-  usersPlaylists*/
   userLinks
 }
 

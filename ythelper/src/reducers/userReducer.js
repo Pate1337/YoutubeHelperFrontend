@@ -1,10 +1,4 @@
 import userService from '../services/users'
-/*Eli täällä on nyt mun mielestä semmonen tilanne, että initialisoinnin
-jälkeen, täällä on kaikki käyttäjät siinä muodossa, että tiedot näkyy
-mutta linkkien ja playlistien kohdalla näkyy vaan id:t. Eli ei
-populointia. Tälläsenä sen voi pitää. userLinksReducer pitää sitten
-kirjaa kirjautuneen käyttäjän suosikeista ja soittolistoista paljon
-tarkempaa kirjaa, siellä kaikki on populoitu.*/
 
 const userReducer = (store = [], action) => {
   switch(action.type) {
