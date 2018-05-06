@@ -33,6 +33,12 @@ class LoggedBar extends React.Component {
     } else if (content === 'Sign up') {
       await this.props.setActiveItem('/signup')
       this.props.history.push('/signup')
+    } else if (content === 'Playlists') {
+      await this.props.setActiveItem('/myPlaylists')
+      this.props.history.push('/myPlaylists')
+    } else if (content === 'Favourites') {
+      await this.props.setActiveItem('/myFavourites')
+      this.props.history.push('/myFavourites')
     }
   }
 
@@ -41,46 +47,40 @@ class LoggedBar extends React.Component {
     return (
       <Grid columns='equal' inverted doubling>
         <Grid.Row verticalAlign='top' color='black' textAlign='center' style={{height: '56px'}}>
-          <Grid.Column width={2}>
+          <Grid.Column width={4}>
             <Segment color='black' inverted>
               logo
             </Segment>
           </Grid.Column>
-          <Grid.Column>
 
-          </Grid.Column>
           {this.props.loggedUser !== null
-            ? <Grid.Column width={4}>
+            ? <Grid.Column>
                 <Segment color='black' inverted>
-                  <Link to='/myFavourites'>
-                    Favourites
-                  </Link>&nbsp;
+                  <Button style={{position: 'relative', zIndex: 10}}compact size='mini' inverted content='Favourites' onClick={this.handleButtonClick} />
                 </Segment>
               </Grid.Column>
-            : <Grid.Column width={4}>
+            : <Grid.Column width={1}>
               </Grid.Column>
           }
           {this.props.loggedUser !== null
-            ? <Grid.Column width={3}>
+            ? <Grid.Column>
                 <Segment color='black' inverted>
-                  <Link to='/myPlaylists'>
-                    Playlists
-                  </Link>
+                  <Button style={{position: 'relative', zIndex: 10}} compact size='mini' inverted content='Playlists' onClick={this.handleButtonClick} />
                 </Segment>
               </Grid.Column>
-            : <Grid.Column width={3}></Grid.Column>
+            : <Grid.Column width={1}></Grid.Column>
           }
           {this.props.loggedUser !== null
-            ? <Grid.Column width={5}>
-                <Segment color='black' inverted>
-                  <Button inverted size='mini' icon onClick={this.logOut}>
+            ? <Grid.Column floated='right'>
+                <Segment floated='right' color='black' inverted>
+                  <Button compact floated='right' inverted size='mini' icon onClick={this.logOut}>
                     <Icon name='sign out' />
                   </Button>&nbsp;
                 </Segment>
               </Grid.Column>
-            : <Grid.Column width={5}>
+            : <Grid.Column floated='right'>
                 <Segment color='black' inverted>
-                  <Button.Group size='mini'>
+                  <Button.Group floated='right' size='mini'>
                     <Button basic color='blue' onClick={this.handleButtonClick} content='Login' />
                     <Button.Or />
                     <Button basic color='blue' onClick={this.handleButtonClick} content='Sign up' />

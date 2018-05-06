@@ -50,7 +50,7 @@ class App extends React.Component {
       overflow: 'hidden'
     }
     return (
-      <div style={overflow}>
+      <div  style={overflow}>
         <Router>
           <div>
             <div style={mainPageStyle}>

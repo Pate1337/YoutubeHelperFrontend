@@ -68,7 +68,7 @@ class LoginForm extends React.Component {
             name='password'
             value={this.state.password}
             onChange={this.handleLoginFieldChange}
-            label='Password'
+            label='Password:'
             placeholder='Password'
             error={this.state.error}
           />
