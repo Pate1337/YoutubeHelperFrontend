@@ -1,7 +1,7 @@
 import React from 'react'
 import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
-import { setPlayingVideo } from '../reducers/videoPlayingReducer'
+import { setPlayingVideo, clearPlayingVideo } from '../reducers/videoPlayingReducer'
 import PlaylistButtons from './PlaylistButtons'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { playNext } from '../reducers/playlistPlayingReducer'
@@ -25,7 +25,7 @@ class VideoPlayer extends React.Component {
       smallComputerPopup: {
         right: '0%',
         position: 'fixed',
-        bottom: '1%',
+        bottom: '2%',
         zIndex: 1000,
         width: '40%',
         height: '40%'
@@ -33,7 +33,7 @@ class VideoPlayer extends React.Component {
       bigComputerPopup: {
         right: '0%',
         position: 'fixed',
-        bottom: '1%',
+        bottom: '2%',
         zIndex: 1000,
         width: '25%',
         height: '40%'
@@ -47,7 +47,8 @@ class VideoPlayer extends React.Component {
         height: '25%'
       },
       popup: false,
-      firstLoad: true
+      firstLoad: true,
+      changePosition: true
     }
   }
 
@@ -102,12 +103,29 @@ class VideoPlayer extends React.Component {
     }
   }
 
+  togglePositionChangeOnScroll = (event) => {
+    event.preventDefault()
+    this.setState({
+      changePosition: !this.state.changePosition
+    })
+  }
+
+  stopPlayer = async (event) => {
+    event.preventDefault()
+    await this.props.clearPlayingVideo()
+  }
+
   render() {
     if (this.props.link !== null) {
       console.log('Rendering VideoPlayer')
       const margin = {marginBottom: '10px'}
-      const showButtons = { display: (window.innerWidth <= 750 && this.state.popup) ? 'none' : ''}
-      const showRelocateButton = { display: (this.state.popup) ? '' : 'none' }
+      const notShowingInMobilePopup = { display: (window.innerWidth <= 750 && this.state.popup) ? 'none' : ''}
+      const showInPopup = { display: (this.state.popup) ? '' : 'none' }
+      const onlyShowOnBigPlayer = { display: (!this.state.popup) ? '' : 'none' }
+      let positionChangeButton = {title: 'Disable position change on scroll', icon: 'lock'}
+      if (!this.state.changePosition) {
+        positionChangeButton = {title: 'Enable position change on scroll', icon: 'unlock alternate'}
+      }
       let opts = null
       let scrollLocation = null
       if (window.innerWidth <= 750) {
@@ -129,7 +147,6 @@ class VideoPlayer extends React.Component {
           }
         }
       }
-      let changePlayerIcon = null
       let style = null
       let gridStyle = null
       if (!this.state.popup) {
@@ -140,7 +157,6 @@ class VideoPlayer extends React.Component {
           style = this.state.computerStyle
           gridStyle = {position: 'relative', height: '550px'}
         }
-        changePlayerIcon = 'compress'
       } else {
         if (window.innerWidth <= 750) {
           style = this.state.mobilePopup
@@ -152,7 +168,6 @@ class VideoPlayer extends React.Component {
           style = this.state.bigComputerPopup
           gridStyle = {position: 'relative', height: '550px'}
         }
-        changePlayerIcon = 'expand'
       }
       console.log('IKKUNAN KOKO' + window.innerWidth + ', ' + window.innerHeight )
       return (
@@ -160,10 +175,10 @@ class VideoPlayer extends React.Component {
           <Grid style={gridStyle}>
             <Grid.Column style={style}>
               {(this.props.playingPlaylist.playlist !== null)
-                ? <div style={showButtons}>
+                ? <div style={notShowingInMobilePopup}>
                     <h4>Playing {this.props.playingPlaylist.playlist.title}</h4>
                   </div>
-                : <div style={showButtons}><h4>Playing {this.props.link.title}</h4></div>
+                : <div style={notShowingInMobilePopup}><h4>Playing {this.props.link.title}</h4></div>
               }
               <Youtube
                 id='player'
@@ -174,16 +189,19 @@ class VideoPlayer extends React.Component {
                 onEnd={this.onEnd}
               />
               <div style={{position: 'relative', zIndex: 20}}>
-                <Button icon floated='right' onClick={this.changePosition} style={showRelocateButton}>
-                  <Icon name={changePlayerIcon} size='large' />
+                <Button icon floated='right' onClick={this.changePosition} style={showInPopup} title='Hide popup'>
+                  <Icon name='hide' size='large' />
                 </Button>
-                <div style={showButtons}>
+                <Button title={positionChangeButton.title} icon floated='right' onClick={this.togglePositionChangeOnScroll} style={onlyShowOnBigPlayer}>
+                  <Icon name={positionChangeButton.icon} size='large' />
+                </Button>
+                <div style={notShowingInMobilePopup}>
                   <Button.Group floated='left'>
                     <PlaylistButtons />
                   </Button.Group>
 
                   <Popup
-                    trigger={<Button floated='right' color='blue' icon>
+                    trigger={<Button title='Add to' floated='right' color='blue' icon>
                       <Icon name='add' size='large' />
                       </Button>}
                     content={<AddToUserLinksButtons link={this.props.link} />}
@@ -192,10 +210,13 @@ class VideoPlayer extends React.Component {
                     hideOnScroll
                   />
                 </div>
+                <Button title='Stop and hide player' color='red' icon floated='right' onClick={this.stopPlayer}>
+                  <Icon name='stop' size='large' />
+                </Button>
               </div>
             </Grid.Column>
           </Grid>
-          <VisibilitySensor offset={{top:135}} onChange={this.handleVisibility} />
+          <VisibilitySensor active={this.state.changePosition} offset={{top:135}} onChange={this.handleVisibility} />
         </div>
       )
     } else {
@@ -220,7 +241,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setPlayingVideo,
-  playNext
+  playNext,
+  clearPlayingVideo
 }
 
 const ConnectedVideoPlayer = connect(mapStateToProps, mapDispatchToProps)(VideoPlayer)

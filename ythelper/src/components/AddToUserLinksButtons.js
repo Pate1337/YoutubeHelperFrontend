@@ -13,7 +13,9 @@ class AddToUserLinksButtons extends React.Component {
   constructor() {
     super()
     this.state = {
-      showPlaylists: false
+      showPlaylists: false,
+      showFavourite: true,
+      clickedPlaylistId: null
     }
   }
 
@@ -25,6 +27,9 @@ class AddToUserLinksButtons extends React.Component {
 
   handleFavourite = async () => {
     console.log('this.props.serverOnUse: ' + this.props.serverOnUse)
+    this.setState({
+      showFavourite: false
+    })
     const timer = setInterval(() => {
       console.log('intervallia')
       if (!this.props.serverOnUse) {
@@ -36,6 +41,9 @@ class AddToUserLinksButtons extends React.Component {
 
   handlePlaylist = async (event) => {
     const id = event.target.id
+    this.setState({
+      clickedPlaylistId: id
+    })
     console.log('this.props.serverOnUse: ' + this.props.serverOnUse)
     const timer = setInterval(() => {
       const playlistId = id
@@ -277,25 +285,26 @@ class AddToUserLinksButtons extends React.Component {
 
   render() {
     console.log('Rendering AddToUserLinksButtons')
-    const showFavourite = { display: (this.props.favouritesAvailable) ? '' : 'none' }
+    const showFavourite = { display: (this.props.favouritesAvailable && this.state.showFavourite) ? '' : 'none' }
     const showPlaylist = { display: (this.props.availablePlaylists.length !== 0) ? '' : 'none' }
 
     return (
       <div style={{width: '210px'}}>
         <h4>Add to</h4>
         <Button.Group vertical fluid basic color='blue'>
-        <Button color='blue' icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
-          <Icon name='favorite' />
-          Favourites
-        </Button>
-        {(this.props.availablePlaylists.length !== 0)
-          ? this.props.availablePlaylists.map(p =>
-            <Button color='blue' icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}>
-              <Icon name='list' />
-              {p.title}
-            </Button>)
-          : <div></div>
-        }
+          <Button color='blue' icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
+            <Icon name='favorite' />
+            Favourites
+          </Button>
+          {(this.props.availablePlaylists.length !== 0)
+            ? this.props.availablePlaylists.map(p =>
+              <Button color='blue' icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}
+                style={{display: (this.state.clickedPlaylistId === p._id) ? 'none' : ''}}>
+                <Icon name='list' />
+                {p.title}
+              </Button>)
+            : <div></div>
+          }
         </Button.Group>
       </div>
     )

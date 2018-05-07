@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { searchForVideo } from '../reducers/ytReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { updateSearchBar } from '../reducers/ytSearchBarReducer'
-import { Grid, Form, Button, Dropdown, Icon } from 'semantic-ui-react'
+import { Grid, Form, Button, Dropdown, Icon, Popup } from 'semantic-ui-react'
 
 class YTSearchBar extends React.Component {
   constructor() {
@@ -105,9 +105,12 @@ class YTSearchBar extends React.Component {
             <Button icon type='submit'>
               <Icon name='search' />
             </Button>
-            <Button icon type='button' onClick={this.clearResults}>
-              <Icon name='undo' />
-            </Button>
+            <Popup
+              trigger={<Button icon type='button' onClick={this.clearResults}>
+                  <Icon name='undo' />
+                </Button>}
+              content='Clear search results'
+            />
             <Form.Select
               inline
               compact

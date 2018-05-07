@@ -73,7 +73,7 @@ class LoggedBar extends React.Component {
           {this.props.loggedUser !== null
             ? <Grid.Column floated='right'>
                 <Segment floated='right' color='black' inverted>
-                  <Button compact floated='right' inverted size='mini' icon onClick={this.logOut}>
+                  <Button title='Sign out' compact floated='right' inverted size='mini' icon onClick={this.logOut}>
                     <Icon name='sign out' />
                   </Button>&nbsp;
                 </Segment>

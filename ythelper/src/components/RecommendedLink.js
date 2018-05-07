@@ -59,7 +59,7 @@ class RecommendedLink extends React.Component {
           <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
           <Item.Extra>
             <Popup
-              trigger={<Button compact color='blue' icon floated='right' onClick={this.toggleButtons}>
+              trigger={<Button title='Add to' compact color='blue' icon floated='right' onClick={this.toggleButtons}>
                   <Icon name='add' size='large' />
                 </Button>}
               content={<AddToUserLinksButtons recommend={this.props.recommend} />}

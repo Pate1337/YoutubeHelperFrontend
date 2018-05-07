@@ -107,7 +107,7 @@ class RelatedLinks extends React.Component {
               <Item.Group divided>
                 {linksAtPage.map(l => <RecommendedLink key={l.link._id} recommend={l.link} count={l.count} />)}
               </Item.Group>
-              <div>
+              <div style={{position: 'relative', zIndex: 1001}}>
                 <Pagination
                   inverted
                   activePage={this.state.activePage}

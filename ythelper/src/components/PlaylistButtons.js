@@ -34,13 +34,13 @@ class PlaylistButtons extends React.Component {
     return (
       <div>
         <div style={showPlaylistButtons}>
-          <Button icon onClick={this.playPrevious}>
+          <Button title='Play previous' icon onClick={this.playPrevious}>
             <Icon name='step backward' size='large' />
           </Button>
-          <Button icon onClick={this.shuffle}>
+          <Button title='Shuffle' icon onClick={this.shuffle}>
             <Icon name='shuffle' size='large' />
           </Button>
-          <Button icon onClick={this.playNext}>
+          <Button title='Play next' icon onClick={this.playNext}>
             <Icon name='step forward' size='large' />
           </Button>
         </div>
