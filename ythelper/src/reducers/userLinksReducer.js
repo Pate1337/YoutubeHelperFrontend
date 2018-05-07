@@ -1,7 +1,7 @@
 import userService from '../services/users'
 import linkService from '../services/links'
 
-const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null, relatedSort: 'count', favouriteSort: 'none' }, action) => {
+const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null, relatedSort: 'countAsc', favouriteSort: 'none' }, action) => {
   switch(action.type) {
     case 'GET_ALL':
       console.log('GET_ALL userLinksReducer')
@@ -74,11 +74,16 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
     case 'ADD_RELATED':
       console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
       let addedRelateds = [...store.relatedLinks, ...action.data]
-      if (store.relatedSort === 'count') {
-        addedRelateds.sort(sortByCount)
-      } else if (store.relatedSort === 'name') {
-        addedRelateds.sort(sortByName)
-      }
+      /*let sortedAddedRelateds = []*/
+      /*if (store.relatedSort === 'countAsc') {
+        sortedAddedRelateds = addedRelateds.sort(sortByCount)
+      } else if (store.relatedSort === 'countDesc') {
+        sortedAddedRelateds = addedRelateds.sort(sortByCount).reverse()
+      } else if (store.relatedSort === 'nameAsc') {
+        sortedAddedRelateds = addedRelateds.sort(sortByName)
+      } else if (store.relatedSort === 'nameDesc') {
+        sortedAddedRelateds = addedRelateds.sort(sortByName).reverse()
+      }*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -87,6 +92,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       }
     case 'UPDATE_COUNT':
       let updatedRelatedLinks = []
+      /*let sortedUpdatedRelatedLinks = []*/
       store.relatedLinks.forEach(rl => {
         let found = action.links.find(l => l === rl._id)
         if (found !== undefined) {
@@ -95,11 +101,15 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           updatedRelatedLinks.push(rl)
         }
       })
-      if (store.relatedSort === 'count') {
-        updatedRelatedLinks.sort(sortByCount)
-      } else if (store.relatedSort === 'name') {
-        updatedRelatedLinks.sort(sortByName)
-      }
+      /*if (store.relatedSort === 'countAsc') {
+        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByCount)
+      } else if (store.relatedSort === 'countDesc') {
+        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByCount).reverse()
+      } else if (store.relatedSort === 'nameAsc') {
+        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByName)
+      } else if (store.relatedSort === 'nameDesc') {
+        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByName).reverse()
+      }*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -107,22 +117,45 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         randomLink: store.randomLink
       }
     case 'SORT_RELATEDS_BY_NAME':
-      let sortedByNameRelateds = store.relatedLinks.sort(sortByName)
+      let sortedByNameRelateds = []
+      let nameSort = null
+      if (store.relatedSort === 'nameAsc') {
+        sortedByNameRelateds = store.relatedLinks.reverse()
+        nameSort = 'nameDesc'
+      } else if (store.relatedSort === 'nameDesc') {
+        sortedByNameRelateds = store.relatedLinks.reverse()
+        nameSort = 'nameAsc'
+      } else {
+        sortedByNameRelateds = store.relatedLinks.sort(sortByName)
+        nameSort = 'nameAsc'
+      }
       console.log('KOKO: ' + sortedByNameRelateds.length)
       return {
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: sortedByNameRelateds,
         randomLink: store.randomLink,
-        relatedSort: 'name'
+        relatedSort: nameSort
       }
     case 'SORT_RELATEDS_BY_COUNT':
+      let sortedByCountRelateds = []
+      let countSort = null
+      if (store.relatedSort === 'countAsc') {
+        sortedByCountRelateds = store.relatedLinks.reverse()
+        countSort = 'countDesc'
+      } else if (store.relatedSort === 'countDesc') {
+        sortedByCountRelateds = store.relatedLinks.reverse()
+        countSort = 'countAsc'
+      } else {
+        sortedByCountRelateds = store.relatedLinks.sort(sortByCount)
+        countSort = 'countAsc'
+      }
       return {
         favourites: store.favourites,
         playlists: store.playlists,
-        relatedLinks: store.relatedLinks.sort(sortByCount),
+        relatedLinks: sortedByCountRelateds,
         randomLink: store.randomLink,
-        relatedSort: 'count'
+        relatedSort: countSort
       }
     default:
       return store

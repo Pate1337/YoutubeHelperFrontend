@@ -79,22 +79,25 @@ class YTSearchBar extends React.Component {
     ]
     const maxResults = this.state.maxResults
     let gridStyle = this.state.gridStyle
-    let searchBarStyle = {width: '400px'}
+    /*let searchBarStyle = {width: '400px'}*/
     const searchResultsJSON = window.localStorage.getItem('ytSearchResults')
     if (searchResultsJSON) {
       gridStyle = {}
     }
-    if (window.innerWidth <= 750) {
-      searchBarStyle = {width: '160px'}
-    }
+    /*if (window.innerWidth <= 750) {*/
+      let searchBarStyle = {width: '55%', marginRight: '2px'}
+    /*}*/
+    const onlyShowOnMobile = { display: (window.innerWidth <= 750) ? '' : 'none'}
+    const onlyShowOnComputer = { display: (window.innerWidth > 750) ? '' : 'none'}
     return (
       <Grid style={gridStyle}>
         <Grid.Column>
           <h2>Search from Youtube</h2>
           <Form onSubmit={this.handleSubmit}>
             <Form.Group>
+            <div style={searchBarStyle}>
             <Form.Input
-              style={searchBarStyle}
+
               type='text'
               name='text'
               value={this.state.text}
@@ -102,6 +105,7 @@ class YTSearchBar extends React.Component {
               icon='search'
               placeholder='Search...'
             />
+            </div>
             <Button icon type='submit'>
               <Icon name='search' />
             </Button>
@@ -111,16 +115,39 @@ class YTSearchBar extends React.Component {
                 </Button>}
               content='Clear search results'
             />
-            <Form.Select
-              inline
-              compact
-              label='Max results:'
-              onChange={this.handleDropdownChange}
-              options={options}
-              selection
-              value={maxResults}
-              name='maxResults'
-            />
+            <div style={onlyShowOnComputer}>
+              <Form.Select
+                inline
+                compact
+                label='Max results:'
+                onChange={this.handleDropdownChange}
+                options={options}
+                selection
+                value={maxResults}
+                name='maxResults'
+              />
+            </div>
+            <div style={onlyShowOnMobile}>
+              <Popup
+                trigger={
+                  <Button icon type='button'>
+                    <Icon name='options' />
+                  </Button>}
+                content={
+                  <Form.Select
+                    inline
+                    compact
+                    label='Max results:'
+                    onChange={this.handleDropdownChange}
+                    options={options}
+                    selection
+                    value={maxResults}
+                    name='maxResults'
+                  />}
+                on='click'
+                hideOnScroll
+              />
+            </div>
             </Form.Group>
           </Form>
         </Grid.Column>

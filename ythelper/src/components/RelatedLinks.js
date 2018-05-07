@@ -131,7 +131,7 @@ class RelatedLinks extends React.Component {
                   nextItem={{ content: <Icon name='angle right' />, icon: true }}
                 />
               </div>
-              <Item.Group divided>
+              <Item.Group divided unstackable>
                 {linksAtPage.map(l => <RecommendedLink key={l.link._id} recommend={l.link} count={l.count} />)}
               </Item.Group>
               <div style={{position: 'relative', zIndex: 1001}}>
