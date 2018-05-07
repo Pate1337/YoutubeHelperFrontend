@@ -21,7 +21,7 @@ class Home extends React.Component {
           && this.props.recommendedLinks.length !== 0)
           ? <div>
               <strong>Here is our pick of the day for you:</strong>
-              <Item.Group>
+              <Item.Group unstackable>
                 <RecommendedLink recommend={this.props.randomLink} />
               </Item.Group>
             </div>

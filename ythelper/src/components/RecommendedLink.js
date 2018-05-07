@@ -44,16 +44,18 @@ class RecommendedLink extends React.Component {
     )
     return (
       <Item>
-        <Dimmer.Dimmable
-          as={Image}
-          dimmed={active}
-          dimmer={{ active, content }}
-          onMouseEnter={this.handleShow}
-          onMouseLeave={this.handleHide}
-          src={this.props.recommend.thumbnail}
-          onClick={this.playVideo}
-          style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
-        />
+        <div style={{marginRight: '10px'}}>
+          <Dimmer.Dimmable
+            as={Image}
+            dimmed={active}
+            dimmer={{ active, content }}
+            onMouseEnter={this.handleShow}
+            onMouseLeave={this.handleHide}
+            src={this.props.recommend.thumbnail}
+            onClick={this.playVideo}
+            style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
+          />
+        </div>
         <Item.Content>
           <Item.Header>{this.props.recommend.title}</Item.Header>
           <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
