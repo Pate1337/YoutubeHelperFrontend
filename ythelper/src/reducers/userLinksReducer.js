@@ -1,7 +1,7 @@
 import userService from '../services/users'
 import linkService from '../services/links'
 
-const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null }, action) => {
+const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null, relatedSort: 'count', favouriteSort: 'none' }, action) => {
   switch(action.type) {
     case 'GET_ALL':
       console.log('GET_ALL userLinksReducer')
@@ -64,7 +64,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           newRelatedLinks.push(l)
         }
       })
-      newRelatedLinks.sort(sortByCount)
+      /*newRelatedLinks.sort(sortByCount)*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -74,7 +74,11 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
     case 'ADD_RELATED':
       console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
       let addedRelateds = [...store.relatedLinks, ...action.data]
-      addedRelateds.sort(sortByCount)
+      if (store.relatedSort === 'count') {
+        addedRelateds.sort(sortByCount)
+      } else if (store.relatedSort === 'name') {
+        addedRelateds.sort(sortByName)
+      }
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -91,12 +95,34 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           updatedRelatedLinks.push(rl)
         }
       })
-      updatedRelatedLinks.sort(sortByCount)
+      if (store.relatedSort === 'count') {
+        updatedRelatedLinks.sort(sortByCount)
+      } else if (store.relatedSort === 'name') {
+        updatedRelatedLinks.sort(sortByName)
+      }
       return {
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: updatedRelatedLinks,
         randomLink: store.randomLink
+      }
+    case 'SORT_RELATEDS_BY_NAME':
+      let sortedByNameRelateds = store.relatedLinks.sort(sortByName)
+      console.log('KOKO: ' + sortedByNameRelateds.length)
+      return {
+        favourites: store.favourites,
+        playlists: store.playlists,
+        relatedLinks: sortedByNameRelateds,
+        randomLink: store.randomLink,
+        relatedSort: 'name'
+      }
+    case 'SORT_RELATEDS_BY_COUNT':
+      return {
+        favourites: store.favourites,
+        playlists: store.playlists,
+        relatedLinks: store.relatedLinks.sort(sortByCount),
+        randomLink: store.randomLink,
+        relatedSort: 'count'
       }
     default:
       return store
@@ -105,6 +131,29 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
 
 const sortByCount = (a, b) => {
   return parseInt(b.count, 10) - parseInt(a.count, 10)
+}
+
+const sortByName = (a, b) => {
+  let x = a.link.title.toLowerCase()
+  let y = b.link.title.toLowerCase()
+  return x < y ? -1 : x > y ? 1 : 0
+}
+
+export const sortRelatedsByName = () => {
+  console.log('sortRelatedsByName REDUCER')
+  return async (dispatch) => {
+    dispatch({
+      type: 'SORT_RELATEDS_BY_NAME'
+    })
+  }
+}
+
+export const sortRelatedsByCount = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'SORT_RELATEDS_BY_COUNT'
+    })
+  }
 }
 
 /*Nyt saadaan molemmat hoidettua yhdellä tietokantahaulla!!!*/

@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import RecommendedLink from './RecommendedLink'
 import { Link } from 'react-router-dom'
-import { Item, Sticky, Grid, Input, Segment, Pagination, Icon } from 'semantic-ui-react'
+import { Item, Sticky, Grid, Input, Segment, Pagination, Icon, Button } from 'semantic-ui-react'
+import { sortRelatedsByName, sortRelatedsByCount } from '../reducers/userLinksReducer'
 
 class RelatedLinks extends React.Component {
   constructor() {
@@ -41,6 +42,24 @@ class RelatedLinks extends React.Component {
     }
     this.setState({
       activePage
+    })
+  }
+
+  sortByName = async (event) => {
+    console.log('sortByName RelatedLinks')
+    event.preventDefault()
+    await this.props.sortRelatedsByName()
+    this.setState({
+      activePage: 1
+    })
+  }
+
+  sortByCount = async (event) => {
+    console.log('sortByCount RelatedLinks')
+    event.preventDefault()
+    await this.props.sortRelatedsByCount()
+    this.setState({
+      activePage: 1
     })
   }
 
@@ -86,9 +105,17 @@ class RelatedLinks extends React.Component {
           <Grid.Column>
             <div ref={this.handleContextRef}>
               <h2>Recommended</h2>
-              <Sticky context={contextRef} offset={135} style={onTop}>
-                <Input fluid icon='search' value={this.state.filter} onChange={this.handleFilterChange} placeholder='Search from recommendations...' />
-              </Sticky>
+              <div style={{height: '40px'}}>
+                <Sticky context={contextRef} offset={135} style={onTop}>
+                  <Input fluid icon='search' value={this.state.filter} onChange={this.handleFilterChange} placeholder='Search from recommendations...' />
+                </Sticky>
+              </div>
+              <Button onClick={this.sortByName}>
+                Sort by name
+              </Button>
+              <Button onClick={this.sortByCount}>
+                Sort by count
+              </Button>
               <div style={{marginTop: '20px'}}>
                 <Pagination
                   inverted
@@ -158,6 +185,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-const ConnectedRelatedLinks = connect(mapStateToProps)(RelatedLinks)
+const mapDispatchToProps = {
+  sortRelatedsByName,
+  sortRelatedsByCount
+}
+
+const ConnectedRelatedLinks = connect(mapStateToProps, mapDispatchToProps)(RelatedLinks)
 
 export default ConnectedRelatedLinks
