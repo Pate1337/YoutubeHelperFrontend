@@ -95,59 +95,58 @@ class YTSearchBar extends React.Component {
           <h2>Search from Youtube</h2>
           <Form onSubmit={this.handleSubmit}>
             <Form.Group>
-            <div style={searchBarStyle}>
-            <Form.Input
-
-              type='text'
-              name='text'
-              value={this.state.text}
-              onChange={this.handleSearchFieldChange}
-              icon='search'
-              placeholder='Search...'
-            />
-            </div>
-            <Button icon type='submit'>
-              <Icon name='search' />
-            </Button>
-            <Popup
-              trigger={<Button icon type='button' onClick={this.clearResults}>
-                  <Icon name='undo' />
-                </Button>}
-              content='Clear search results'
-            />
-            <div style={onlyShowOnComputer}>
-              <Form.Select
-                inline
-                compact
-                label='Max results:'
-                onChange={this.handleDropdownChange}
-                options={options}
-                selection
-                value={maxResults}
-                name='maxResults'
-              />
-            </div>
-            <div style={onlyShowOnMobile}>
+              <div style={searchBarStyle}>
+                <Form.Input
+                  type='text'
+                  name='text'
+                  value={this.state.text}
+                  onChange={this.handleSearchFieldChange}
+                  icon='search'
+                  placeholder='Search...'
+                />
+              </div>
+              <Button icon type='submit'>
+                <Icon name='search' />
+              </Button>
               <Popup
-                trigger={
-                  <Button icon type='button'>
-                    <Icon name='options' />
+                trigger={<Button icon type='button' onClick={this.clearResults}>
+                    <Icon name='undo' />
                   </Button>}
-                content={
-                  <Form.Select
-                    inline
-                    compact
-                    label='Max results:'
-                    onChange={this.handleDropdownChange}
-                    options={options}
-                    selection
-                    value={maxResults}
-                    name='maxResults'
-                  />}
-                on='click'
-                hideOnScroll
+                content='Clear search results'
               />
-            </div>
+              <div style={onlyShowOnComputer}>
+                <Form.Select
+                  inline
+                  compact
+                  label='Max results:'
+                  onChange={this.handleDropdownChange}
+                  options={options}
+                  selection
+                  value={maxResults}
+                  name='maxResults'
+                />
+              </div>
+              <div style={onlyShowOnMobile}>
+                <Popup
+                  trigger={
+                    <Button icon type='button'>
+                      <Icon name='options' />
+                    </Button>}
+                  content={
+                    <Form.Select
+                      inline
+                      compact
+                      label='Max results:'
+                      onChange={this.handleDropdownChange}
+                      options={options}
+                      selection
+                      value={maxResults}
+                      name='maxResults'
+                    />}
+                  on='click'
+                  hideOnScroll
+                />
+              </div>
             </Form.Group>
           </Form>
         </Grid.Column>

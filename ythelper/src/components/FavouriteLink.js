@@ -5,12 +5,14 @@ import { usersInitialization } from '../reducers/userReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
+import { Item, Icon, Button, Dimmer, Popup, Image } from 'semantic-ui-react'
 
 class FavouriteLink extends React.Component {
   constructor() {
     super()
     this.state = {
-      showButtons: false
+      showButtons: false,
+      active: false
     }
   }
 
@@ -25,23 +27,56 @@ class FavouriteLink extends React.Component {
     })
   }
 
+  handleShow = () => {
+    this.setState({
+      active: true
+    })
+  }
+  handleHide = () => {
+    this.setState({
+      active: false
+    })
+  }
+
   render() {
     console.log('Rendering FavouriteLink')
+    const active = this.state.active
+    const content = (
+      <Icon name='play' size='huge' />
+    )
     return (
-      <div>
-        <img onClick={this.playVideo}
-          src={this.props.item.thumbnail}
-          alt={this.props.item.title}
-          style={{cursor: 'pointer', display: 'inline-block'}}
-        />
-        id: {this.props.item.linkId}, title: {this.props.item.title}
-        <button onClick={this.removeOneFavouriteLink}>Remove From Favorites</button>
-        {(!this.state.showButtons)
-          ? <button onClick={this.toggleButtons}>Add to</button>
-          : <div><AddToUserLinksButtons favourite={this.props.item} />
-            <button onClick={this.toggleButtons}>Back</button></div>
-        }
-      </div>
+      <Item>
+        <Item.Image style={{width: '124px'}}>
+          <Dimmer.Dimmable
+            as={Image}
+            dimmed={active}
+            dimmer={{ active, content }}
+            onMouseEnter={this.handleShow}
+            onMouseLeave={this.handleHide}
+            src={this.props.item.thumbnail}
+            onClick={this.playVideo}
+            style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
+          />
+        </Item.Image>
+        <Item.Content>
+          <Item.Header>{this.props.item.title}</Item.Header>
+          <Item.Description>id: {this.props.item.linkId}</Item.Description>
+          <Item.Extra>
+            <Popup
+              trigger={<Button title='Add to' compact color='blue' icon floated='right'>
+                  <Icon name='add' size='large' />
+                </Button>}
+              content={<AddToUserLinksButtons favourite={this.props.item} />}
+              position='top right'
+              on='click'
+              hideOnScroll
+            />
+            <Button title='Remove from favourites' icon compact floated='right' onClick={this.removeOneFavouriteLink}>
+              <Icon name='trash' size='large' />
+            </Button>
+          </Item.Extra>
+        </Item.Content>
+      </Item>
     )
   }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import FavouriteLink from './FavouriteLink'
 import { Link } from 'react-router-dom'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Item } from 'semantic-ui-react'
 
 class FavouriteLinks extends React.Component {
   constructor() {
@@ -25,9 +25,11 @@ class FavouriteLinks extends React.Component {
           <h2>
             My favourites
           </h2>
-          {this.props.favouriteLinks.map(link =>
-            <FavouriteLink key={link._id} item={link} />
-          )}
+          <Item.Group divided unstackable>
+            {this.props.favouriteLinks.map(link =>
+              <FavouriteLink key={link._id} item={link} />
+            )}
+          </Item.Group>
         </Grid.Column>
         </Grid>
       )

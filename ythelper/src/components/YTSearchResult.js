@@ -4,36 +4,85 @@ import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Grid } from 'semantic-ui-react'
+import { Item, Icon, Button, Dimmer, Popup, Image } from 'semantic-ui-react'
 
 class YTSearchResult extends React.Component {
-
+  constructor() {
+    super()
+    this.state = {
+      active: false
+    }
+  }
   playVideo = async () => {
     await this.props.setPlayingVideo(this.props.item)
     await this.props.clearPlayingPlaylist()
   }
 
+  handleShow = () => {
+    this.setState({
+      active: true
+    })
+  }
+  handleHide = () => {
+    this.setState({
+      active: false
+    })
+  }
+
   render() {
     console.log('Rendering YTSearchResult')
+    const active = this.state.active
+    const content = (
+      <Icon name='play' size='huge' />
+    )
     return (
-      <Grid>
-        <Grid.Column>
-          <img onClick={this.playVideo}
+      <Item>
+        <Item.Image style={{width: '124px'}}>
+          <Dimmer.Dimmable
+            as={Image}
+            dimmed={active}
+            dimmer={{ active, content }}
+            onMouseEnter={this.handleShow}
+            onMouseLeave={this.handleHide}
             src={this.props.item.thumbnail}
-            alt={this.props.item.title}
-            style={{cursor: 'pointer', display: 'inline-block'}}
+            onClick={this.playVideo}
+            style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
           />
-          id: {this.props.item.linkId}, title: {this.props.item.title}, count: {this.props.count}
-          {this.props.loggedUser !== null
-            ? <AddToUserLinksButtons link={this.props.item} />
-            : <div></div>
-          }
-        </Grid.Column>
-      </Grid>
+        </Item.Image>
+        <Item.Content>
+          <Item.Header>{this.props.item.title}</Item.Header>
+          <Item.Description>id: {this.props.item.linkId}, count: {this.props.count}</Item.Description>
+          <Item.Extra>
+            {this.props.loggedUser !== null
+              ? <Popup
+                  trigger={<Button title='Add to' compact color='blue' icon floated='right'>
+                      <Icon name='add' size='large' />
+                    </Button>}
+                  content={<AddToUserLinksButtons link={this.props.item} />}
+                  position='top right'
+                  on='click'
+                  hideOnScroll
+                />
+              : <div></div>
+            }
+          </Item.Extra>
+        </Item.Content>
+      </Item>
     )
   }
 }
-
+/*<Grid.Column>
+  <img onClick={this.playVideo}
+    src={this.props.item.thumbnail}
+    alt={this.props.item.title}
+    style={{cursor: 'pointer', display: 'inline-block'}}
+  />
+  id: {this.props.item.linkId}, title: {this.props.item.title}, count: {this.props.count}
+  {this.props.loggedUser !== null
+    ? <AddToUserLinksButtons link={this.props.item} />
+    : <div></div>
+  }
+</Grid.Column>*/
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser

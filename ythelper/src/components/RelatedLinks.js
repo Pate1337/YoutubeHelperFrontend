@@ -64,6 +64,7 @@ class RelatedLinks extends React.Component {
   }
 
   render() {
+    console.log('Rendering RelatedLinks')
     const onTop = {
       position: 'relative',
       zIndex: 1
@@ -88,12 +89,12 @@ class RelatedLinks extends React.Component {
       const totalPages = Math.ceil(linksToShow.length / 20)
       let startIndex = 0
       if (this.state.activePage > 1) {
-        startIndex = (this.state.activePage - 1) * 20 - 1
+        startIndex = (this.state.activePage - 1) * 20
       }
       let linksAtPage = []
       let i = 0
       while (i < 20) {
-        if (startIndex === linksToShow.length - 1 || linksToShow.length === 0) {
+        if (startIndex === linksToShow.length || linksToShow.length === 0) {
           break
         }
         linksAtPage.push(linksToShow[startIndex])

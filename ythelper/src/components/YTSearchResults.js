@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import YTSearchResult from './YTSearchResult'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Item } from 'semantic-ui-react'
 
 class YTSearchResults extends React.Component {
 
@@ -10,9 +10,11 @@ class YTSearchResults extends React.Component {
     return (
       <Grid>
         <Grid.Column>
-          {this.props.ytSearchResults.map(r =>
-            <YTSearchResult key={r.linkId} item={r} />
-          )}
+          <Item.Group divided unstackable>
+            {this.props.ytSearchResults.map(r =>
+              <YTSearchResult key={r.linkId} item={r} />
+            )}
+          </Item.Group>
         </Grid.Column>
       </Grid>
     )

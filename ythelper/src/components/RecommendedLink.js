@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Dimmer, Icon, Image, Item, Button, Popup } from 'semantic-ui-react'
+import { Dimmer, Icon, Image, Item, Button, Popup, Segment } from 'semantic-ui-react'
 
 class RecommendedLink extends React.Component {
   constructor() {
@@ -38,13 +38,11 @@ class RecommendedLink extends React.Component {
   render() {
     const active = this.state.active
     const content = (
-      <div>
-        <Icon name='play' size='huge' />
-      </div>
+      <Icon name='play' size='huge' />
     )
     return (
       <Item>
-        <div style={{marginRight: '10px'}}>
+        <Item.Image style={{width: '124px'}}>
           <Dimmer.Dimmable
             as={Image}
             dimmed={active}
@@ -55,7 +53,7 @@ class RecommendedLink extends React.Component {
             onClick={this.playVideo}
             style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
           />
-        </div>
+        </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.recommend.title}</Item.Header>
           <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
@@ -75,7 +73,7 @@ class RecommendedLink extends React.Component {
     )
   }
 }
-
+/*<div style={{marginRight: '10px', height: '95px', width: '124px'}}>*/
 const mapDispatchToProps = {
   setPlayingVideo,
   clearPlayingPlaylist

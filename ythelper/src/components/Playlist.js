@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PlaylistLink from './PlaylistLink'
+import { Grid, Item } from 'semantic-ui-react'
 
 class Playlist extends React.Component {
   constructor() {
@@ -19,15 +20,19 @@ class Playlist extends React.Component {
   render() {
     console.log('Rendering Playlist')
     return (
-      <div>
-        <div onClick={this.toggleVisibility} style={{cursor: 'pointer', display: 'inline-block'}}>
-          <h3>{this.props.playlist.title} </h3> links: {this.props.playlist.links.length}
-        </div>
-        {(this.state.showPlaylistLinks && this.props.playlist.links.length !== 0)
-          ? this.props.playlist.links.map(l => <PlaylistLink key={l._id} link={l} playlist={this.props.playlist} />)
-          : <div></div>
-        }
-      </div>
+      <Grid>
+        <Grid.Column>
+          <div onClick={this.toggleVisibility} style={{cursor: 'pointer', display: 'inline-block'}}>
+            <h3>{this.props.playlist.title} </h3> links: {this.props.playlist.links.length}
+          </div>
+          <Item.Group divided unstackable>
+            {(this.state.showPlaylistLinks && this.props.playlist.links.length !== 0)
+              ? this.props.playlist.links.map(l => <PlaylistLink key={l._id} link={l} playlist={this.props.playlist} />)
+              : <div></div>
+            }
+          </Item.Group>
+        </Grid.Column>
+      </Grid>
     )
   }
 }
