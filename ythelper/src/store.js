@@ -12,6 +12,7 @@ import commentReducer from './reducers/commentReducer'
 import videoPlayingReducer from './reducers/videoPlayingReducer'
 import menuReducer from './reducers/menuReducer'
 import notificationReducer from './reducers/notificationReducer'
+import autocompleteReducer from './reducers/autocompleteReducer'
 
 const reducer = combineReducers({
   users: userReducer,
@@ -25,7 +26,8 @@ const reducer = combineReducers({
   userComments: commentReducer,// tää reduceri pitää korjata
   playingVideo: videoPlayingReducer,
   activeItem: menuReducer,
-  notification: notificationReducer
+  notification: notificationReducer,
+  autocomplete: autocompleteReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

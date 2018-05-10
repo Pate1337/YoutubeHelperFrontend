@@ -4,6 +4,8 @@ import { searchForVideo } from '../reducers/ytReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { updateSearchBar } from '../reducers/ytSearchBarReducer'
 import { Grid, Form, Button, Dropdown, Icon, Popup } from 'semantic-ui-react'
+import { searchSuggestions, clearAutocomplete } from '../reducers/autocompleteReducer'
+
 
 class YTSearchBar extends React.Component {
   constructor() {
@@ -24,8 +26,13 @@ class YTSearchBar extends React.Component {
     }
   }
 
-  handleSearchFieldChange = (event) => {
+  handleSearchFieldChange = async (event) => {
     this.setState({ [event.target.name]: event.target.value })
+    if (event.target.value !== '') {
+      await this.props.searchSuggestions(event.target.value)
+    } else {
+      await this.props.clearAutocomplete()
+    }
   }
 
   handleDropdownChange = (event, { value }) => {
@@ -93,7 +100,7 @@ class YTSearchBar extends React.Component {
       <Grid style={gridStyle}>
         <Grid.Column>
           <h2>Search from Youtube</h2>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit} autoComplete='off'>
             <Form.Group>
               <div style={searchBarStyle}>
                 <Form.Input
@@ -149,6 +156,9 @@ class YTSearchBar extends React.Component {
               </div>
             </Form.Group>
           </Form>
+          <div style={{borderStyle: 'solid', width: '55%'}}>
+            {this.props.autocompleteItems.map((i, index) => <div key={index}>{i}</div>)}
+          </div>
         </Grid.Column>
       </Grid>
     )
@@ -164,14 +174,17 @@ class YTSearchBar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     text: state.ytSearchBar.text,
-    maxResults: state.ytSearchBar.maxResults
+    maxResults: state.ytSearchBar.maxResults,
+    autocompleteItems: state.autocomplete
   }
 }
 
 const mapDispatchToProps = {
   searchForVideo,
   clearSearchResults,
-  updateSearchBar
+  updateSearchBar,
+  searchSuggestions,
+  clearAutocomplete
 }
 
 const ConnectedYTSearchBar = connect(mapStateToProps, mapDispatchToProps)(YTSearchBar)
