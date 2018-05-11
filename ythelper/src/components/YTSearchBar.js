@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { searchForVideo } from '../reducers/ytReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { updateSearchBar } from '../reducers/ytSearchBarReducer'
-import { Grid, Form, Button, Dropdown, Icon, Popup } from 'semantic-ui-react'
+import { Grid, Form, Button, Dropdown, Icon, Popup, List } from 'semantic-ui-react'
 import { searchSuggestions, clearAutocomplete } from '../reducers/autocompleteReducer'
 
 
@@ -22,8 +22,13 @@ class YTSearchBar extends React.Component {
     this.state = {
       text: text,
       maxResults: maxResults,
-      gridStyle: {height: 250}
+      gridStyle: {height: 450},
+      drawMobileSearch: false
     }
+  }
+
+  componentDidMount() {
+    this.props.clearAutocomplete()
   }
 
   handleSearchFieldChange = async (event) => {
@@ -44,7 +49,7 @@ class YTSearchBar extends React.Component {
 
   handleSubmit = (event) => {
     console.log('handleSubmit YTSearchBar')
-    event.preventDefault()
+    /*event.preventDefault()*/
     console.log('maxresults: ' + this.state.maxResults)
     if (this.state.text !== '') {
       /*Kun tulevaisuudessa useampi kenttä, esim. järjestys, hakutulosten määrä..*/
@@ -55,12 +60,14 @@ class YTSearchBar extends React.Component {
       this.props.searchForVideo(searchObject)
       window.localStorage.setItem('ytSearchBar', JSON.stringify(searchObject))
     }
+    this.props.clearAutocomplete()
     this.setState({
-      gridStyle: {}
+      gridStyle: {},
+      drawMobileSearch: false
     })
   }
 
-  clearResults = (event) => {
+  clearResults = async (event) => {
     console.log('clearResults YTSearchBar')
     event.preventDefault()
     this.props.clearSearchResults()
@@ -71,9 +78,34 @@ class YTSearchBar extends React.Component {
     window.localStorage.setItem('ytSearchBar', JSON.stringify(searchObject))
     this.setState({
       text: '',
-      gridStyle: {height: 250}
+      gridStyle: {height: 450}
     })
+    await this.props.clearAutocomplete()
+  }
 
+  handleInputClick = async (event) => {
+    console.log('PAINETTU')
+    await this.props.searchSuggestions(this.state.text)
+    if (window.innerHeight <= 800) {
+      this.setState({
+        drawMobileSearch: true
+      })
+    }
+  }
+
+  handleElsewhereClick = async (event) => {
+    console.log('painettu muualta')
+    await this.props.clearAutocomplete()
+  }
+
+  handleSuggestionClick = async (item) => {
+    console.log('NAME: ' + item)
+    await this.props.clearAutocomplete()
+    this.setState({
+      text: item,
+      drawMobileSearch: false
+    })
+    this.handleSubmit()
   }
 
   render() {
@@ -91,16 +123,33 @@ class YTSearchBar extends React.Component {
     if (searchResultsJSON) {
       gridStyle = {}
     }
+    let mobileSearchStyle = {}
+    if (this.state.drawMobileSearch) {
+      mobileSearchStyle = {
+        position: 'fixed',
+        top: '0%',
+        left: '0%',
+        width: '100%',
+        height: '100%',
+        background: 'white',
+        zIndex: 1002
+      }
+    }
+    let suggestStyle = {borderStyle: 'solid', width: '55%', position: 'absolute', zIndex: 100, background: 'white'}
+    if (this.props.autocompleteItems.length === 0) {
+      suggestStyle = {width: '55%', position: 'absolute', zIndex: 100, background: 'white'}
+    }
     /*if (window.innerWidth <= 750) {*/
       let searchBarStyle = {width: '55%', marginRight: '2px'}
     /*}*/
     const onlyShowOnMobile = { display: (window.innerWidth <= 750) ? '' : 'none'}
     const onlyShowOnComputer = { display: (window.innerWidth > 750) ? '' : 'none'}
     return (
+      <div style={mobileSearchStyle} onClick={this.handleElsewhereClick}>
       <Grid style={gridStyle}>
         <Grid.Column>
           <h2>Search from Youtube</h2>
-          <Form onSubmit={this.handleSubmit} autoComplete='off'>
+          <Form onSubmit={this.handleSubmit} autoComplete='off' style={{marginLeft: '2%'}}>
             <Form.Group>
               <div style={searchBarStyle}>
                 <Form.Input
@@ -110,6 +159,7 @@ class YTSearchBar extends React.Component {
                   onChange={this.handleSearchFieldChange}
                   icon='search'
                   placeholder='Search...'
+                  onClick={this.handleInputClick}
                 />
               </div>
               <Button icon type='submit'>
@@ -156,11 +206,18 @@ class YTSearchBar extends React.Component {
               </div>
             </Form.Group>
           </Form>
-          <div style={{borderStyle: 'solid', width: '55%'}}>
-            {this.props.autocompleteItems.map((i, index) => <div key={index}>{i}</div>)}
+          <div style={suggestStyle}>
+            <List selection verticalAlign='middle'>
+              {this.props.autocompleteItems.map((i, index) =>
+                /*let boundItemClick = this.handleSuggestionClick.bind('MOI')*/
+                <List.Item key={index} onClick={() => this.handleSuggestionClick(i)}>
+                  {i}
+                </List.Item>)}
+            </List>
           </div>
         </Grid.Column>
       </Grid>
+      </div>
     )
   }
 }
