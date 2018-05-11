@@ -16,6 +16,8 @@ class Menu extends React.Component {
     let address = '/' + name
     if (name === 'home') {
       address = '/'
+    } else if (name === 'search' && window.innerHeight <= 800) {
+      address = '/mobileSearch'
     }
     this.props.history.push(address)
   }
@@ -52,7 +54,7 @@ class Menu extends React.Component {
             name='search' active={activeItem === '/search'}
             onClick={this.handleItemClick}
             content={
-              <div title='Search from Youtube'><Icon name='youtube' size='large' /><Icon name='search' size='large' /></div>  
+              <div title='Search from Youtube'><Icon name='youtube' size='large' /><Icon name='search' size='large' /></div>
             }
           />
         </MenuItem>

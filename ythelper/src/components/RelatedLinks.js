@@ -4,6 +4,7 @@ import RecommendedLink from './RecommendedLink'
 import { Link } from 'react-router-dom'
 import { Item, Sticky, Grid, Input, Segment, Pagination, Icon, Button } from 'semantic-ui-react'
 import { sortRelatedsByName, sortRelatedsByCount } from '../reducers/userLinksReducer'
+import { setActiveItem } from '../reducers/menuReducer'
 
 class RelatedLinks extends React.Component {
   constructor() {
@@ -12,6 +13,10 @@ class RelatedLinks extends React.Component {
       filter: '',
       activePage: 1
     }
+  }
+
+  componentDidMount() {
+    this.props.setActiveItem('/recommended')
   }
 
   handleContextRef = contextRef => this.setState({ contextRef })
@@ -188,7 +193,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   sortRelatedsByName,
-  sortRelatedsByCount
+  sortRelatedsByCount,
+  setActiveItem
 }
 
 const ConnectedRelatedLinks = connect(mapStateToProps, mapDispatchToProps)(RelatedLinks)

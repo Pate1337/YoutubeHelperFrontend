@@ -3,9 +3,15 @@ import { connect } from 'react-redux'
 import Youtube from 'react-youtube'
 import RecommendedLink from './RecommendedLink'
 import { Item, Grid } from 'semantic-ui-react'
+import { setActiveItem } from '../reducers/menuReducer'
 
 class Home extends React.Component {
 
+
+  componentDidMount() {
+    this.props.setActiveItem('/')
+  }
+  
   render() {
     return (
       <div style={{marginTop: '10px'}}>
@@ -42,6 +48,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-const ConnectedHome = connect(mapStateToProps)(Home)
+const mapDispatchToProps = {
+  setActiveItem
+}
+
+const ConnectedHome = connect(mapStateToProps, mapDispatchToProps)(Home)
 
 export default ConnectedHome

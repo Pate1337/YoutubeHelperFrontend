@@ -82,6 +82,8 @@ class App extends React.Component {
                       render={() => <RelatedLinks />} />
                     <Route path='/users'
                       render={() => <Users />} />
+                    <Route path='/mobileSearch'
+                      render={({history}) => <YTSearchBar history={history} />} />
                     <Route path='/search'
                       render={() => <YTSearchBar />} />
                     <Route path='/search'

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import FavouriteLink from './FavouriteLink'
 import { Link } from 'react-router-dom'
 import { Grid, Item } from 'semantic-ui-react'
+import { setActiveItem } from '../reducers/menuReducer'
 
 class FavouriteLinks extends React.Component {
   constructor() {
@@ -10,6 +11,10 @@ class FavouriteLinks extends React.Component {
     this.state = {
       showFavourites: false
     }
+  }
+
+  componentDidMount() {
+    this.props.setActiveItem('/myFavourites')
   }
 
   render() {
@@ -57,6 +62,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-const ConnectedFavouriteLinks = connect(mapStateToProps)(FavouriteLinks)
+const mapDispatchToProps = {
+  setActiveItem
+}
+
+const ConnectedFavouriteLinks = connect(mapStateToProps, mapDispatchToProps)(FavouriteLinks)
 
 export default ConnectedFavouriteLinks

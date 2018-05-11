@@ -1,10 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Grid } from 'semantic-ui-react'
+import { setActiveItem } from '../reducers/menuReducer'
+import { connect } from 'react-redux'
 
 class Welcome extends React.Component {
 
+  componentDidMount() {
+    this.props.setActiveItem('/')
+  }
+
   render() {
+    console.log('Rendering Welcome')
     return (
       <Grid>
         <Grid.Column>
@@ -23,4 +30,11 @@ class Welcome extends React.Component {
   }
 }
 
-export default Welcome
+const mapDispatchToProps = {
+  setActiveItem
+}
+
+const ConnectedWelcome = connect(null, mapDispatchToProps)(Welcome)
+
+
+export default ConnectedWelcome

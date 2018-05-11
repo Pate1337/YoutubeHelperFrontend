@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Comments from './Comments'
 import { allUsersComments } from '../reducers/commentReducer'
 import { Grid } from 'semantic-ui-react'
+import { setActiveItem } from '../reducers/menuReducer'
 
 class Users extends React.Component {
   constructor() {
@@ -10,6 +11,10 @@ class Users extends React.Component {
     this.state = {
       userToShow: null
     }
+  }
+
+  componentDidMount() {
+    this.props.setActiveItem('/users')
   }
 
   showUser = async (id, event) => {
@@ -82,7 +87,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   //uutta
-  allUsersComments
+  allUsersComments,
+  setActiveItem
 }
 const ConnectedUsers = connect(mapStateToProps, mapDispatchToProps)(Users)
 
