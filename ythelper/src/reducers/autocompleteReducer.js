@@ -13,14 +13,11 @@ const autocompleteReducer = (store = [], action) => {
 
 export const searchSuggestions = (query) => {
   const formatItem = (item) => {
-    console.log('item[0]: ' + item[0])
     return item[0]
   }
   return async (dispatch) => {
     const result = await autocompleteService.search(query)
-    console.log('RESULTTI: ' + result)
     const strings = result[1]
-    console.log('STRINGS: ' + strings)
     const formattedItems = strings.map(i => formatItem(i))
     dispatch({
       type: 'SEARCH_AUTOCOMPLETE',

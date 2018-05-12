@@ -11,7 +11,7 @@ const ytRelatedVideosReducer = (store = [], action) => {
 
 export const searchForRelatedVideos = (videoId) => {
   console.log('searchForRelatedVideos ytReducer')
-  const query = `part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=20`
+  const query = `search?part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=20`
   /*formatItem tähän*/
   const formatItem = (item) => {
     return {

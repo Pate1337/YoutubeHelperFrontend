@@ -118,7 +118,7 @@ class VideoPlayer extends React.Component {
   render() {
     if (this.props.link !== null) {
       console.log('Rendering VideoPlayer')
-      const margin = {marginBottom: '10px'}
+      const margin = {marginBottom: '20px'}
       const notShowingInMobilePopup = { display: (window.innerWidth <= 750 && this.state.popup) ? 'none' : ''}
       const showInPopup = { display: (this.state.popup) ? '' : 'none' }
       const onlyShowOnBigPlayer = { display: (!this.state.popup) ? '' : 'none' }

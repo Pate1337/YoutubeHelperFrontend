@@ -157,64 +157,64 @@ class YTSearchBar extends React.Component {
     const onlyShowOnMobile = { display: (window.innerHeight <= 800) ? '' : 'none'}
     const onlyShowOnComputer = { display: (window.innerHeight > 800) ? '' : 'none'}
     if (this.props.history === undefined) {
-    return (
-      <div onClick={this.handleElsewhereClick} style={onlyShowOnComputer}>
-      <Grid style={gridStyle}>
-        <Grid.Column>
-          <h2>Search from Youtube</h2>
-          <Form onSubmit={this.handleSubmit} autoComplete='off' style={{marginLeft: '2%'}}>
-            <Form.Group>
-              <div style={searchBarStyle}>
-                <Form.Input
-                  type='text'
-                  name='text'
-                  value={this.state.text}
-                  onChange={this.handleSearchFieldChange}
-                  icon='search'
-                  placeholder='Search...'
-                  onClick={this.handleInputClick}
-                />
-              </div>
-              <Button icon type='submit'>
-                <Icon name='search' />
-              </Button>
-              <Button title='Clear search results' icon type='button' onClick={this.clearResults}>
-                <Icon name='undo' />
-              </Button>
-              <div style={onlyShowOnComputer}>
-                <Form.Select
-                  inline
-                  compact
-                  label='Max results:'
-                  onChange={this.handleDropdownChange}
-                  options={options}
-                  selection
-                  value={maxResults}
-                  name='maxResults'
-                />
-              </div>
+      return (
+        <div onClick={this.handleElsewhereClick} style={onlyShowOnComputer}>
+        <Grid style={gridStyle}>
+          <Grid.Column>
+            <h2>Search from Youtube</h2>
+            <Form onSubmit={this.handleSubmit} autoComplete='off' style={{marginLeft: '2%'}}>
+              <Form.Group>
+                <div style={searchBarStyle}>
+                  <Form.Input
+                    type='text'
+                    name='text'
+                    value={this.state.text}
+                    onChange={this.handleSearchFieldChange}
+                    icon='search'
+                    placeholder='Search...'
+                    onClick={this.handleInputClick}
+                  />
+                </div>
+                <Button icon type='submit'>
+                  <Icon name='search' />
+                </Button>
+                <Button title='Clear search results' icon type='button' onClick={this.clearResults}>
+                  <Icon name='undo' />
+                </Button>
+                <div style={onlyShowOnComputer}>
+                  <Form.Select
+                    inline
+                    compact
+                    label='Max results:'
+                    onChange={this.handleDropdownChange}
+                    options={options}
+                    selection
+                    value={maxResults}
+                    name='maxResults'
+                  />
+                </div>
 
-            </Form.Group>
-          </Form>
-          <div style={suggestStyle}>
-            <List selection verticalAlign='middle'>
-              {this.props.autocompleteItems.map((i, index) =>
-                /*let boundItemClick = this.handleSuggestionClick.bind('MOI')*/
-                <List.Item key={index} onClick={() => this.handleSuggestionClick(i)}>
-                  {i}
-                </List.Item>)}
-            </List>
-          </div>
-        </Grid.Column>
-      </Grid>
+              </Form.Group>
+            </Form>
+            <div style={suggestStyle}>
+              <List selection verticalAlign='middle'>
+                {this.props.autocompleteItems.map((i, index) =>
+                  /*let boundItemClick = this.handleSuggestionClick.bind('MOI')*/
+                  <List.Item key={index} onClick={() => this.handleSuggestionClick(i)}>
+                    {i}
+                  </List.Item>)}
+              </List>
+            </div>
+          </Grid.Column>
+        </Grid>
       </div>
     )
   } else {
     return (
       <div style={mobileSearchStyle}>
-      <Grid style={gridStyle}>
+      <Grid>
         <Grid.Column>
-          <Segment inverted>
+          <Segment basic inverted color='black'>
           <Form onSubmit={this.handleSubmit} autoComplete='off' style={{marginLeft: '2%'}}>
             <Form.Group>
               <Button icon type='button' onClick={this.goBack}>

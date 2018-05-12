@@ -23,23 +23,37 @@ export const searchForVideo = (searchObject) => {
   esim. q=. Tässä vaiheessa kuitenkin pelkkää hakukenttää voidaan muuttaa.*/
   const q = searchObject.text
   const maxResults = searchObject.maxResults
-  const query = `part=snippet&q=${q}&type=video&maxResults=${maxResults}`
+  const query = `search?part=snippet&q=${q}&type=video&maxResults=${maxResults}`
   /*formatItemissä nyt vaan pari hassua kohtaa*/
   const formatItem = (item) => {
     return {
       linkId: item.id.videoId,
       title: item.snippet.title,
-      thumbnail: item.snippet.thumbnails.default.url
+      thumbnail: item.snippet.thumbnails.default.url,
+      published: item.snippet.publishedAt
     }
   }
   return async (dispatch) => {
     const result = await youtubeService.search(query)
     const items = result.items
     const formattedItems = items.map(i => formatItem(i))
+    let size = formattedItems.length
+    let idQuery = null
+    for (let i = 0; i < size; i++) {
+      if (idQuery === null) {
+        idQuery = formattedItems[i].linkId + '%2C+'
+      } else if (i === (size - 1)) {
+        idQuery = idQuery + formattedItems[i].linkId
+      } else {
+        idQuery = idQuery + formattedItems[i].linkId + '%2C+'
+      }
+    }
+    const viewQuery = `videos?part=statistics&id=${idQuery}`
+    const viewResults = await youtubeService.search(viewQuery)
+    for (let i = 0; i < size; i++) {
+      formattedItems[i].views = viewResults.items[i].statistics.viewCount
+    }
 
-    /*Tallennetaan localStorageen, jotta hakutulokset säilyvät kun
-    sivu refreshataan. Koska näitä ei siis tallenneta missään vaiheessa
-    tietokantaan. (siksi localStorage)*/
     window.localStorage.setItem('ytSearchResults', JSON.stringify(formattedItems))
 
     dispatch({
@@ -54,6 +68,7 @@ export const searchResultInitialization = () => {
   return async (dispatch) => {
     const searchResultsJSON = window.localStorage.getItem('ytSearchResults')
     if (searchResultsJSON) {
+      console.log('SEARCH RESULTTEJA ON!!')
       const searchResults = JSON.parse(searchResultsJSON)
       dispatch({
         type: 'INIT_RESULTS',

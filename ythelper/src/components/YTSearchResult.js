@@ -35,6 +35,16 @@ class YTSearchResult extends React.Component {
     const content = (
       <Icon name='play' size='huge' />
     )
+    let published = null
+    if (this.props.item.published !== undefined) {
+    for (let i = 0; i < 10; i++) {
+      if (published === null) {
+        published = this.props.item.published[i]
+      } else {
+        published = published + this.props.item.published[i]
+      }
+    }
+    }
     return (
       <Item>
         <Item.Image style={{width: '124px'}}>
@@ -51,7 +61,9 @@ class YTSearchResult extends React.Component {
         </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.item.title}</Item.Header>
-          <Item.Description>id: {this.props.item.linkId}, count: {this.props.count}</Item.Description>
+          <Item.Description>id: {this.props.item.linkId}</Item.Description>
+          <Item.Description>Published: {published}</Item.Description>
+          <Item.Description>Views: {this.props.item.views}</Item.Description>
           <Item.Extra>
             {this.props.loggedUser !== null
               ? <Popup
