@@ -27,7 +27,7 @@ class Menu extends React.Component {
     const activeItem = this.props.activeItem
     console.log('activeItem: ' + activeItem)
     return (
-      <Segment inverted>
+      <Segment basic inverted>
         <MenuItem inverted pointing secondary widths={4}>
           <MenuItem.Item
             name='home' active={activeItem === '/'}

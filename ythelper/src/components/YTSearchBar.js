@@ -33,6 +33,9 @@ class YTSearchBar extends React.Component {
       this.props.setActiveItem('/search')
     } else {
       this.props.setActiveItem('/mobileSearch')
+      this.setState({
+        text: ''
+      })
     }
   }
 
@@ -171,7 +174,7 @@ class YTSearchBar extends React.Component {
                     value={this.state.text}
                     onChange={this.handleSearchFieldChange}
                     icon='search'
-                    placeholder='Search...'
+                    placeholder='Search from Youtube...'
                     onClick={this.handleInputClick}
                   />
                 </div>
@@ -222,12 +225,13 @@ class YTSearchBar extends React.Component {
               </Button>
               <div style={searchBarStyle}>
                 <Form.Input
+                  autoFocus
                   type='text'
                   name='text'
                   value={this.state.text}
                   onChange={this.handleSearchFieldChange}
                   icon='search'
-                  placeholder='Search...'
+                  placeholder='Search from Youtube...'
                   onClick={this.handleInputClick}
                 />
               </div>
@@ -258,7 +262,7 @@ class YTSearchBar extends React.Component {
             </Form.Group>
           </Form>
           </Segment>
-          <div style={{width: '100%', height: '50%', zIndex: 100, background: 'white', overflow: 'auto'}}>
+          <div style={{width: '100%', height: '48%', zIndex: 100, background: 'white', overflow: 'auto'}}>
 
             <List selection verticalAlign='middle'>
               {this.props.autocompleteItems.map((i, index) =>
