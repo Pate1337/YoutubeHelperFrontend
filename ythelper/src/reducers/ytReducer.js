@@ -12,7 +12,6 @@ const ytReducer = (store = [], action) => {
       console.log('CLEAR_RESULTS ytReducer')
       return []
     default:
-      console.log('default ytReducer')
       return store
   }
 }

@@ -13,7 +13,6 @@ const loggedUserReducer = (state = null, action) => {
       console.log('LOGOUT loggedUserReducer')
       return null
     default:
-      console.log('default loggedUserReducer')
       return state
   }
 }

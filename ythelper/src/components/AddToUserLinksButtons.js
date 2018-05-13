@@ -8,6 +8,7 @@ import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Button, Icon } from 'semantic-ui-react'
 import { setNotification, hideNotification } from '../reducers/notificationReducer'
+import { initPlayingPlaylist, play } from '../reducers/playlistPlayingReducer'
 
 class AddToUserLinksButtons extends React.Component {
   constructor() {
@@ -27,24 +28,43 @@ class AddToUserLinksButtons extends React.Component {
 
   handleFavourite = async () => {
     console.log('this.props.serverOnUse: ' + this.props.serverOnUse)
-    this.setState({
-      showFavourite: false
-    })
-    const timer = setInterval(() => {
+    if (!this.props.serverOnUse) {
+      this.setState({
+        showFavourite: false
+      })
+      await this.props.serverSetOnUse()
+      this.addToFavourites()
+    } else {
+      await this.props.setNotification(`${this.props.link.title} was not added to favourites`, 'Try again later', 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification(`${this.props.link.title} was not added to favourites`)
+      }, 4000)
+    }
+
+    /*const timer = setInterval(() => {
       console.log('intervallia')
       if (!this.props.serverOnUse) {
         this.addToFavourites()
         clearInterval(timer)
       }
-    }, 1000)
+    }, 1000)*/
   }
 
   handlePlaylist = async (event) => {
     const id = event.target.id
-    this.setState({
-      clickedPlaylistId: id
-    })
-    console.log('this.props.serverOnUse: ' + this.props.serverOnUse)
+    if (!this.props.serverOnUse) {
+      this.setState({
+        clickedPlaylistId: id
+      })
+      await this.props.serverSetOnUse()
+      this.addToPlaylist(id)
+    } else {
+      await this.props.setNotification(`${this.props.link.title} was not added to playlist`, 'Try again later', 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification(`${this.props.link.title} was not added to playlist`)
+      }, 4000)
+    }
+    /*console.log('this.props.serverOnUse: ' + this.props.serverOnUse)
     const timer = setInterval(() => {
       const playlistId = id
       console.log('intervallia')
@@ -52,11 +72,11 @@ class AddToUserLinksButtons extends React.Component {
         this.addToPlaylist(playlistId)
         clearInterval(timer)
       }
-    }, 1000)
+    }, 1000)*/
   }
 
   addToFavourites = async () => {
-    await this.props.serverSetOnUse()
+    /*await this.props.serverSetOnUse()*/
     console.log('addToFavourites YTSearchResult')
     /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     let isRelated = false
@@ -71,6 +91,7 @@ class AddToUserLinksButtons extends React.Component {
       } else {
         /*Käyttäjän relatedeista pitää poistaa kyseinen linkki.*/
         isRelated = true
+        console.log('Linkki oli related')
         /*Tää toimii*/
       }
       /*Tarkistetaan, onko jo suosikeissa*/
@@ -81,6 +102,7 @@ class AddToUserLinksButtons extends React.Component {
         console.log('EI OLE FAVORITEISSA')
       } else {
         isFavourited = true
+        console.log('linkki oli jo favouriteissa')
       }
     }
 
@@ -97,8 +119,8 @@ class AddToUserLinksButtons extends React.Component {
         await this.props.hideNotification(`${linkObject.title} added to favourites`)
       }, 4000)
 
-      console.log('lisätty')
-      await this.props.usersInitialization()
+      console.log('linkki lisätty favouritteihin')
+      /*await this.props.usersInitialization()*/
       if (isRelated) {
         await this.props.removeRelatedFromUser(linkExists[0].link._id)
         /*while (remResponse === 'error') {
@@ -109,35 +131,42 @@ class AddToUserLinksButtons extends React.Component {
       }
       /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
       voidaan hakea kyseisen videon related videos.*/
-      await this.props.searchForRelatedVideos(linkObject.linkId)
-      const relatedLinks = this.props.relatedLinks
+      const relatedLinks = await this.props.searchForRelatedVideos(linkObject.linkId)
+      /*const relatedLinks = this.props.relatedLinks*/
 
+      console.log('Haettujen related linkkien pituus: ' + relatedLinks.length)
       let linksToAdd = []
       let updateCounts = []
-      let found = false
+      console.log('Käydään läp ikaikki related linkit')
       for (let i = 0; i < relatedLinks.length; i++) {
         const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
 
         if (favourites !== undefined) {
+          console.log('Uusi related löytyi favouriteista')
           /*Tällöin linkkiä ei haluta lisätä related*/
           continue
         }
+        let found = false
         for (let j = 0; j < this.props.playlists.length; j++) {
           let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
           if (playlists !== undefined) {
+            console.log('Uusi related oli jo soittolistassa')
             found = true
             /*Tällä playlistillä oli kyseinen linkki.*/
           }
           if (found) {
+            console.log('Koska uusi related oli jo playlistillä, ei tarvi käydä muita soittolistoja läpi')
             break
           }
         }
         if (found) {
+          console.log('Koska uusi related oli playlistillä, käydään läpi uusi related')
           /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
           continue
         }
         const usersRelated = this.props.usersRelated.find(l => l.link.linkId === relatedLinks[i].linkId)
         if (usersRelated !== undefined) {
+          console.log('Uusi related löytyi jo relatedeista, joten lisätään counttia')
           /*Kyseinen related oli jo käyttäjän relatedLinkeissä*/
           /*Tää pitää tallentaa, jotta saadaan countti päivitettyä*/
           /*let resp = await this.props.updateRelatedCount(usersRelated)
@@ -151,6 +180,7 @@ class AddToUserLinksButtons extends React.Component {
         /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
         relatedLinkseihin*/
         linksToAdd.push(relatedLinks[i])
+        console.log('Uusi related laitetaan relatedeihin')
       }
       console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
       console.log('updateCounts: ' + updateCounts.length)
@@ -177,7 +207,7 @@ class AddToUserLinksButtons extends React.Component {
 
   addToPlaylist = async (plistId) => {
     /*Backend on kunnossa*/
-    await this.props.serverSetOnUse()
+    /*await this.props.serverSetOnUse()*/
     console.log('addToPlaylist YTSearchResult')
     /*Tarkistetaan, onko linkki jo käyttäjän related.*/
     let isRelated = false
@@ -206,14 +236,22 @@ class AddToUserLinksButtons extends React.Component {
         await this.props.hideNotification(`${linkObject.title} added to playlist`)
       }, 4000)
       /*Pitää lisätä myös playingPlaylistille*/
+      let playlist = null
       if (this.props.playingPlaylist.playlist !== null &&
         playlistId === this.props.playingPlaylist.playlist._id) {
         /*TÄÄLLÄ MOKA, linkObjectilla ei edes ole _id:tä!!*/
         /*Pitää siis hakea äsken lisätty linkki ja lisätä se
         playingPlaylistille*/
-        const playlist = this.props.playlists.find(p => p._id === playlistId)
+        playlist = this.props.playlists.find(p => p._id === playlistId)
         const link = playlist.links[playlist.links.length - 1]
         await this.props.addToPlayingPlaylist(link)
+      } else if (this.props.playingPlaylist.playlist === null) {
+        playlist = this.props.playlists.find(p => p._id === playlistId)
+        await this.props.initPlayingPlaylist(playlist)
+        const index = playlist.links
+          .findIndex(l => linkObject.linkId === l.linkId)
+        console.log('indeksi on: ' + index)
+        await this.props.play(index)
       }
 
       if (isRelated) {
@@ -222,20 +260,22 @@ class AddToUserLinksButtons extends React.Component {
       }
       /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
       voidaan hakea kyseisen videon related videos.*/
-      await this.props.searchForRelatedVideos(linkObject.linkId)
-      const relatedLinks = this.props.relatedLinks
+      const relatedLinks = await this.props.searchForRelatedVideos(linkObject.linkId)
+      /*const relatedLinks = this.props.relatedLinks*/
       console.log('Yotuube apista tulleet linkit: ' + relatedLinks.length)
       /*console.log('relatedVideos.length: ' + relatedLinks.length)*/
       let linksToAdd = []
       let updateCounts = []
-      let found = false
+      console.log('Käydään läpi related linkit')
       for (let i = 0; i < relatedLinks.length; i++) {
         const favourites = this.props.favourites.find(f => f.linkId === relatedLinks[i].linkId)
         /*favourites = undefined kun ei löydä mitään.*/
         if (favourites !== undefined) {
+          console.log('related oli suosikeissa')
           /*Tällöin linkkiä ei haluta lisätä related*/
           continue
         }
+        let found = false
         for (let j = 0; j < this.props.playlists.length; j++) {
           let playlists = this.props.playlists[j].links.find(l => l.linkId === relatedLinks[i].linkId)
           if (playlists !== undefined) {
@@ -247,6 +287,7 @@ class AddToUserLinksButtons extends React.Component {
           }
         }
         if (found) {
+          console.log('related oli soittolistalla')
           /*Jos jollain playlistillä oli linkki, hypätän seuraavan related*/
           continue
         }
@@ -262,6 +303,7 @@ class AddToUserLinksButtons extends React.Component {
         /*Jos päästään tänne asti, niin linkki voidaan lisätä käyttäjän
         relatedLinkseihin*/
         linksToAdd.push(relatedLinks[i])
+        console.log('lisätään related telatedeihin')
       }
       console.log('Kaikkien jälkeen linksToAdd.length: ' + linksToAdd.length)
       console.log('Countti päivitetään: ' + updateCounts.length)
@@ -292,13 +334,13 @@ class AddToUserLinksButtons extends React.Component {
       <div style={{width: '210px'}}>
         <h4>Add to</h4>
         <Button.Group vertical fluid basic color='blue'>
-          <Button color='blue' icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
+          <Button disabled={this.props.serverOnUse} color='blue' icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
             <Icon name='favorite' />
             Favourites
           </Button>
           {(this.props.availablePlaylists.length !== 0)
             ? this.props.availablePlaylists.map(p =>
-              <Button color='blue' icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}
+              <Button disabled={this.props.serverOnUse} color='blue' icon labelPosition='left' key={p._id} id={p._id} onClick={this.handlePlaylist}
                 style={{display: (this.state.clickedPlaylistId === p._id) ? 'none' : ''}}>
                 <Icon name='list' />
                 {p.title}
@@ -441,7 +483,9 @@ const mapDispatchToProps = {
   addLinkToPlaylist,
   addToPlayingPlaylist,
   setNotification,
-  hideNotification
+  hideNotification,
+  initPlayingPlaylist,
+  play
 }
 
 const ConnectedAddToUserLinksButton = connect(mapStateToProps, mapDispatchToProps)(AddToUserLinksButtons)

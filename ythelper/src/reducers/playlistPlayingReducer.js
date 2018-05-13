@@ -86,7 +86,6 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
         index: state.index
       }
     default:
-      console.log('default playlistPlayingReducer')
       return state
   }
 }

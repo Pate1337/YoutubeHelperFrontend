@@ -4,7 +4,6 @@ const menuReducer = (state = window.location.pathname, action) => {
       console.log('menuReducer active: ' + action.data)
       return action.data
     default:
-      console.log('DEFAULTTI menuReducer: ' + state)
       return state
   }
 }

@@ -10,7 +10,6 @@ const userReducer = (store = [], action) => {
       console.log('Uuden käyttäjän lisäys userReducer')
       return [...store, action.data]
     default:
-      console.log('default in userReducer')
       return store
   }
 }
