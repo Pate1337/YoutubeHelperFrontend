@@ -55,17 +55,19 @@ class Comments extends React.Component {
 
   render() {
     console.log('Rendering CommentS')
+    console.log(this.props.comments)
     console.log(this.props.cuser, ' ', this.props.cuser.id, ' ', this.props.cuser._id)
     console.log(this.props.cuser)
     if(this.state.showComments) {
       console.log('RENDERING COMMENTS -- ', this.props.userComments)
       console.log('COMMENTS ', this.props.userComments.rComments)
+      console.log('---')
       return (
         <div>
           <h3 onClick={this.toggleVisibility}>Comments (click to hide)</h3>
           <p>Testing</p>
-          {this.props.userComments.rComments.map(link =>
-            <Comment />
+          {this.props.userComments.rComments.map(comment =>
+            <Comment key={comment._id} received={comment.content}/>
           )}
             
           <form onSubmit={this.handleComment}>

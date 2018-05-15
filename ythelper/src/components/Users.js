@@ -9,7 +9,8 @@ class Users extends React.Component {
   constructor() {
     super()
     this.state = {
-      userToShow: null
+      userToShow: null,
+      comments: null
     }
   }
 
@@ -20,10 +21,11 @@ class Users extends React.Component {
   showUser = async (id, event) => {
     event.preventDefault()
     console.log('Users.js lista onclickin id:', id)
-    await allUsersComments(id)
+    const allcomments = await this.props.allUsersComments(id)
     //console.log('USERS - ', result)
     this.setState({
-      userToShow: id
+      userToShow: id,
+      comments: allcomments
     })
   }
 
@@ -53,7 +55,7 @@ class Users extends React.Component {
 
             <h3>Näytettävä Käyttäjä</h3>
             <p>{this.state.userToShow}</p>
-            <Comments cuser={this.state.userToShow}/>
+            <Comments cuser={this.state.userToShow} comments={this.state.comments} comm/>
             <button onClick={this.hideUser}>Piilota</button>
           </Grid.Column>
         </Grid>
