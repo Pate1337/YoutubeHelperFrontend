@@ -131,7 +131,7 @@ class AddToUserLinksButtons extends React.Component {
       }
       /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
       voidaan hakea kyseisen videon related videos.*/
-      const relatedLinks = await this.props.searchForRelatedVideos(linkObject.linkId)
+      const relatedLinks = await this.props.searchForRelatedVideos(linkObject.linkId, 10)
       /*const relatedLinks = this.props.relatedLinks*/
 
       console.log('Haettujen related linkkien pituus: ' + relatedLinks.length)
@@ -260,7 +260,7 @@ class AddToUserLinksButtons extends React.Component {
       }
       /*Tässä vaiheessa, kun tiedetään että linkin lisääminen on onnistunut,
       voidaan hakea kyseisen videon related videos.*/
-      const relatedLinks = await this.props.searchForRelatedVideos(linkObject.linkId)
+      const relatedLinks = await this.props.searchForRelatedVideos(linkObject.linkId, 10)
       /*const relatedLinks = this.props.relatedLinks*/
       console.log('Yotuube apista tulleet linkit: ' + relatedLinks.length)
       /*console.log('relatedVideos.length: ' + relatedLinks.length)*/

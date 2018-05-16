@@ -18,7 +18,7 @@ class RecommendedLink extends React.Component {
   playVideo = async () => {
     await this.props.setPlayingVideo(this.props.recommend)
     await this.props.clearPlayingPlaylist()
-    await this.props.searchForRelatedVideos(this.props.recommend.linkId)
+    await this.props.searchForRelatedVideos(this.props.recommend.linkId, 50)
   }
 
   toggleButtons = () => {
@@ -42,6 +42,7 @@ class RecommendedLink extends React.Component {
     const content = (
       <Icon name='play' size='huge' />
     )
+    const onlyForUsers = { display: (this.props.loggedUser !== null) ? '' : 'none'}
     return (
       <Item>
         <Item.Image style={{width: '124px'}}>
@@ -59,7 +60,7 @@ class RecommendedLink extends React.Component {
         <Item.Content>
           <Item.Header>{this.props.recommend.title}</Item.Header>
           <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
-          <Item.Extra>
+          <Item.Extra style={onlyForUsers}>
             <Popup
               trigger={<Button title='Add to' compact color='blue' icon floated='right' onClick={this.toggleButtons}>
                   <Icon name='add' size='large' />
@@ -76,12 +77,17 @@ class RecommendedLink extends React.Component {
   }
 }
 /*<div style={{marginRight: '10px', height: '95px', width: '124px'}}>*/
+const mapStateToProps = (state) => {
+  return {
+    loggedUser: state.loggedUser
+  }
+}
 const mapDispatchToProps = {
   setPlayingVideo,
   clearPlayingPlaylist,
   searchForRelatedVideos
 }
 
-const ConnectedRecommendedLink = connect(null, mapDispatchToProps)(RecommendedLink)
+const ConnectedRecommendedLink = connect(mapStateToProps, mapDispatchToProps)(RecommendedLink)
 
 export default ConnectedRecommendedLink

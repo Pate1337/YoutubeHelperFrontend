@@ -9,9 +9,9 @@ const ytRelatedVideosReducer = (store = [], action) => {
   }
 }
 
-export const searchForRelatedVideos = (videoId) => {
+export const searchForRelatedVideos = (videoId, maxResults) => {
   console.log('searchForRelatedVideos ytReducer')
-  const query = `search?part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=10`
+  const query = `search?part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=${maxResults}`
   /*formatItem tähän*/
   const formatItem = (item) => {
     console.log(item.snippet.title + ', ' + item.id.videoId)

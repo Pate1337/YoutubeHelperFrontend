@@ -16,7 +16,7 @@ class VideoPlayer extends React.Component {
     this.state = {
       computerStyle: {
         position: 'relative',
-        width: '80%',
+        width: '100%',
         height: '550px'
       },
       mobileStyle: {
@@ -125,6 +125,7 @@ class VideoPlayer extends React.Component {
       const notShowingInMobilePopup = { display: (window.innerWidth <= 750 && this.state.popup) ? 'none' : ''}
       const showInPopup = { display: (this.state.popup) ? '' : 'none' }
       const onlyShowOnBigPlayer = { display: (!this.state.popup) ? '' : 'none' }
+      const onlyForUsers = { display: (this.props.loggedUser !== null) ? '' : 'none'}
       let positionChangeButton = {title: 'Disable position change on scroll', icon: 'lock'}
       if (!this.state.changePosition) {
         positionChangeButton = {title: 'Enable position change on scroll', icon: 'unlock alternate'}
@@ -203,7 +204,7 @@ class VideoPlayer extends React.Component {
                   <Button.Group floated='left'>
                     <PlaylistButtons />
                   </Button.Group>
-
+                  <div style={onlyForUsers}>
                   <Popup
                     trigger={<Button title='Add to' floated='right' color='blue' icon>
                       <Icon name='add' size='large' />
@@ -213,12 +214,13 @@ class VideoPlayer extends React.Component {
                     on='click'
                     hideOnScroll
                   />
+                  </div>
                 </div>
                 <Button title='Stop and hide player' color='red' icon floated='right' onClick={this.stopPlayer}>
                   <Icon name='stop' size='large' />
                 </Button>
               </div>
-              <RelatedSidebar />
+
             </Grid.Column>
           </Grid>
           <VisibilitySensor active={this.state.changePosition} offset={{top:135}} onChange={this.handleVisibility} />
@@ -241,7 +243,8 @@ const mapStateToProps = (state) => {
     playerPlaying: state.playingVideo.playerPlaying,
     playingPlaylist: state.playingPlaylist,
     index: state.playingPlaylist.index,
-    relatedLinks: state.relatedLinks
+    relatedLinks: state.relatedLinks,
+    loggedUser: state.loggedUser
   }
 }
 

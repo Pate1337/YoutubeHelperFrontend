@@ -48,16 +48,20 @@ class App extends React.Component {
       marginTop: '160px'
     }
     const overflow = {
-      overflow: 'hidden'
+      overflow: (this.props.playerPlaying) ? 'visible' : 'hidden'
+    }
+    let computerStyle = {}
+    if (window.innerWidth > 750) {
+      computerStyle = {width: '80%'}
     }
     return (
-      <div  style={overflow}>
+      <div style={overflow}>
         <Router>
           <div>
             <div style={mainPageStyle}>
-              <Container style={{borderStyle: 'solid'}}>
+              <Container>
                 <Grid>
-                  <Grid.Column>
+                  <Grid.Column style={computerStyle}>
                     <Notification />
                     <Route path='/'
                       render={() => <VideoPlayer />} />
@@ -89,7 +93,7 @@ class App extends React.Component {
                       render={() => <YTSearchBar />} />
                     <Route path='/search'
                       render={() => <YTSearchResults />} />
-
+                    <RelatedSidebar />
                   </Grid.Column>
                 </Grid>
               </Container>
@@ -110,7 +114,8 @@ const mapStateToProps = (state) => {
     users: state.users,
     loggedUser: state.loggedUser,
     favourites: state.userLinks.favourites,
-    playlists: state.userLinks.playlists
+    playlists: state.userLinks.playlists,
+    playerPlaying: state.playingVideo.playerPlaying
   }
 }
 

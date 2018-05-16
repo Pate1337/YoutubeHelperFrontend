@@ -5,6 +5,7 @@ import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Item, Icon, Button, Dimmer, Popup, Image } from 'semantic-ui-react'
+import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class YTSearchResult extends React.Component {
   constructor() {
@@ -16,6 +17,7 @@ class YTSearchResult extends React.Component {
   playVideo = async () => {
     await this.props.setPlayingVideo(this.props.item)
     await this.props.clearPlayingPlaylist()
+    await this.props.searchForRelatedVideos(this.props.item.linkId, 50)
   }
 
   handleShow = () => {
@@ -102,7 +104,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setPlayingVideo,
-  clearPlayingPlaylist
+  clearPlayingPlaylist,
+  searchForRelatedVideos
 }
 
 const ConnectedYTSearchResult = connect(mapStateToProps, mapDispatchToProps)(YTSearchResult)

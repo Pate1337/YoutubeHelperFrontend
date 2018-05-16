@@ -4,6 +4,7 @@ import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { initPlayingPlaylist, play } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import { Item, Icon, Button, Dimmer, Popup, Image } from 'semantic-ui-react'
+import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class PlaylistLink extends React.Component {
   constructor() {
@@ -41,6 +42,7 @@ class PlaylistLink extends React.Component {
       await this.props.play(index)
       await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[index])
     }
+    await this.props.searchForRelatedVideos(this.props.link.linkId, 50)
   }
 
   handleShow = () => {
@@ -104,7 +106,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
   initPlayingPlaylist,
   setPlayingVideo,
-  play
+  play,
+  searchForRelatedVideos
 }
 
 const ConnectedPlaylistLink = connect(mapStateToProps, mapDispatchToProps)(PlaylistLink)

@@ -6,10 +6,10 @@ import RecommendedLink from './RecommendedLink'
 class RelatedSidebar extends React.Component {
 
   render() {
-    if (window.innerWidth >= 1100) {
+    if (window.innerWidth >= 1100 && this.props.playerPlaying) {
       return (
         <Rail attached style={{width: '40%'}} position='right'>
-          <Segment style={{height: '550px', overflow: 'auto'}}>
+          <Segment style={{overflow: 'auto'}}>
             <h3>Related videos</h3>
             <Item.Group divided unstackable>
               {this.props.relatedLinks.map(l =>
@@ -18,7 +18,7 @@ class RelatedSidebar extends React.Component {
           </Segment>
         </Rail>
       )
-    } else if (window.innerWidth >= 750) {
+    } else if (window.innerWidth >= 750 && this.props.playerPlaying) {
       return (
         <Rail attached style={{width: '30%'}} position='right'>
           <Segment style={{height: '550px', overflow: 'auto'}}>
@@ -40,7 +40,8 @@ class RelatedSidebar extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    relatedLinks: state.relatedLinks
+    relatedLinks: state.relatedLinks,
+    playerPlaying: state.playingVideo.playerPlaying
   }
 }
 

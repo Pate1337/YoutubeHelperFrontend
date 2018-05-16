@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { playNext, playPrevious, shufflePlaylist, playRandom } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import { Icon, Button } from 'semantic-ui-react'
+import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class PlaylistButtons extends React.Component {
 
@@ -10,12 +11,14 @@ class PlaylistButtons extends React.Component {
     event.preventDefault()
     await this.props.playRandom()
     await this.props.setPlayingVideo(this.props.playingPlaylist.links[this.props.index])
+    await this.props.searchForRelatedVideos(this.props.playingPlaylist.links[this.props.index].linkId, 50)
   }
 
   playPrevious = async (event) => {
     event.preventDefault()
     await this.props.playPrevious()
     await this.props.setPlayingVideo(this.props.playingPlaylist.links[this.props.index])
+    await this.props.searchForRelatedVideos(this.props.playingPlaylist.links[this.props.index].linkId, 50)
   }
 
   shuffle = async (event) => {
@@ -26,6 +29,7 @@ class PlaylistButtons extends React.Component {
   playNext = async (event) => {
     await this.props.playNext()
     await this.props.setPlayingVideo(this.props.playingPlaylist.links[this.props.index])
+    await this.props.searchForRelatedVideos(this.props.playingPlaylist.links[this.props.index].linkId, 50)
   }
 
   render() {
@@ -64,7 +68,8 @@ const mapDispatchToProps = {
   playPrevious,
   shufflePlaylist,
   playRandom,
-  setPlayingVideo
+  setPlayingVideo,
+  searchForRelatedVideos
 }
 
 const ConnectedPlaylistButtons = connect(mapStateToProps, mapDispatchToProps)(PlaylistButtons)

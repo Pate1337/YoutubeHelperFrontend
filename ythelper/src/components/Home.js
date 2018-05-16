@@ -11,7 +11,7 @@ class Home extends React.Component {
   componentDidMount() {
     this.props.setActiveItem('/')
   }
-  
+
   render() {
     return (
       <div style={{marginTop: '10px'}}>
