@@ -24,17 +24,15 @@ const commentReducer = (store = { rComments: [], sentComments: [] }, action) => 
   }
 }
 
-export const allUsersComments = async (userP) => {
+export const allUsersComments = (userP) => {
   console.log('allUsersComments commentReducer', userP)
+  
+  return async (dispatch) => {
+    try {
+    
+    
   const user = await userService.getUserById(userP)
   console.log('user: ' + user.rComments[0].content)
-  //Tää returnin paska ei ilmeisesti tee yhtään mitään
-  return async (dispatch) => {
-    //console.log('voiko täälä edes logata vai mitä vittua')
-    //try {
-    //const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    //if (loggedUserJSON != null) {
-    //const loggedUser = JSON.parse(loggedUserJSON)
 
     dispatch({
       type: 'GET_COMMENTS_ID',
@@ -43,11 +41,10 @@ export const allUsersComments = async (userP) => {
         sentComments: user.sentComments
       }
     })
-    //}
-    /*} catch (e) {
-      console.log('vitun paska heitti catchiin')
-      return 'error'
-    }*/
+    
+  } catch (e) {
+    return 'error'
+  }
   }
 }
 
