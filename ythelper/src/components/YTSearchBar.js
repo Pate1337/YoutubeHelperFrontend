@@ -220,7 +220,7 @@ class YTSearchBar extends React.Component {
           <Segment basic inverted color='black'>
           <Form onSubmit={this.handleSubmit} autoComplete='off' style={{marginLeft: '2%'}}>
             <Form.Group>
-              <Button icon type='button' onClick={this.goBack}>
+              <Button basic color='blue' icon type='button' onClick={this.goBack}>
                 <Icon name='arrow left' />
               </Button>
               <div style={searchBarStyle}>
@@ -230,18 +230,17 @@ class YTSearchBar extends React.Component {
                   name='text'
                   value={this.state.text}
                   onChange={this.handleSearchFieldChange}
-                  icon='search'
                   placeholder='Search from Youtube...'
                   onClick={this.handleInputClick}
                 />
               </div>
-              <Button icon type='submit'>
+              <Button icon basic color='blue' type='submit'>
                 <Icon name='search' />
               </Button>
 
                 <Popup
                   trigger={
-                    <Button icon type='button'>
+                    <Button icon basic color='blue' type='button'>
                       <Icon name='options' />
                     </Button>}
                   content={
@@ -264,7 +263,7 @@ class YTSearchBar extends React.Component {
           </Segment>
           <div style={{width: '100%', height: '48%', zIndex: 100, background: 'white', overflow: 'auto'}}>
 
-            <List selection verticalAlign='middle'>
+            <List divided selection verticalAlign='middle'>
               {this.props.autocompleteItems.map((i, index) =>
                 /*let boundItemClick = this.handleSuggestionClick.bind('MOI')*/
                 <List.Item key={index} onClick={() => this.handleSuggestionClick(i)}>
@@ -280,6 +279,7 @@ class YTSearchBar extends React.Component {
   }
   }
 }
+/*<Button icon type='button' onClick={this.goBack}>*/
 /*placeholder={this.state.maxResults.toString()}*/
 /*<Form.Select name='maxResults' onChange={this.handleSearchFieldChange}>
   <option value='5' selected={(this.state.maxResults.toString() === '5') ? true : false}>5</option>

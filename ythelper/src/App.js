@@ -23,6 +23,7 @@ import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
 import { Grid, Segment, Sticky } from 'semantic-ui-react'
 import Notification from './components/Notification'
+import RelatedSidebar from './components/RelatedSidebar'
 
 class App extends React.Component {
 
@@ -54,7 +55,7 @@ class App extends React.Component {
         <Router>
           <div>
             <div style={mainPageStyle}>
-              <Container>
+              <Container style={{borderStyle: 'solid'}}>
                 <Grid>
                   <Grid.Column>
                     <Notification />
@@ -88,6 +89,7 @@ class App extends React.Component {
                       render={() => <YTSearchBar />} />
                     <Route path='/search'
                       render={() => <YTSearchResults />} />
+
                   </Grid.Column>
                 </Grid>
               </Container>

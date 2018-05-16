@@ -15,6 +15,10 @@ class LoginForm extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.props.setActiveItem('/login')
+  }
+
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }

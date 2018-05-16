@@ -5,8 +5,10 @@ import { setPlayingVideo, clearPlayingVideo } from '../reducers/videoPlayingRedu
 import PlaylistButtons from './PlaylistButtons'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { playNext } from '../reducers/playlistPlayingReducer'
-import { Grid, Popup, Icon, Button, Visibility } from 'semantic-ui-react'
+import { Grid, Popup, Icon, Button, Visibility, Rail, Segment, Item } from 'semantic-ui-react'
 import VisibilitySensor from 'react-visibility-sensor'
+import RecommendedLink from './RecommendedLink'
+import RelatedSidebar from './RelatedSidebar'
 
 class VideoPlayer extends React.Component {
   constructor() {
@@ -51,6 +53,7 @@ class VideoPlayer extends React.Component {
       changePosition: true
     }
   }
+
 
   onPlay = async (event) => {
     console.log('onPlay VideoPlayer')
@@ -169,6 +172,7 @@ class VideoPlayer extends React.Component {
           gridStyle = {position: 'relative', height: '550px'}
         }
       }
+      /*const relatedLinks = await this.props.searchForRelatedVideos(this.props.link.linkId)*/
       console.log('IKKUNAN KOKO' + window.innerWidth + ', ' + window.innerHeight )
       return (
         <div style={margin}>
@@ -214,6 +218,7 @@ class VideoPlayer extends React.Component {
                   <Icon name='stop' size='large' />
                 </Button>
               </div>
+              <RelatedSidebar />
             </Grid.Column>
           </Grid>
           <VisibilitySensor active={this.state.changePosition} offset={{top:135}} onChange={this.handleVisibility} />
@@ -235,7 +240,8 @@ const mapStateToProps = (state) => {
     link: state.playingVideo.link,
     playerPlaying: state.playingVideo.playerPlaying,
     playingPlaylist: state.playingPlaylist,
-    index: state.playingPlaylist.index
+    index: state.playingPlaylist.index,
+    relatedLinks: state.relatedLinks
   }
 }
 

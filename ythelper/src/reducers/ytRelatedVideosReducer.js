@@ -22,15 +22,15 @@ export const searchForRelatedVideos = (videoId) => {
     }
   }
 
-  return async () => {
+  return async (dispatch) => {
     const result = await youtubeService.search(query)
     const items = result.items
     console.log('YOUTUBE APISTA HAETUT RELATEDIT:')
     const formattedItems = items.map(i => formatItem(i))
-    /*dispatch({
+    dispatch({
       type: 'ADD_NEW_RELATEDS',
       data: formattedItems
-    })*/
+    })
     return formattedItems
   }
 }

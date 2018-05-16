@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNewUser } from '../reducers/userReducer'
 import { Grid} from 'semantic-ui-react'
+import { setActiveItem } from '../reducers/menuReducer'
 
 class RegisterForm extends React.Component {
   constructor() {
@@ -13,6 +14,10 @@ class RegisterForm extends React.Component {
       pwordCheck: '',
       colors: 'red'
     }
+  }
+
+  componentDidMount() {
+    this.props.setActiveItem('/signup')
   }
 
   handleRegisterFieldChange = (event) => {
@@ -106,7 +111,8 @@ class RegisterForm extends React.Component {
 }
 
 const mapDispatchToProps = {
-  addNewUser
+  addNewUser,
+  setActiveItem
 }
 
 const ConnectedRegisterForm = connect(null, mapDispatchToProps)(RegisterForm)
