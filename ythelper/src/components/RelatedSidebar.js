@@ -21,7 +21,7 @@ class RelatedSidebar extends React.Component {
     } else if (window.innerWidth >= 750 && this.props.playerPlaying) {
       return (
         <Rail attached style={{width: '30%'}} position='right'>
-          <Segment style={{height: '550px', overflow: 'auto'}}>
+          <Segment style={{overflow: 'auto'}}>
             <h3>Related videos</h3>
             <Item.Group unstackable divided>
               {this.props.relatedLinks.map(l =>

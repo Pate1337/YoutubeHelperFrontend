@@ -9,6 +9,7 @@ import { Grid, Popup, Icon, Button, Visibility, Rail, Segment, Item } from 'sema
 import VisibilitySensor from 'react-visibility-sensor'
 import RecommendedLink from './RecommendedLink'
 import RelatedSidebar from './RelatedSidebar'
+import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class VideoPlayer extends React.Component {
   constructor() {
@@ -67,6 +68,7 @@ class VideoPlayer extends React.Component {
     if (this.props.playingPlaylist.playlist !== null) {
       await this.props.playNext()
       await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[this.props.index])
+      await this.props.searchForRelatedVideos(this.props.playingPlaylist.playlist.links[this.props.index].linkId, 50)
     }
   }
 
@@ -251,7 +253,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   setPlayingVideo,
   playNext,
-  clearPlayingVideo
+  clearPlayingVideo,
+  searchForRelatedVideos
 }
 
 const ConnectedVideoPlayer = connect(mapStateToProps, mapDispatchToProps)(VideoPlayer)
