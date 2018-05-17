@@ -10,6 +10,7 @@ class YTSearchResults extends React.Component {
     return (
       <Grid>
         <Grid.Column>
+          <h2>Results ({this.props.ytSearchResults.length})</h2>
           <Item.Group divided unstackable>
             {this.props.ytSearchResults.map(r =>
               <YTSearchResult key={r.linkId} item={r} />

@@ -24,7 +24,7 @@ class FavouriteLinks extends React.Component {
 
     if (this.props.loggedUser !== null) {
       return (
-        <Grid>
+        <Grid style={{overflow: 'hidden'}}>
           <Grid.Column>
 
           <h2>

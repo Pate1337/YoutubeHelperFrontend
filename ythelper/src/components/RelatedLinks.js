@@ -76,6 +76,7 @@ class RelatedLinks extends React.Component {
     }
     let boundaryRange = 1
     let showEllipsis = true
+    let paginationWidth = {}
     if (window.innerWidth <= 750) {
       boundaryRange = 0
       showEllipsis = false
@@ -107,7 +108,7 @@ class RelatedLinks extends React.Component {
         i++
       }
       return (
-        <Grid>
+        <Grid style={{overflow: 'hidden'}}>
           <Grid.Column>
             <div ref={this.handleContextRef}>
               <h2>Recommended</h2>

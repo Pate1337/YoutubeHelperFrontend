@@ -21,7 +21,7 @@ import Home from './components/Home'
 import Menu from './components/Menu'
 import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
-import { Grid, Segment, Sticky } from 'semantic-ui-react'
+import { Grid, Segment, Sticky, Sidebar } from 'semantic-ui-react'
 import Notification from './components/Notification'
 import RelatedSidebar from './components/RelatedSidebar'
 

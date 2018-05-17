@@ -1,10 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Rail, Segment, Item } from 'semantic-ui-react'
+import { Rail, Segment, Item, Button, Transition, Icon } from 'semantic-ui-react'
 import RecommendedLink from './RecommendedLink'
 
 class RelatedSidebar extends React.Component {
-
+  constructor() {
+    super()
+    this.state = {
+      visible: false
+    }
+  }
+  toggleVisibility = () => {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
   render() {
     if (window.innerWidth >= 1100 && this.props.playerPlaying) {
       return (
@@ -29,6 +39,38 @@ class RelatedSidebar extends React.Component {
             </Item.Group>
           </Segment>
         </Rail>
+      )
+    } else if (this.props.playerPlaying) {
+      const sidebarStyle = {
+        width: '84%',
+        height: window.innerHeight,
+        position: 'fixed',
+        top: 0,
+        right: '-4%',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        display: (this.state.visible) ? '' : 'none',
+        zIndex: 1004
+      }
+      return (
+        <div>
+          <Button icon attached='left' color='black' style={{position: 'fixed', right: '0%', top: 130, zIndex: 1004}} onClick={this.toggleVisibility}>
+            <Icon name='arrow left' />
+          </Button>
+          <Button icon attached='left' color='black' style={{position: 'fixed', zIndex: 1004, right: '80%', top: 130, display: (this.state.visible) ? '' : 'none'}} onClick={this.toggleVisibility}>
+            <Icon name='arrow right' />
+          </Button>
+          <Transition.Group style={sidebarStyle} animation='slide left' duration={200}>
+            {this.state.visible &&
+              <Segment onClick={this.toggleVisibility} style={{background: 'white'}}>
+              <h3>Related videos</h3>
+              <Item.Group divided>
+                {this.props.relatedLinks.map(l =>
+                  <RecommendedLink key={l.linkId} recommend={l} />)}
+              </Item.Group>
+              </Segment>}
+          </Transition.Group>
+        </div>
       )
     } else {
       return (
