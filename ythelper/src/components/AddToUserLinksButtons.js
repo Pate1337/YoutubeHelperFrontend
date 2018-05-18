@@ -6,7 +6,7 @@ import { addFavouriteForUser, removeRelatedFromUser,
 import { usersInitialization } from '../reducers/userReducer'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { addToPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Button, Icon } from 'semantic-ui-react'
+import { Button, Icon, Dimmer, Loader } from 'semantic-ui-react'
 import { setNotification, hideNotification } from '../reducers/notificationReducer'
 import { initPlayingPlaylist, play } from '../reducers/playlistPlayingReducer'
 
@@ -333,6 +333,9 @@ class AddToUserLinksButtons extends React.Component {
     return (
       <div style={{width: '210px'}}>
         <h4>Add to</h4>
+        <Dimmer active={this.props.serverOnUse}>
+          <Loader>Adding link. This will only take few seconds.</Loader>
+        </Dimmer>
         <Button.Group vertical fluid basic color='blue'>
           <Button disabled={this.props.serverOnUse} color='blue' icon labelPosition='left' onClick={this.handleFavourite} style={showFavourite}>
             <Icon name='favorite' />

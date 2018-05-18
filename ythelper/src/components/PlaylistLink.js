@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { initPlayingPlaylist, play } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
-import { Item, Icon, Button, Dimmer, Popup, Image } from 'semantic-ui-react'
+import { Item, Icon, Button, Dimmer, Popup, Image, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class PlaylistLink extends React.Component {
@@ -11,7 +11,8 @@ class PlaylistLink extends React.Component {
     super()
     this.state = {
       showButtons: false,
-      active: false
+      active: false,
+      modalOpen: false
     }
   }
 
@@ -56,6 +57,19 @@ class PlaylistLink extends React.Component {
     })
   }
 
+  removeLink = () => {
+    console.log('Not supported yet')
+    this.setState({
+      modalOpen: false
+    })
+  }
+
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
+    })
+  }
+
   render() {
     const active = this.state.active
     const content = (
@@ -88,6 +102,29 @@ class PlaylistLink extends React.Component {
               on='click'
               hideOnScroll
             />
+            <Modal trigger={
+                <Button title='Remove from playlist' icon compact floated='right' onClick={this.toggleModal}>
+                  <Icon name='trash' size='large' />
+                </Button>
+              }
+              open={this.state.modalOpen}
+            >
+              <Header icon='trash' content='Delete from playlist' />
+              <Modal.Content image>
+                <Image src={this.props.link.thumbnail} />
+                <Modal.Description>
+                  <p>Are you sure you want to delete <strong>{this.props.link.title}</strong> from playlist?</p>
+                </Modal.Description>
+              </Modal.Content>
+              <Modal.Actions>
+                <Button color='red' onClick={this.toggleModal}>
+                  <Icon name='remove' /> No
+                </Button>
+                <Button color='green' onClick={this.removeLink}>
+                  <Icon name='checkmark' /> Yes
+                </Button>
+              </Modal.Actions>
+            </Modal>
           </Item.Extra>
         </Item.Content>
       </Item>

@@ -8,7 +8,7 @@ class YTSearchResults extends React.Component {
   render() {
     console.log('Rendering YTSearchResults')
     return (
-      <Grid>
+      <Grid style={{overflow: 'hidden'}}>
         <Grid.Column>
           <h2>Results ({this.props.ytSearchResults.length})</h2>
           <Item.Group divided unstackable>

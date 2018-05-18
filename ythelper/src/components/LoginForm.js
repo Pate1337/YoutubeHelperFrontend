@@ -11,7 +11,8 @@ class LoginForm extends React.Component {
     super()
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      error: false
     }
   }
 
@@ -43,11 +44,13 @@ class LoginForm extends React.Component {
     } else {
       this.setState({
         username: '',
-        password: ''
+        password: '',
+        error: true
       })
       await this.props.setNotification('Wrong username or password', '', 'error', true)
       setTimeout(async () => {
         await this.props.hideNotification('Wrong username or password')
+        this.setState({error: false})
       }, 3000)
     }
   }

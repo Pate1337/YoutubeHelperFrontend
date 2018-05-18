@@ -5,7 +5,7 @@ import { usersInitialization } from '../reducers/userReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Item, Icon, Button, Dimmer, Popup, Image } from 'semantic-ui-react'
+import { Item, Icon, Button, Dimmer, Popup, Image, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class FavouriteLink extends React.Component {
@@ -13,7 +13,8 @@ class FavouriteLink extends React.Component {
     super()
     this.state = {
       showButtons: false,
-      active: false
+      active: false,
+      modalOpen: false
     }
   }
 
@@ -37,6 +38,11 @@ class FavouriteLink extends React.Component {
   handleHide = () => {
     this.setState({
       active: false
+    })
+  }
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
     })
   }
 
@@ -73,9 +79,29 @@ class FavouriteLink extends React.Component {
               on='click'
               hideOnScroll
             />
-            <Button title='Remove from favourites' icon compact floated='right' onClick={this.removeOneFavouriteLink}>
-              <Icon name='trash' size='large' />
-            </Button>
+            <Modal trigger={
+                <Button title='Remove from favourites' icon compact floated='right' onClick={this.toggleModal}>
+                  <Icon name='trash' size='large' />
+                </Button>
+              }
+              open={this.state.modalOpen}
+            >
+              <Header icon='trash' content='Delete from favourites' />
+              <Modal.Content image>
+                <Image src={this.props.item.thumbnail} />
+                <Modal.Description>
+                  <p>Are you sure you want to delete <strong>{this.props.item.title}</strong> from favourites?</p>
+                </Modal.Description>
+              </Modal.Content>
+              <Modal.Actions>
+                <Button color='red' onClick={this.toggleModal}>
+                  <Icon name='remove' /> No
+                </Button>
+                <Button color='green' onClick={this.removeOneFavouriteLink}>
+                  <Icon name='checkmark' /> Yes
+                </Button>
+              </Modal.Actions>
+            </Modal>
           </Item.Extra>
         </Item.Content>
       </Item>
@@ -85,6 +111,9 @@ class FavouriteLink extends React.Component {
   removeOneFavouriteLink = async (event) => {
     event.preventDefault()
     console.log('test')
+    this.setState({
+      modalOpen: false
+    })
     await this.props.removeOneFavouriteLink(this.props.item._id)
     await this.props.usersInitialization()
   }

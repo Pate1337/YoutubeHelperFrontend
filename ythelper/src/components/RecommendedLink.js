@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
-import { Dimmer, Icon, Image, Item, Button, Popup, Segment } from 'semantic-ui-react'
+import { Dimmer, Icon, Image, Item, Button, Popup, Segment, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 
 class RecommendedLink extends React.Component {
@@ -11,7 +11,8 @@ class RecommendedLink extends React.Component {
     super()
     this.state = {
       showButtons: false,
-      active: false
+      active: false,
+      modalOpen: false
     }
   }
 
@@ -34,6 +35,19 @@ class RecommendedLink extends React.Component {
   handleHide = () => {
     this.setState({
       active: false
+    })
+  }
+
+  removeLink = () => {
+    console.log('Not supported yet')
+    this.setState({
+      modalOpen: false
+    })
+  }
+
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
     })
   }
 
@@ -70,6 +84,31 @@ class RecommendedLink extends React.Component {
               on='click'
               hideOnScroll
             />
+
+            <Modal trigger={
+                <Button title='Remove from recommendations' icon compact floated='right' onClick={this.toggleModal} style={{display: (this.props.sidebar !== undefined) ? 'none' : ''}}>
+                  <Icon name='trash' size='large' />
+                </Button>
+              }
+              open={this.state.modalOpen}
+            >
+              <Header icon='trash' content='Delete from recommendations' />
+              <Modal.Content image>
+                <Image src={this.props.recommend.thumbnail} />
+                <Modal.Description>
+                  <p>Are you sure you want to delete <strong>{this.props.recommend.title}</strong> from recommendations?</p>
+                </Modal.Description>
+              </Modal.Content>
+              <Modal.Actions>
+                <Button color='red' onClick={this.toggleModal}>
+                  <Icon name='remove' /> No
+                </Button>
+                <Button color='green' onClick={this.removeLink}>
+                  <Icon name='checkmark' /> Yes
+                </Button>
+              </Modal.Actions>
+            </Modal>
+
           </Item.Extra>
         </Item.Content>
       </Item>
