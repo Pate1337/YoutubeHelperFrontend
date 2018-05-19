@@ -67,7 +67,7 @@ class Comments extends React.Component {
           <h3 onClick={this.toggleVisibility}>Comments (click to hide)</h3>
           <p>Testing</p>
           {this.props.userComments.rComments.map(comment =>
-            <Comment key={comment._id} received={comment.content}/>
+            <Comment key={comment.id} received={comment.content}/>
           )}
             
           <form onSubmit={this.handleComment}>

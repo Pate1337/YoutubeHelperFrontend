@@ -55,7 +55,7 @@ class Users extends React.Component {
 
             <h3>Näytettävä Käyttäjä</h3>
             <p>{this.state.userToShow}</p>
-            <Comments cuser={this.state.userToShow} comments={this.state.comments} comm/>
+            <Comments cuser={this.state.userToShow} comments={this.state.comments}/>
             <button onClick={this.hideUser}>Piilota</button>
           </Grid.Column>
         </Grid>

@@ -9,6 +9,12 @@ const getAll = async () => {
   return response.data
 }
 
+const getByReceiver = async (id) => {
+  console.log('getByReceiver commentService')
+  const response = await axios.get(`${baseUrl}/${id}`)
+  return response.data
+}
+
 const setToken = (newToken) => {
   console.log('setToken commentsService')
   token = `bearer ${newToken}`
@@ -24,5 +30,5 @@ const addComment = async (comment) => {
 }
 
 export default {
-  setToken, getAll, addComment
+  setToken, getAll, addComment, getByReceiver
 }
