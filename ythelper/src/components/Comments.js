@@ -37,18 +37,21 @@ class Comments extends React.Component {
     }
     console.log('Comments.js handleComment')
     const response = await this.props.addSentComment(sComment)
+    this.getReceivedComments()
     this.setState({
-      comment: ''
+      comment: '',
+      //resComments: this.props.userComments.rComments
     })
+
   }
 
   getReceivedComments = async () => {
     console.log('getReveivedComments')
     const comments = await this.props.allUsersComments(this.props.cuser)
     console.log(comments)
-    /*this.setState({
+    this.setState({
       resComments: comments
-    })*/ 
+    })
   }
   
 
