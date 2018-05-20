@@ -15,6 +15,16 @@ const getByReceiver = async (id) => {
   return response.data
 }
 
+const deleteOneComment = async (id) => {
+  console.log('deleteOneComment commentService')
+  const config = {
+    headers: { 'Authorization': token }
+  }
+  const url = baseUrl + '/' + id
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
+  return response.data
+}
+
 const setToken = (newToken) => {
   console.log('setToken commentsService')
   token = `bearer ${newToken}`
@@ -30,5 +40,5 @@ const addComment = async (comment) => {
 }
 
 export default {
-  setToken, getAll, addComment, getByReceiver
+  setToken, getAll, addComment, getByReceiver, deleteOneComment
 }
