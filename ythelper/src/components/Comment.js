@@ -10,12 +10,21 @@ class Comment extends React.Component {
 
   render() {
     console.log('Rendering Comment')
-    return (
-      <div>
-        <p>{this.props.received} by: {this.props.sender.id.name} at: 
-        {this.props.date.substring(0,10)}<button onClick={this.removeOneComment}>Delete</button></p>
-      </div>
-    )
+    if (this.props.receiver != this.props.loggedUser.id) {
+      return (
+        <div>
+          <p>{this.props.received} by: {this.props.sender.id.name} at:
+          {this.props.date.substring(0, 10)}</p>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <p>{this.props.received} by: {this.props.sender.id.name} at:
+        {this.props.date.substring(0, 10)}<button onClick={this.removeOneComment}>Delete</button></p>
+        </div>
+      )
+    }
   }
 
   removeOneComment = async (event) => {

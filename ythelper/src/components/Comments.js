@@ -71,7 +71,7 @@ class Comments extends React.Component {
           <p>Testing</p>
           {this.props.userComments.rComments.map(comment =>
             <Comment key={comment.id} cId={comment.id} received={comment.content} sender={comment.sender}
-            date={comment.date}/>
+            date={comment.date} receiver={comment.receiver}/>
           )}
             
           <form onSubmit={this.handleComment}>
