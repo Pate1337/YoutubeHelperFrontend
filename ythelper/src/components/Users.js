@@ -73,7 +73,9 @@ class Users extends React.Component {
             </ul>
 
             <h3>Näytettävä Käyttäjä</h3>
-            <p>{this.state.userToShow}</p>
+            <p>{this.state.userToShow}<br/>
+              {this.props.users
+              .filter(user => user.id == this.state.userToShow)[0].username}</p>
             <Comments cuser={this.state.userToShow} comments={this.state.comments} />
             <button onClick={this.hideUser}>Piilota</button>
           </Grid.Column>
