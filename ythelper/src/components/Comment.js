@@ -12,7 +12,8 @@ class Comment extends React.Component {
     console.log('Rendering Comment')
     return (
       <div>
-        <p>{this.props.received} by: {this.props.sender.id.name}<button onClick={this.removeOneComment}>Delete</button></p>
+        <p>{this.props.received} by: {this.props.sender.id.name} at: 
+        {this.props.date.substring(0,10)}<button onClick={this.removeOneComment}>Delete</button></p>
       </div>
     )
   }

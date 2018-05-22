@@ -60,7 +60,9 @@ class Users extends React.Component {
               <button type='submit'>Search</button>
             </form>
             <ul>
-              {this.props.users.filter(user => user.username.includes(this.state.usersearch)).map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
+              {this.props.users.filter(user => user.username
+                .includes(this.state.usersearch))
+                .map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
                 username: {u.username},
                 id: {u.id},
                 name: {u.name},
@@ -92,7 +94,9 @@ class Users extends React.Component {
             <button type='submit'>Search</button>
           </form>
           <ul>
-            {this.props.users.filter(user => user.username.includes(this.state.usersearch)).map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
+            {this.props.users.filter(user => user.username
+              .includes(this.state.usersearch))
+              .map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
               username: {u.username},
               id: {u.id},
               name: {u.name},
