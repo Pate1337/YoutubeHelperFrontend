@@ -5,6 +5,7 @@ import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Dimmer, Icon, Image, Item, Button, Popup, Segment, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
+import { setLoading, setLoaded } from '../reducers/loaderReducer'
 
 class RecommendedLink extends React.Component {
   constructor() {
@@ -17,9 +18,13 @@ class RecommendedLink extends React.Component {
   }
 
   playVideo = async () => {
+    console.log('LOADING')
+    await this.props.setLoading()
     await this.props.setPlayingVideo(this.props.recommend)
     await this.props.clearPlayingPlaylist()
     await this.props.searchForRelatedVideos(this.props.recommend.linkId, 50)
+    await this.props.setLoaded()
+    console.log('LOADED')
   }
 
   toggleButtons = () => {
@@ -124,7 +129,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   setPlayingVideo,
   clearPlayingPlaylist,
-  searchForRelatedVideos
+  searchForRelatedVideos,
+  setLoading,
+  setLoaded
 }
 
 const ConnectedRecommendedLink = connect(mapStateToProps, mapDispatchToProps)(RecommendedLink)

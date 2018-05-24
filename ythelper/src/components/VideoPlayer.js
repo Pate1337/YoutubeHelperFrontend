@@ -10,6 +10,7 @@ import VisibilitySensor from 'react-visibility-sensor'
 import RecommendedLink from './RecommendedLink'
 import RelatedSidebar from './RelatedSidebar'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
+import { setLoading, setLoaded } from '../reducers/loaderReducer'
 
 class VideoPlayer extends React.Component {
   constructor() {
@@ -66,9 +67,11 @@ class VideoPlayer extends React.Component {
 
   onEnd = async () => {
     if (this.props.playingPlaylist.playlist !== null) {
+      await this.props.setLoading()
       await this.props.playNext()
       await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[this.props.index])
       await this.props.searchForRelatedVideos(this.props.playingPlaylist.playlist.links[this.props.index].linkId, 50)
+      await this.props.setLoaded()
     }
   }
 
@@ -254,7 +257,9 @@ const mapDispatchToProps = {
   setPlayingVideo,
   playNext,
   clearPlayingVideo,
-  searchForRelatedVideos
+  searchForRelatedVideos,
+  setLoading,
+  setLoaded
 }
 
 const ConnectedVideoPlayer = connect(mapStateToProps, mapDispatchToProps)(VideoPlayer)

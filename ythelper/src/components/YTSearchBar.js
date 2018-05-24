@@ -57,10 +57,10 @@ class YTSearchBar extends React.Component {
 
   handleSubmit = (event) => {
     console.log('handleSubmit YTSearchBar')
-    this.props.setSearching()
     /*event.preventDefault()*/
     console.log('maxresults: ' + this.state.maxResults)
     if (this.state.text !== '') {
+      this.props.setSearching()
       /*Kun tulevaisuudessa useampi kenttä, esim. järjestys, hakutulosten määrä..*/
       const searchObject = {
         text: this.state.text,

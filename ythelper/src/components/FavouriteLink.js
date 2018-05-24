@@ -7,6 +7,7 @@ import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Item, Icon, Button, Dimmer, Popup, Image, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
+import { setLoading, setLoaded } from '../reducers/loaderReducer'
 
 class FavouriteLink extends React.Component {
   constructor() {
@@ -19,9 +20,11 @@ class FavouriteLink extends React.Component {
   }
 
   playVideo = async () => {
+    await this.props.setLoading()
     await this.props.setPlayingVideo(this.props.item)
     await this.props.clearPlayingPlaylist()
     await this.props.searchForRelatedVideos(this.props.item.linkId, 50)
+    await this.props.setLoaded()
   }
 
   toggleButtons = () => {
@@ -131,7 +134,9 @@ const mapDispatchToProps = {
   usersInitialization,
   setPlayingVideo,
   clearPlayingPlaylist,
-  searchForRelatedVideos
+  searchForRelatedVideos,
+  setLoading,
+  setLoaded
 }
 
 const ConnectedFavouriteLink = connect(mapStateToProps, mapDispatchToProps)(FavouriteLink)

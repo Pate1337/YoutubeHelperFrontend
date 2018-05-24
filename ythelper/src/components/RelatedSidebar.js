@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Rail, Segment, Item, Button, Transition, Icon } from 'semantic-ui-react'
+import { Rail, Segment, Item, Button, Transition, Icon, Dimmer, Loader } from 'semantic-ui-react'
 import RecommendedLink from './RecommendedLink'
 
 class RelatedSidebar extends React.Component {
@@ -21,30 +21,61 @@ class RelatedSidebar extends React.Component {
     const header = document.getElementById('relatedHeader')
     header.scrollIntoView()
   }
-
+/*<Rail attached style={{width: '40%'}} position='right'>
+  {this.props.loader
+  ? <Segment style={{position: 'fixed', width: '20%', height: '400px'}}>
+    <Dimmer active inverted>
+      <Loader size='large'>Loading...</Loader>
+    </Dimmer>
+  </Segment>
+  : <Segment style={{overflow: 'auto'}}>
+    <h3>Related videos</h3>
+    <Item.Group divided unstackable>
+      {this.props.relatedLinks.map(l =>
+        <RecommendedLink key={l.linkId} recommend={l} sidebar={true} />)}
+    </Item.Group>
+    <Dimmer active={this.props.loader} inverted>
+      <Loader size='large'>Loading...</Loader>
+    </Dimmer>
+  </Segment>}
+</Rail>*/
   render() {
     if (window.innerWidth >= 1100 && this.props.playerPlaying) {
       return (
         <Rail attached style={{width: '40%'}} position='right'>
-          <Segment style={{overflow: 'auto'}}>
+          {this.props.loader
+          ? <Segment style={{position: 'fixed', height: '200px'}}>
+            <h3>Related videos</h3>
+            <Dimmer active inverted>
+              <Loader size='large'>Loading...</Loader>
+            </Dimmer>
+          </Segment>
+          : <Segment style={{overflow: 'auto'}}>
             <h3>Related videos</h3>
             <Item.Group divided unstackable>
               {this.props.relatedLinks.map(l =>
                 <RecommendedLink key={l.linkId} recommend={l} sidebar={true} />)}
             </Item.Group>
-          </Segment>
+          </Segment>}
         </Rail>
       )
     } else if (window.innerWidth >= 750 && this.props.playerPlaying) {
       return (
         <Rail attached style={{width: '30%'}} position='right'>
-          <Segment style={{overflow: 'auto'}}>
+          {this.props.loader
+          ? <Segment style={{position: 'fixed', height: '200px'}}>
+            <h3>Related videos</h3>
+            <Dimmer active inverted>
+              <Loader size='large'>Loading...</Loader>
+            </Dimmer>
+          </Segment>
+          : <Segment style={{overflow: 'auto'}}>
             <h3>Related videos</h3>
             <Item.Group unstackable divided>
               {this.props.relatedLinks.map(l =>
                 <RecommendedLink key={l.linkId} recommend={l} sidebar={true} />)}
             </Item.Group>
-          </Segment>
+          </Segment>}
         </Rail>
       )
     } else if (this.props.playerPlaying) {
@@ -76,6 +107,9 @@ class RelatedSidebar extends React.Component {
                 {this.props.relatedLinks.map(l =>
                   <RecommendedLink key={l.linkId} recommend={l} sidebar={true} />)}
               </Item.Group>
+              <Dimmer style={{position: 'fixed'}} active={this.props.loader} inverted>
+                <Loader size='large'>Loading...</Loader>
+              </Dimmer>
               </Segment>}
           </Transition.Group>
         </div>
@@ -91,7 +125,8 @@ class RelatedSidebar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     relatedLinks: state.relatedLinks,
-    playerPlaying: state.playingVideo.playerPlaying
+    playerPlaying: state.playingVideo.playerPlaying,
+    loader: state.loader
   }
 }
 

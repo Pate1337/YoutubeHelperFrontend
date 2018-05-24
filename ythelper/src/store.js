@@ -13,6 +13,7 @@ import videoPlayingReducer from './reducers/videoPlayingReducer'
 import menuReducer from './reducers/menuReducer'
 import notificationReducer from './reducers/notificationReducer'
 import autocompleteReducer from './reducers/autocompleteReducer'
+import loaderReducer from './reducers/loaderReducer'
 
 const reducer = combineReducers({
   users: userReducer,
@@ -27,7 +28,8 @@ const reducer = combineReducers({
   playingVideo: videoPlayingReducer,
   activeItem: menuReducer,
   notification: notificationReducer,
-  autocomplete: autocompleteReducer
+  autocomplete: autocompleteReducer,
+  loader: loaderReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

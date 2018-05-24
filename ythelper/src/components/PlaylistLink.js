@@ -5,6 +5,7 @@ import { initPlayingPlaylist, play } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import { Item, Icon, Button, Dimmer, Popup, Image, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
+import { setLoading, setLoaded } from '../reducers/loaderReducer'
 
 class PlaylistLink extends React.Component {
   constructor() {
@@ -43,7 +44,9 @@ class PlaylistLink extends React.Component {
       await this.props.play(index)
       await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[index])
     }
+    await this.props.setLoading()
     await this.props.searchForRelatedVideos(this.props.link.linkId, 50)
+    await this.props.setLoaded()
   }
 
   handleShow = () => {
@@ -144,7 +147,9 @@ const mapDispatchToProps = {
   initPlayingPlaylist,
   setPlayingVideo,
   play,
-  searchForRelatedVideos
+  searchForRelatedVideos,
+  setLoading,
+  setLoaded
 }
 
 const ConnectedPlaylistLink = connect(mapStateToProps, mapDispatchToProps)(PlaylistLink)
