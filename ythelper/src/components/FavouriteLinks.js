@@ -28,7 +28,7 @@ class FavouriteLinks extends React.Component {
           <Grid.Column>
 
           <h2>
-            My favourites
+            My favourites ({this.props.favouriteLinks.length})
           </h2>
           <Item.Group divided unstackable>
             {this.props.favouriteLinks.map(link =>

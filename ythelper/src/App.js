@@ -19,6 +19,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Welcome from './components/Welcome'
 import Home from './components/Home'
 import Menu from './components/Menu'
+import PlaylistView from './components/PlaylistView'
 import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
 import { Grid, Segment, Sticky, Sidebar } from 'semantic-ui-react'
@@ -33,6 +34,12 @@ class App extends React.Component {
     await this.props.usersInitialization()
     await this.props.searchResultInitialization()
     await this.props.userLinks()
+  }
+
+  playlistById = (id) => {
+    const playlist = this.props.playlists.find(p => p._id === id)
+    /*console.log('playlist._id: ' + playlist._id)*/
+    return playlist
   }
 
   render() {
@@ -75,10 +82,10 @@ class App extends React.Component {
                       : <div>
                           <Route exact path='/'
                             render={() => <Home />} />
-                          <Route path='/myPlaylists'
+                          <Route exact path='/myPlaylists'
                             render={() => <PlaylistForm />} />
-                          <Route path='/myPlaylists'
-                            render={() => <Playlists />} />
+                          <Route exact path='/myPlaylists'
+                            render={({history}) => <Playlists history={history} />} />
                         </div>
                     }
                     <Route path='/myFavourites'
@@ -93,6 +100,8 @@ class App extends React.Component {
                       render={() => <YTSearchBar />} />
                     <Route path='/search'
                       render={() => <YTSearchResults />} />
+                    <Route path='/myPlaylists/:id' render={({match}) =>
+                      <PlaylistView playlist={this.playlistById(match.params.id)} />} />
                     <RelatedSidebar />
                   </Grid.Column>
                 </Grid>

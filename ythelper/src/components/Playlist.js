@@ -1,42 +1,112 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PlaylistLink from './PlaylistLink'
-import { Grid, Item } from 'semantic-ui-react'
+import { Grid, Item, Image, Icon, Dimmer, Modal, Button, Header } from 'semantic-ui-react'
 
 class Playlist extends React.Component {
   constructor() {
     super()
     this.state = {
-      showPlaylistLinks: false
+      active: false,
+      modalOpen: false
     }
   }
 
-  toggleVisibility = () => {
+  /*toggleVisibility = () => {
     this.setState({
       showPlaylistLinks: !this.state.showPlaylistLinks
+    })
+  }*/
+
+  onPlaylistClick = (event) => {
+    event.preventDefault()
+    console.log(this.props.playlist._id)
+    this.props.history.push(`/myPlaylists/${this.props.playlist._id}`)
+  }
+  handleShow = () => {
+    this.setState({
+      active: true
+    })
+  }
+  handleHide = () => {
+    this.setState({
+      active: false
+    })
+  }
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
+    })
+  }
+  removePlaylist = () => {
+    console.log('Not supported yet!')
+    this.setState({
+      modalOpen: false
     })
   }
 
   render() {
     console.log('Rendering Playlist')
+    const active = this.state.active
+    const content = (
+      <Icon name='play' size='huge' />
+    )
+    const onlyForUsers = { display: (this.props.loggedUser !== null) ? '' : 'none'}
     return (
-      <Grid>
-        <Grid.Column>
-          <div onClick={this.toggleVisibility} style={{cursor: 'pointer', display: 'inline-block'}}>
-            <h3>{this.props.playlist.title} </h3> links: {this.props.playlist.links.length}
-          </div>
-          <Item.Group divided unstackable>
-            {(this.state.showPlaylistLinks && this.props.playlist.links.length !== 0)
-              ? this.props.playlist.links.map(l => <PlaylistLink key={l._id} link={l} playlist={this.props.playlist} />)
-              : <div></div>
-            }
-          </Item.Group>
-        </Grid.Column>
-      </Grid>
+
+          <Item>
+            <Item.Image style={{width: '124px'}}>
+              <Dimmer.Dimmable
+                as={Image}
+                dimmed={active}
+                dimmer={{ active, content }}
+                onMouseEnter={this.handleShow}
+                onMouseLeave={this.handleHide}
+                src={this.props.playlist.links[0].thumbnail}
+                onClick={this.onPlaylistClick}
+                label={{ corner: 'right', icon: 'list' }}
+                style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
+              />
+            </Item.Image>
+            <Item.Content>
+              <Item.Header>{this.props.playlist.title}</Item.Header>
+              <Item.Description>Links: {this.props.playlist.links.length}</Item.Description>
+              <Item.Extra style={onlyForUsers}>
+                <Modal trigger={
+                    <Button title='Remove playlist' icon compact floated='right' onClick={this.toggleModal} style={{display: (this.props.sidebar !== undefined) ? 'none' : ''}}>
+                      <Icon name='trash' size='large' />
+                    </Button>
+                  }
+                  open={this.state.modalOpen}
+                >
+                  <Header icon='trash' content='Delete playlist' />
+                  <Modal.Content image>
+                    <Image src={this.props.playlist.links[0].thumbnail} />
+                    <Modal.Description>
+                      <p>Are you sure you want to delete <strong>{this.props.playlist.title}</strong>?</p>
+                    </Modal.Description>
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button color='red' onClick={this.toggleModal}>
+                      <Icon name='remove' /> No
+                    </Button>
+                    <Button color='green' onClick={this.removePlaylist}>
+                      <Icon name='checkmark' /> Yes
+                    </Button>
+                  </Modal.Actions>
+                </Modal>
+
+              </Item.Extra>
+            </Item.Content>
+          </Item>
+
     )
   }
 }
 
+/*<div onClick={this.onPlaylistClick} style={{cursor: 'pointer', display: 'inline-block'}}>
+  <h3>{this.props.playlist.title} </h3> links: {this.props.playlist.links.length}
+</div>*/
 const mapStateToProps = (state, ownProps) => {
   let playlist
   if (state.playingPlaylist.playlist === null) {
@@ -47,7 +117,8 @@ const mapStateToProps = (state, ownProps) => {
     playlist = ownProps.item
   }
   return {
-    playlist: playlist
+    playlist: playlist,
+    loggedUser: state.loggedUser
   }
 }
 

@@ -65,8 +65,8 @@ class RelatedSidebar extends React.Component {
           <Button icon attached='left' color='black' style={{position: 'fixed', right: '0%', top: 130, zIndex: 1004}} onClick={this.toggleVisibility}>
             <Icon name='arrow left' />
           </Button>
-          <Button icon attached='left' color='black' style={{position: 'fixed', zIndex: 1004, right: '80%', height: window.innerHeight, width: '30px', top: 0, display: (this.state.visible) ? '' : 'none'}} onClick={this.toggleVisibility}>
-            <Icon style={{right: '82%', position: 'fixed', top: '50%'}} name='arrow right' />
+          <Button icon attached='left' color='black' style={{position: 'fixed', zIndex: 1004, right: '80%', height: window.innerHeight, width: '40px', top: 0, display: (this.state.visible) ? '' : 'none'}} onClick={this.toggleVisibility}>
+            <Icon style={{right: '83%', position: 'fixed', top: '50%'}} name='arrow right' />
           </Button>
           <Transition.Group style={sidebarStyle} animation='slide left' duration={200}>
             {this.state.visible &&

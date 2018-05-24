@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { searchForVideo } from '../reducers/ytReducer'
+import { searchForVideo, setSearching } from '../reducers/ytReducer'
 import { clearSearchResults } from '../reducers/ytReducer'
 import { updateSearchBar } from '../reducers/ytSearchBarReducer'
 import { Grid, Form, Button, Dropdown, Icon, Popup, List, Segment } from 'semantic-ui-react'
@@ -57,6 +57,7 @@ class YTSearchBar extends React.Component {
 
   handleSubmit = (event) => {
     console.log('handleSubmit YTSearchBar')
+    this.props.setSearching()
     /*event.preventDefault()*/
     console.log('maxresults: ' + this.state.maxResults)
     if (this.state.text !== '') {
@@ -301,7 +302,8 @@ const mapDispatchToProps = {
   updateSearchBar,
   searchSuggestions,
   clearAutocomplete,
-  setActiveItem
+  setActiveItem,
+  setSearching
 }
 
 const ConnectedYTSearchBar = connect(mapStateToProps, mapDispatchToProps)(YTSearchBar)

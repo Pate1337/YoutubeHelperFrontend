@@ -1,18 +1,40 @@
 import youtubeService from '../services/youtube'
 
-const ytReducer = (store = [], action) => {
+const ytReducer = (state = {links: [], searching: false}, action) => {
   switch(action.type) {
-    case 'SEARCH':
+    case 'SEARCH_YOUTUBE':
       console.log('SEARCH ytReducer')
-      return action.data
+      return {
+        links: action.data,
+        searching: false
+      }
     case 'INIT_RESULTS':
       console.log('INIT_RESULTS ytReducer')
-      return action.data
+      return {
+        links: action.data,
+        searching: false
+      }
     case 'CLEAR_RESULTS':
       console.log('CLEAR_RESULTS ytReducer')
-      return []
+      return {
+        links: [],
+        searching: false
+      }
+    case 'SET_SEARCHING':
+      return {
+        links: state.links,
+        searching: true
+      }
     default:
-      return store
+      return state
+  }
+}
+
+export const setSearching = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'SET_SEARCHING'
+    })
   }
 }
 
@@ -56,7 +78,7 @@ export const searchForVideo = (searchObject) => {
     window.localStorage.setItem('ytSearchResults', JSON.stringify(formattedItems))
 
     dispatch({
-      type: 'SEARCH',
+      type: 'SEARCH_YOUTUBE',
       data: formattedItems
     })
   }
