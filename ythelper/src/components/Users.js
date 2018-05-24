@@ -10,7 +10,8 @@ class Users extends React.Component {
     super()
     this.state = {
       userToShow: null,
-      comments: null
+      comments: null,
+      usersearch: ''
     }
   }
 
@@ -36,26 +37,46 @@ class Users extends React.Component {
     })
   }
 
+  handleUserSearch = (event) => {
+    event.preventDefault()
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
   render() {
-    if(this.state.userToShow != null) {
+    if (this.state.userToShow != null) {
       return (
         <Grid>
           <Grid.Column>
             <h2>Käyttäjät</h2>
+            <form>
+              <input
+                type='text'
+                name='usersearch'
+                value={this.state.usersearch}
+                onChange={this.handleUserSearch}
+              />
+              <button type='submit'>Search</button>
+            </form>
             <ul>
-              {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
+              {this.props.users.filter(user => user.username
+                .includes(this.state.usersearch))
+                .map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
                 username: {u.username},
                 id: {u.id},
                 name: {u.name},
                 linkkien määrä: {u.links.length},
                 soittolistojen määrä: {u.playlists.length}
-                </li>
+              </li>
               )}
             </ul>
 
             <h3>Näytettävä Käyttäjä</h3>
-            <p>{this.state.userToShow}</p>
-            <Comments cuser={this.state.userToShow} comments={this.state.comments} comm/>
+            <p>{this.state.userToShow}<br/>
+              {this.props.users
+              .filter(user => user.id == this.state.userToShow)[0].username}</p>
+            <Comments cuser={this.state.userToShow} comments={this.state.comments} />
             <button onClick={this.hideUser}>Piilota</button>
           </Grid.Column>
         </Grid>
@@ -65,8 +86,19 @@ class Users extends React.Component {
       <Grid>
         <Grid.Column>
           <h1>Käyttäjät</h1>
+          <form>
+            <input
+              type='text'
+              name='usersearch'
+              value={this.state.usersearch}
+              onChange={this.handleUserSearch}
+            />
+            <button type='submit'>Search</button>
+          </form>
           <ul>
-            {this.props.users.map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
+            {this.props.users.filter(user => user.username
+              .includes(this.state.usersearch))
+              .map(u => <li key={u.id} onClick={(event) => this.showUser(u.id, event)}>
               username: {u.username},
               id: {u.id},
               name: {u.name},

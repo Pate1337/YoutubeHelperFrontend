@@ -37,18 +37,21 @@ class Comments extends React.Component {
     }
     console.log('Comments.js handleComment')
     const response = await this.props.addSentComment(sComment)
+    this.getReceivedComments()
     this.setState({
-      comment: ''
+      comment: '',
+      //resComments: this.props.userComments.rComments
     })
+
   }
 
   getReceivedComments = async () => {
     console.log('getReveivedComments')
     const comments = await this.props.allUsersComments(this.props.cuser)
     console.log(comments)
-    /*this.setState({
+    this.setState({
       resComments: comments
-    })*/ 
+    })
   }
   
 
@@ -67,7 +70,8 @@ class Comments extends React.Component {
           <h3 onClick={this.toggleVisibility}>Comments (click to hide)</h3>
           <p>Testing</p>
           {this.props.userComments.rComments.map(comment =>
-            <Comment key={comment._id} received={comment.content}/>
+            <Comment key={comment.id} cId={comment.id} received={comment.content} sender={comment.sender}
+            date={comment.date} receiver={comment.receiver}/>
           )}
             
           <form onSubmit={this.handleComment}>

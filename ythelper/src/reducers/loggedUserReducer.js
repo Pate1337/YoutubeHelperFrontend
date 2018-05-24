@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import linkService from '../services/links'
+import commentService from '../services/comments'
 
 const loggedUserReducer = (state = null, action) => {
   switch(action.type) {
@@ -43,6 +44,7 @@ export const loggedUserInitialization = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       linkService.setToken(user.token)
+      commentService.setToken(user.token)
       dispatch({
         type: 'INIT_LOGGED',
         data: user
