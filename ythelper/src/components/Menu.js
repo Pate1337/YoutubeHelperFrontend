@@ -19,6 +19,11 @@ class Menu extends React.Component {
     } else if (name === 'search' && window.innerHeight <= 800) {
       address = '/mobileSearch'
     }
+    if (this.props.playerPlaying && window.innerWidth > 750) {
+      window.scrollTo(0, 560)
+    } else if (this.props.playerPlaying && window.innerWidth <= 750) {
+      window.scrollTo(0, 310)
+    }
     this.props.history.push(address)
   }
 
@@ -66,7 +71,8 @@ class Menu extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    activeItem: state.activeItem
+    activeItem: state.activeItem,
+    playerPlaying: state.playingVideo.playerPlaying
   }
 }
 

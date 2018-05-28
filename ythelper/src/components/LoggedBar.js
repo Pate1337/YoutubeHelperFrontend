@@ -41,6 +41,11 @@ class LoggedBar extends React.Component {
       await this.props.setActiveItem('/myFavourites')
       this.props.history.push('/myFavourites')
     }
+    if (this.props.playerPlaying && window.innerWidth > 750) {
+      window.scrollTo(0, 560)
+    } else if (this.props.playerPlaying && window.innerWidth <= 750) {
+      window.scrollTo(0, 310)
+    }
   }
 
   render() {
@@ -103,7 +108,8 @@ class LoggedBar extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    loggedUser: state.loggedUser
+    loggedUser: state.loggedUser,
+    playerPlaying: state.playingVideo.playerPlaying
   }
 }
 

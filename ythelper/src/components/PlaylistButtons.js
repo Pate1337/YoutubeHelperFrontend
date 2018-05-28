@@ -5,6 +5,7 @@ import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import { Icon, Button } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { setLoading, setLoaded } from '../reducers/loaderReducer'
+import { Link } from 'react-router-dom'
 
 class PlaylistButtons extends React.Component {
 
@@ -38,9 +39,24 @@ class PlaylistButtons extends React.Component {
     await this.props.searchForRelatedVideos(this.props.playingPlaylist.links[this.props.index].linkId, 50)
     await this.props.setLoaded()
   }
+  showPlaylist = () => {
+    console.log('Show playlist')
+    if (this.props.playerPlaying && window.innerWidth > 750) {
+      window.scrollTo(0, 560)
+    } else if (this.props.playerPlaying && window.innerWidth <= 750) {
+      window.scrollTo(0, 310)
+    }
+  }
 
   render() {
     const showPlaylistButtons = { display: (this.props.playingPlaylist !== null) ? '' : 'none' }
+    const onlyShowOnComputer = { display: (window.innerWidth > 750) ? '' : 'none'}
+    let playlistUrl = ''
+    let playlistTitle = ''
+    if (this.props.playingPlaylist !== null) {
+      playlistUrl = '/myPlaylists/' + this.props.playingPlaylist._id
+      playlistTitle = 'Show ' + this.props.playingPlaylist.title
+    }
     console.log('playlistPlaying: ' + this.props.playingPlaylist)
     return (
       <div>
@@ -50,6 +66,9 @@ class PlaylistButtons extends React.Component {
           </Button>
           <Button title='Shuffle' icon onClick={this.shuffle}>
             <Icon name='shuffle' size='large' />
+          </Button>
+          <Button as={Link} to={playlistUrl} style={onlyShowOnComputer} title={playlistTitle} icon onClick={this.showPlaylist}>
+            <Icon name='list' size='large' />
           </Button>
           <Button title='Play next' icon onClick={this.playNext}>
             <Icon name='step forward' size='large' />
@@ -66,7 +85,8 @@ class PlaylistButtons extends React.Component {
 const mapStateToProps = (state) => {
   return {
     playingPlaylist: state.playingPlaylist.playlist,
-    index: state.playingPlaylist.index
+    index: state.playingPlaylist.index,
+    playerPlaying: state.playingVideo.playerPlaying
   }
 }
 
