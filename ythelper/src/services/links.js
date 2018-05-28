@@ -84,6 +84,16 @@ const removeLinkFromRelated = async (linkId) => {
   return response.data
 }
 
+const deleteLinkFromPlaylist = async (linkId, playlistId) => {
+  const config = {
+    headers: { 'Authorization': token}
+  }
+  console.log('Lähetetään poisto serverille')
+  const response = await axios.delete(`/api/playlists/${playlistId}/${linkId}`, config)
+  console.log('Serveri done, paluatetaan response')
+  return response.data
+}
+
 const updateRelatedCount = async (relatedLinkObject) => {
   const response = await axios.put('/api/relateds/', relatedLinkObject)
   return response.data
@@ -91,4 +101,4 @@ const updateRelatedCount = async (relatedLinkObject) => {
 
 export default { getAll, setToken, createAndAddLinkToUserFavourites,
   createPlaylist, addLinkToPlaylist, addLinksToRelated, removeLinkFromRelated,
-  deleteOneLinkFromUserFavourites, updateRelatedCount }
+  deleteOneLinkFromUserFavourites, updateRelatedCount, deleteLinkFromPlaylist }

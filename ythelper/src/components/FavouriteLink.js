@@ -71,7 +71,7 @@ class FavouriteLink extends React.Component {
         </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.item.title}</Item.Header>
-          <Item.Description>id: {this.props.item.linkId}</Item.Description>
+          <Item.Description>id: {this.props.item.linkId}, yolo: {this.props.item._id}</Item.Description>
           <Item.Extra>
             <Popup
               trigger={<Button title='Add to' compact color='blue' icon floated='right'>

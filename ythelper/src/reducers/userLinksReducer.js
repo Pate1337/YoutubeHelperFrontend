@@ -157,6 +157,37 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         randomLink: store.randomLink,
         relatedSort: countSort
       }
+    case 'DELETE_FROM_PLAYLIST':
+      playlists = []
+      console.log('action.linkId: ' + action.linkId)
+      console.log('action.playlist: ' + action.playlist)
+      store.playlists.forEach(p => {
+        if (p._id === action.playlist) {
+          console.log('Löytyi playlisti. Length: ' + p.links.length)
+          /*Tätä muokataan*/
+          let newPlaylistLinks = []
+          p.links.forEach(plink => {
+            if (plink._id !== action.linkId) {
+              newPlaylistLinks.push(plink)
+            } else {
+              console.log('POISTETTAVA LINKKI ON ' + plink._id)
+            }
+          })
+          let newPlaylist = {...p, links: newPlaylistLinks}
+          playlists.push(newPlaylist)
+          console.log('newPlaylist length: ' + newPlaylist.links.length)
+        } else {
+          playlists.push(p)
+        }
+      })
+      console.log('playlists.length: ' + playlists.length)
+      console.log('DELETE_FROM_PLAYLIST OK')
+      return {
+        favourites: store.favourites,
+        playlists: playlists,
+        relatedLinks: store.relatedLinks,
+        randomLink: store.randomLink
+      }
     default:
       return store
   }
@@ -170,6 +201,24 @@ const sortByName = (a, b) => {
   let x = a.link.title.toLowerCase()
   let y = b.link.title.toLowerCase()
   return x < y ? -1 : x > y ? 1 : 0
+}
+
+export const deleteLinkFromPlaylist = (link, playlistId) => {
+  return async (dispatch) => {
+    try {
+      console.log('Linkserviceä kutsutaan')
+      await linkService.deleteLinkFromPlaylist(link._id, playlistId)
+      console.log('Poisto on OK')
+      dispatch({
+        type: 'DELETE_FROM_PLAYLIST',
+        linkId: link._id,
+        playlist: playlistId
+      })
+    } catch (exception) {
+      console.log('ERRORIA TULI')
+      return 'error'
+    }
+  }
 }
 
 export const sortRelatedsByName = () => {

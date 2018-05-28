@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
-import { initPlayingPlaylist, play } from '../reducers/playlistPlayingReducer'
+import { initPlayingPlaylist, play, deleteFromPlayingPlaylist, clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
-import { Item, Icon, Button, Dimmer, Popup, Image, Modal, Header } from 'semantic-ui-react'
+import { Segment, Item, Icon, Button, Dimmer, Popup, Image, Modal, Header, Loader } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { setLoading, setLoaded } from '../reducers/loaderReducer'
+import { deleteLinkFromPlaylist } from '../reducers/userLinksReducer'
 
 class PlaylistLink extends React.Component {
   constructor() {
@@ -60,11 +61,24 @@ class PlaylistLink extends React.Component {
     })
   }
 
-  removeLink = () => {
-    console.log('Not supported yet')
+  removeLink = async () => {
     this.setState({
       modalOpen: false
     })
+    const response = await this.props.deleteLinkFromPlaylist(this.props.link, this.props.playlist._id)
+    if (response !== 'error') {
+      console.log('POISTETTU')
+      if (this.props.playingPlaylist.playlist !== null &&
+        this.props.playlist._id === this.props.playingPlaylist.playlist._id) {
+        console.log('Poistetaan myös playingPlaylistiltä')
+        await this.props.deleteFromPlayingPlaylist(this.props.link)
+        if (this.props.playingVideo._id === this.props.link._id) {
+          await this.props.clearPlayingPlaylist()
+        }
+      }
+    } else {
+      console.log('Ei poistettu')
+    }
   }
 
   toggleModal = () => {
@@ -74,6 +88,7 @@ class PlaylistLink extends React.Component {
   }
 
   render() {
+    console.log('Rendering PlaylistLink')
     const active = this.state.active
     const content = (
       <Icon name='play' size='huge' />
@@ -94,7 +109,7 @@ class PlaylistLink extends React.Component {
         </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.link.title}</Item.Header>
-          <Item.Description>id: {this.props.link.linkId}</Item.Description>
+          <Item.Description>id: {this.props.link.linkId}, yolo: {this.props.link._id}</Item.Description>
           <Item.Extra>
             <Popup
               trigger={<Button title='Add to' compact color='blue' icon floated='right'>
@@ -139,7 +154,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     link: ownProps.link,
     playlist: ownProps.playlist,
-    playingPlaylist: state.playingPlaylist
+    playingPlaylist: state.playingPlaylist,
+    playingVideo: state.playingVideo.link
   }
 }
 
@@ -149,7 +165,10 @@ const mapDispatchToProps = {
   play,
   searchForRelatedVideos,
   setLoading,
-  setLoaded
+  setLoaded,
+  deleteLinkFromPlaylist,
+  deleteFromPlayingPlaylist,
+  clearPlayingPlaylist
 }
 
 const ConnectedPlaylistLink = connect(mapStateToProps, mapDispatchToProps)(PlaylistLink)

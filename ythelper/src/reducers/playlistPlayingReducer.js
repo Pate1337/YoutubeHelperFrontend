@@ -85,6 +85,34 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
         playlist: null,
         index: state.index
       }
+    case 'DELETE_FROM_PLAYING_PLAYLIST':
+      let newPlaylistLinks = []
+      i = 0
+      let indexOfRemoved = 0
+      state.playlist.links.forEach(l => {
+        if (l._id !== action.data) {
+          newPlaylistLinks.push(l)
+        } else {
+          console.log('Tämä poistetaan: ' + l.title)
+          indexOfRemoved = i
+        }
+        i++
+      })
+      newPlaylist = {...state.playlist, links: newPlaylistLinks}
+      let newIndex = 0
+      if (indexOfRemoved < state.index) {
+        newIndex = state.index - 1
+      } else if (indexOfRemoved > state.index) {
+        newIndex = state.index
+      } else {
+        console.log('Poistettiin soitettava linkki...')
+        newIndex: 0
+      }
+      console.log('Indeksi on: ' + newIndex)
+      return {
+        playlist: newPlaylist,
+        index: newIndex
+      }
     default:
       return state
   }
@@ -95,6 +123,15 @@ export const playRandom = () => {
   return async (dispatch) => {
     dispatch({
       type: 'PLAY_RANDOM'
+    })
+  }
+}
+
+export const deleteFromPlayingPlaylist = (link) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'DELETE_FROM_PLAYING_PLAYLIST',
+      data: link._id
     })
   }
 }

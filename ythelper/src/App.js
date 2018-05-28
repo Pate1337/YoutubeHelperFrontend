@@ -37,7 +37,9 @@ class App extends React.Component {
   }
 
   playlistById = (id) => {
+    console.log('id paramssissa: ' + id)
     const playlist = this.props.playlists.find(p => p._id === id)
+    console.log('playlist: ' + playlist)
     /*console.log('playlist._id: ' + playlist._id)*/
     return playlist
   }
