@@ -6,6 +6,8 @@ import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Dimmer, Icon, Image, Item, Button, Popup, Segment, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { setLoading, setLoaded } from '../reducers/loaderReducer'
+import { removeRelatedFromUser } from '../reducers/userLinksReducer'
+import { setNotification, hideNotification } from '../reducers/notificationReducer'
 
 class RecommendedLink extends React.Component {
   constructor() {
@@ -43,11 +45,26 @@ class RecommendedLink extends React.Component {
     })
   }
 
-  removeLink = () => {
-    console.log('Not supported yet')
+  removeLink = async () => {
     this.setState({
       modalOpen: false
     })
+    const response = await this.props.removeRelatedFromUser(this.props.recommend._id)
+    if (response !== 'error') {
+      console.log('POISTETTTU')
+      const message = this.props.recommend.title + ' has been succesfully removed from recommendations'
+      await this.props.setNotification('Link removed', message, 'success', true)
+      setTimeout(async () => {
+        await this.props.hideNotification('Link removed')
+      }, 3000)
+    } else {
+      console.log('Ei poistettu')
+      const message = 'Could not delete ' + this.props.recommend.title + ' from recommendations'
+      await this.props.setNotification('Something went wrong..', message, 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification('Something went wrong..')
+      }, 3000)
+    }
   }
 
   toggleModal = () => {
@@ -131,7 +148,10 @@ const mapDispatchToProps = {
   clearPlayingPlaylist,
   searchForRelatedVideos,
   setLoading,
-  setLoaded
+  setLoaded,
+  removeRelatedFromUser,
+  setNotification,
+  hideNotification
 }
 
 const ConnectedRecommendedLink = connect(mapStateToProps, mapDispatchToProps)(RecommendedLink)

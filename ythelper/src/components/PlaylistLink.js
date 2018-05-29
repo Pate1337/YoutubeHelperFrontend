@@ -7,6 +7,7 @@ import { Segment, Item, Icon, Button, Dimmer, Popup, Image, Modal, Header, Loade
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { setLoading, setLoaded } from '../reducers/loaderReducer'
 import { deleteLinkFromPlaylist } from '../reducers/userLinksReducer'
+import { setNotification, hideNotification } from '../reducers/notificationReducer'
 
 class PlaylistLink extends React.Component {
   constructor() {
@@ -68,6 +69,11 @@ class PlaylistLink extends React.Component {
     const response = await this.props.deleteLinkFromPlaylist(this.props.link, this.props.playlist._id)
     if (response !== 'error') {
       console.log('POISTETTU')
+      const message = this.props.link.title + ' has been succesfully removed from ' + this.props.playlist.title
+      await this.props.setNotification('Link removed', message, 'success', true)
+      setTimeout(async () => {
+        await this.props.hideNotification('Link removed')
+      }, 3000)
       if (this.props.playingPlaylist.playlist !== null &&
         this.props.playlist._id === this.props.playingPlaylist.playlist._id) {
         console.log('Poistetaan myös playingPlaylistiltä')
@@ -78,6 +84,11 @@ class PlaylistLink extends React.Component {
       }
     } else {
       console.log('Ei poistettu')
+      const message = 'Could not delete ' + this.props.link.title + ' from ' + this.props.playlist.title
+      await this.props.setNotification('Something went wrong..', message, 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification('Something went wrong..')
+      }, 3000)
     }
   }
 
@@ -168,7 +179,9 @@ const mapDispatchToProps = {
   setLoaded,
   deleteLinkFromPlaylist,
   deleteFromPlayingPlaylist,
-  clearPlayingPlaylist
+  clearPlayingPlaylist,
+  setNotification,
+  hideNotification
 }
 
 const ConnectedPlaylistLink = connect(mapStateToProps, mapDispatchToProps)(PlaylistLink)

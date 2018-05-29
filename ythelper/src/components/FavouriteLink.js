@@ -8,6 +8,7 @@ import { clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { Item, Icon, Button, Dimmer, Popup, Image, Modal, Header } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { setLoading, setLoaded } from '../reducers/loaderReducer'
+import { setNotification, hideNotification } from '../reducers/notificationReducer'
 
 class FavouriteLink extends React.Component {
   constructor() {
@@ -117,8 +118,21 @@ class FavouriteLink extends React.Component {
     this.setState({
       modalOpen: false
     })
-    await this.props.removeOneFavouriteLink(this.props.item._id)
-    await this.props.usersInitialization()
+    const response = await this.props.removeOneFavouriteLink(this.props.item._id)
+    /*await this.props.usersInitialization()*/
+    if (response !== 'error') {
+      const message = this.props.item.title + ' has been succesfully removed from favourites'
+      await this.props.setNotification('Link removed', message, 'success', true)
+      setTimeout(async () => {
+        await this.props.hideNotification('Link removed')
+      }, 3000)
+    } else {
+      const message = 'Could not delete ' + this.props.item.title + ' from favourites'
+      await this.props.setNotification('Something went wrong..', message, 'error', true)
+      setTimeout(async () => {
+        await this.props.hideNotification('Something went wrong..')
+      }, 3000)
+    }
   }
 
 }
@@ -136,7 +150,9 @@ const mapDispatchToProps = {
   clearPlayingPlaylist,
   searchForRelatedVideos,
   setLoading,
-  setLoaded
+  setLoaded,
+  setNotification,
+  hideNotification
 }
 
 const ConnectedFavouriteLink = connect(mapStateToProps, mapDispatchToProps)(FavouriteLink)

@@ -284,7 +284,7 @@ export const removeOneFavouriteLink = (linkId) => {
         linkId: linkId
       })
     } catch (e) {
-      return 'error removing the link from favorites'
+      return 'error'
     }
 
   }
