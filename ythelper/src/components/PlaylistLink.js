@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
 import { initPlayingPlaylist, play, deleteFromPlayingPlaylist, clearPlayingPlaylist } from '../reducers/playlistPlayingReducer'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
-import { Segment, Item, Icon, Button, Dimmer, Popup, Image, Modal, Header, Loader } from 'semantic-ui-react'
+import { Label, Segment, Item, Icon, Button, Dimmer, Popup, Image, Modal, Header, Loader } from 'semantic-ui-react'
 import { searchForRelatedVideos } from '../reducers/ytRelatedVideosReducer'
 import { setLoading, setLoaded } from '../reducers/loaderReducer'
 import { deleteLinkFromPlaylist } from '../reducers/userLinksReducer'
@@ -100,10 +100,19 @@ class PlaylistLink extends React.Component {
 
   render() {
     console.log('Rendering PlaylistLink')
-    const active = this.state.active
-    const content = (
-      <Icon name='play' size='huge' />
+    let active = this.state.active
+    let content = (
+      <Icon name='play' size='huge' fitted />
     )
+    if (this.props.playingVideo !== null && this.props.playingVideo._id === this.props.link._id) {
+      active = true
+      content = (
+        <div>
+          <Icon name='play' size='huge' fitted />
+          <p>Playing</p>
+        </div>
+      )
+    }
     return (
       <Item>
         <Item.Image style={{width: '124px'}}>

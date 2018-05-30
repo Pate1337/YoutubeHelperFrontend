@@ -51,6 +51,10 @@ class Playlist extends React.Component {
     const content = (
       <Icon name='play' size='huge' />
     )
+    let src = 'https://i.ytimg.com/vi/gOaMva1OpWk/default.jpg'
+    if (this.props.playlist.links.length !== 0) {
+      src = this.props.playlist.links[0].thumbnail
+    }
     const onlyForUsers = { display: (this.props.loggedUser !== null) ? '' : 'none'}
     return (
 
@@ -62,7 +66,7 @@ class Playlist extends React.Component {
                 dimmer={{ active, content }}
                 onMouseEnter={this.handleShow}
                 onMouseLeave={this.handleHide}
-                src={this.props.playlist.links[0].thumbnail}
+                src={src}
                 onClick={this.onPlaylistClick}
                 label={{ corner: 'right', icon: 'list' }}
                 style={{cursor: 'pointer', position: 'relative', zIndex: 0}}
@@ -81,7 +85,7 @@ class Playlist extends React.Component {
                 >
                   <Header icon='trash' content='Delete playlist' />
                   <Modal.Content image>
-                    <Image src={this.props.playlist.links[0].thumbnail} />
+                    <Image src={src} />
                     <Modal.Description>
                       <p>Are you sure you want to delete <strong>{this.props.playlist.title}</strong>?</p>
                     </Modal.Description>
