@@ -13,6 +13,15 @@ class Home extends React.Component {
   }
 
   render() {
+    const onlyShowOnComputer = { display: (window.innerWidth > 750) ? '' : 'none', marginTop: '30px' }
+    const onlyShowOnMobile = { display: (window.innerWidth <= 750) ? '' : 'none', marginTop: '30px' }
+    let count = 0
+    let links = []
+    if (this.props.randomLinks !== undefined && this.props.randomLinks.length !== 0) {
+      links = this.props.randomLinks
+      console.log('KEY: ' + links[0]._id)
+    }
+    const showHeader = { display: (links.length !== 0) ? '' : 'none' }
     return (
       <div style={{marginTop: '10px'}}>
       <Grid>
@@ -23,16 +32,32 @@ class Home extends React.Component {
           Soon you will have so many recommended videos that
           you dont even need to search for videos!
         </p>
-        {(this.props.recommendedLinks !== undefined
-          && this.props.recommendedLinks.length !== 0)
-          ? <div>
-              <strong>Here is our pick of the day for you:</strong>
-              <Item.Group unstackable>
-                <RecommendedLink recommend={this.props.randomLink} />
-              </Item.Group>
-            </div>
-          : <div></div>
-        }
+        <div style={onlyShowOnComputer}>
+        <h3 style={showHeader}>You might like some of these</h3>
+        <Grid columns={2}>
+          {links.map(l => {
+            return (
+              <Grid.Column key={l._id}>
+                <Item.Group unstackable key={l._id}>
+                  <RecommendedLink recommend={l} key={l._id} />
+                </Item.Group>
+              </Grid.Column>
+            )
+            count++
+          })}
+        </Grid>
+        </div>
+        <div style={onlyShowOnMobile}>
+          <h3 style={showHeader}>You might like some of these</h3>
+            {links.map(l => {
+              return (
+                  <Item.Group unstackable key={l._id}>
+                    <RecommendedLink recommend={l} key={l._id} />
+                  </Item.Group>
+              )
+              count++
+            })}
+        </div>
       </Grid.Column>
       </Grid>
       </div>
@@ -44,7 +69,7 @@ const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser,
     recommendedLinks: state.userLinks.relatedLinks,
-    randomLink: state.userLinks.randomLink
+    randomLinks: state.userLinks.randomLinks
   }
 }
 

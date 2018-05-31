@@ -1,14 +1,14 @@
 import userService from '../services/users'
 import linkService from '../services/links'
 
-const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLink: null, relatedSort: 'countAsc', favouriteSort: 'none' }, action) => {
+const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLinks: [], relatedSort: 'countAsc', favouriteSort: 'none' }, action) => {
   switch(action.type) {
     case 'GET_ALL':
       console.log('GET_ALL userLinksReducer')
       return action.data
     case 'REMOVE_ALL':
       console.log('REMOVE userLinksReducer')
-      return { favourites: [], playlists: [], relatedLinks: [], randomLink: null }
+      return { favourites: [], playlists: [], relatedLinks: [], randomLinks: [] }
     case 'REMOVE_LINK':
       console.log('REMOVE_LINK userLinksReducer')
       let favouritesC = store.favourites.filter( link => link._id != action.linkId)
@@ -16,7 +16,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: favouritesC,
         playlists: store.playlists,
         relatedLinks: store.relatedLinks,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
     case 'ADD_FAVOURITE':
       console.log('ADD_FAVOURITE userLinksReducer')
@@ -24,7 +24,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: [...store.favourites, action.data],
         playlists: store.playlists,
         relatedLinks: store.relatedLinks,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
     case 'ADD_LINK_TO_PLAYLIST':
       console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
@@ -45,7 +45,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: playlists,
         relatedLinks: store.relatedLinks,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
       case 'ADD_PLAYLIST':
         console.log('ADD_PLAYLIST userLinksReducer')
@@ -54,7 +54,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           favourites: store.favourites,
           playlists: [...store.playlists, action.data],
           relatedLinks: store.relatedLinks,
-          randomLink: store.randomLink
+          randomLinks: store.randomLinks
         }
     case 'REMOVE_RELATED':
       console.log('REMOVE RELATED userLinksService')
@@ -69,7 +69,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: newRelatedLinks,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
     case 'ADD_RELATED':
       console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
@@ -88,7 +88,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: addedRelateds,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
     case 'UPDATE_COUNT':
       let updatedRelatedLinks = []
@@ -114,7 +114,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: updatedRelatedLinks,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
     case 'SORT_RELATEDS_BY_NAME':
       let sortedByNameRelateds = []
@@ -134,7 +134,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: sortedByNameRelateds,
-        randomLink: store.randomLink,
+        randomLinks: store.randomLinks,
         relatedSort: nameSort
       }
     case 'SORT_RELATEDS_BY_COUNT':
@@ -154,7 +154,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: store.playlists,
         relatedLinks: sortedByCountRelateds,
-        randomLink: store.randomLink,
+        randomLinks: store.randomLinks,
         relatedSort: countSort
       }
     case 'DELETE_FROM_PLAYLIST':
@@ -186,7 +186,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         favourites: store.favourites,
         playlists: playlists,
         relatedLinks: store.relatedLinks,
-        randomLink: store.randomLink
+        randomLinks: store.randomLinks
       }
     default:
       return store
@@ -247,9 +247,27 @@ export const userLinks = () => {
       const loggedUser = JSON.parse(loggedUserJSON)
       const user = await userService.getUserById(loggedUser.id)
       console.log('user: ' + user)
-      const randomIndex = Math.floor(Math.random() * user.relatedLinks.length)
-      const randomLink = user.relatedLinks[randomIndex].link
-      console.log('RANDOMLINK ALUSSA: ' + randomLink.title)
+      let randomLinks = []
+      let usedIndexes = []
+      if (user.relatedLinks.length > 10) {
+        for (let i = 0; i < 10; i++) {
+          let randomIndex = null
+          while (true) {
+            randomIndex = Math.floor(Math.random() * user.relatedLinks.length)
+            let found = usedIndexes.find(p => p === randomIndex)
+            if (found === undefined) {
+              usedIndexes.push(randomIndex)
+              break
+            }
+          }
+          let randomLink = user.relatedLinks[randomIndex].link
+          randomLinks.push(randomLink)
+        }
+      } else {
+        user.relatedLinks.forEach(l => {
+          randomLinks.push(l.link)
+        })
+      }
       const relatedLinks = user.relatedLinks.sort(sortByCount)
       dispatch({
         type: 'GET_ALL',
@@ -257,7 +275,7 @@ export const userLinks = () => {
           favourites: user.links,
           playlists: user.playlists,
           relatedLinks: relatedLinks,
-          randomLink: randomLink
+          randomLinks: randomLinks
         }
       })
     }
