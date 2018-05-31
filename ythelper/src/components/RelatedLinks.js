@@ -118,7 +118,7 @@ class RelatedLinks extends React.Component {
                 Sort by name
               </Button>
               <Button onClick={this.sortByCount}>
-                Sort by count
+                Most recommended
               </Button>
               <div style={{marginTop: '20px'}}>
                 <Pagination
