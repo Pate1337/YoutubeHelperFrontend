@@ -14,7 +14,6 @@ import { Route } from 'react-router-dom'
 class LoggedBar extends React.Component {
 
   logOut = (event) => {
-    console.log('logOut LoggedBar')
     event.preventDefault()
     this.props.removeLoggedUser()
     this.props.removeUserLinks()
@@ -49,7 +48,6 @@ class LoggedBar extends React.Component {
   }
 
   render() {
-    console.log('Rendering LoggedBar')
     return (
       <Grid columns='equal' inverted doubling>
         <Grid.Row verticalAlign='top' color='black' textAlign='center' style={{height: '56px'}}>

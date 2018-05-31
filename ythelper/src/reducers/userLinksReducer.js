@@ -4,14 +4,11 @@ import linkService from '../services/links'
 const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks: [], randomLinks: [], relatedSort: 'countAsc', favouriteSort: 'none' }, action) => {
   switch(action.type) {
     case 'GET_ALL':
-      console.log('GET_ALL userLinksReducer')
       return action.data
     case 'REMOVE_ALL':
-      console.log('REMOVE userLinksReducer')
       return { favourites: [], playlists: [], relatedLinks: [], randomLinks: [] }
     case 'REMOVE_LINK':
-      console.log('REMOVE_LINK userLinksReducer')
-      let favouritesC = store.favourites.filter( link => link._id != action.linkId)
+      let favouritesC = store.favourites.filter( link => link._id !== action.linkId)
       return {
         favourites: favouritesC,
         playlists: store.playlists,
@@ -19,7 +16,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         randomLinks: store.randomLinks
       }
     case 'ADD_FAVOURITE':
-      console.log('ADD_FAVOURITE userLinksReducer')
       return {
         favourites: [...store.favourites, action.data],
         playlists: store.playlists,
@@ -27,14 +23,9 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         randomLinks: store.randomLinks
       }
     case 'ADD_LINK_TO_PLAYLIST':
-      console.log('ADD_LINK_TO_PLAYLIST userLinksReducer')
-      /*Etsitään muokattu playlisti playlistId:n perusteella.*/
-      /*Jotta soittolista toimis kivasti, niin pitäis saada järjestys pysyyn
-      samana*/
       let playlists = []
       store.playlists.forEach(p => {
         if (p._id === action.playlistId) {
-          /*Tätä muokataan*/
           let newPlaylist = {...p, links: [...p.links, action.data]}
           playlists.push(newPlaylist)
         } else {
@@ -48,8 +39,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         randomLinks: store.randomLinks
       }
       case 'ADD_PLAYLIST':
-        console.log('ADD_PLAYLIST userLinksReducer')
-        console.log('action.data: ' + action.data._id + action.data.title)
         return {
           favourites: store.favourites,
           playlists: [...store.playlists, action.data],
@@ -57,14 +46,12 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           randomLinks: store.randomLinks
         }
     case 'REMOVE_RELATED':
-      console.log('REMOVE RELATED userLinksService')
       let newRelatedLinks = []
       store.relatedLinks.forEach(l => {
         if (l.link._id !== action.linkId) {
           newRelatedLinks.push(l)
         }
       })
-      /*newRelatedLinks.sort(sortByCount)*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -72,18 +59,7 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         randomLinks: store.randomLinks
       }
     case 'ADD_RELATED':
-      console.log('ACTION DATA kun lisätään related linkit: ' + action.data)
       let addedRelateds = [...store.relatedLinks, ...action.data]
-      /*let sortedAddedRelateds = []*/
-      /*if (store.relatedSort === 'countAsc') {
-        sortedAddedRelateds = addedRelateds.sort(sortByCount)
-      } else if (store.relatedSort === 'countDesc') {
-        sortedAddedRelateds = addedRelateds.sort(sortByCount).reverse()
-      } else if (store.relatedSort === 'nameAsc') {
-        sortedAddedRelateds = addedRelateds.sort(sortByName)
-      } else if (store.relatedSort === 'nameDesc') {
-        sortedAddedRelateds = addedRelateds.sort(sortByName).reverse()
-      }*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -92,7 +68,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       }
     case 'UPDATE_COUNT':
       let updatedRelatedLinks = []
-      /*let sortedUpdatedRelatedLinks = []*/
       store.relatedLinks.forEach(rl => {
         let found = action.links.find(l => l === rl._id)
         if (found !== undefined) {
@@ -101,15 +76,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
           updatedRelatedLinks.push(rl)
         }
       })
-      /*if (store.relatedSort === 'countAsc') {
-        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByCount)
-      } else if (store.relatedSort === 'countDesc') {
-        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByCount).reverse()
-      } else if (store.relatedSort === 'nameAsc') {
-        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByName)
-      } else if (store.relatedSort === 'nameDesc') {
-        sortedUpdatedRelatedLinks = updatedRelatedLinks.sort(sortByName).reverse()
-      }*/
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -129,7 +95,6 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
         sortedByNameRelateds = store.relatedLinks.sort(sortByName)
         nameSort = 'nameAsc'
       }
-      console.log('KOKO: ' + sortedByNameRelateds.length)
       return {
         favourites: store.favourites,
         playlists: store.playlists,
@@ -159,29 +124,20 @@ const userLinksReducer = (store = { favourites: [], playlists: [], relatedLinks:
       }
     case 'DELETE_FROM_PLAYLIST':
       playlists = []
-      console.log('action.linkId: ' + action.linkId)
-      console.log('action.playlist: ' + action.playlist)
       store.playlists.forEach(p => {
         if (p._id === action.playlist) {
-          console.log('Löytyi playlisti. Length: ' + p.links.length)
-          /*Tätä muokataan*/
           let newPlaylistLinks = []
           p.links.forEach(plink => {
             if (plink._id !== action.linkId) {
               newPlaylistLinks.push(plink)
-            } else {
-              console.log('POISTETTAVA LINKKI ON ' + plink._id)
             }
           })
           let newPlaylist = {...p, links: newPlaylistLinks}
           playlists.push(newPlaylist)
-          console.log('newPlaylist length: ' + newPlaylist.links.length)
         } else {
           playlists.push(p)
         }
       })
-      console.log('playlists.length: ' + playlists.length)
-      console.log('DELETE_FROM_PLAYLIST OK')
       return {
         favourites: store.favourites,
         playlists: playlists,
@@ -206,23 +162,19 @@ const sortByName = (a, b) => {
 export const deleteLinkFromPlaylist = (link, playlistId) => {
   return async (dispatch) => {
     try {
-      console.log('Linkserviceä kutsutaan')
       await linkService.deleteLinkFromPlaylist(link._id, playlistId)
-      console.log('Poisto on OK')
       dispatch({
         type: 'DELETE_FROM_PLAYLIST',
         linkId: link._id,
         playlist: playlistId
       })
     } catch (exception) {
-      console.log('ERRORIA TULI')
       return 'error'
     }
   }
 }
 
 export const sortRelatedsByName = () => {
-  console.log('sortRelatedsByName REDUCER')
   return async (dispatch) => {
     dispatch({
       type: 'SORT_RELATEDS_BY_NAME'
@@ -238,15 +190,13 @@ export const sortRelatedsByCount = () => {
   }
 }
 
-/*Nyt saadaan molemmat hoidettua yhdellä tietokantahaulla!!!*/
+
 export const userLinks = () => {
-  console.log('userLinks userLinksReducer')
   return async (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
       const user = await userService.getUserById(loggedUser.id)
-      console.log('user: ' + user)
       let randomLinks = []
       let usedIndexes = []
       if (user.relatedLinks.length > 10) {
@@ -283,7 +233,6 @@ export const userLinks = () => {
 }
 
 export const removeUserLinks = () => {
-  console.log('removeUserLinks userLinksReducer')
   return async (dispatch) => {
     dispatch({
       type: 'REMOVE_ALL'
@@ -292,11 +241,9 @@ export const removeUserLinks = () => {
 }
 
 export const removeOneFavouriteLink = (linkId) => {
-  console.log('removeOneFavouriteLink userLinksReducer')
   return async (dispatch) => {
     try {
       const rmresult = await linkService.deleteOneLinkFromUserFavourites(linkId)
-      console.log('Linkki on poistettu')
       dispatch({
         type: 'REMOVE_LINK',
         linkId: linkId
@@ -309,7 +256,6 @@ export const removeOneFavouriteLink = (linkId) => {
 }
 
 export const addLinkToPlaylist = (linkObject, playlistId) => {
-  console.log('addLinkToPlaylist userLinksReducer')
   return async (dispatch) => {
     try {
       const link = await linkService.addLinkToPlaylist(linkObject, playlistId)
@@ -325,7 +271,6 @@ export const addLinkToPlaylist = (linkObject, playlistId) => {
 }
 
 export const addFavouriteForUser = (linkObject) => {
-  console.log('addFavouriteForUser userLinksReducer')
   return async (dispatch) => {
     try {
       const link = await linkService.createAndAddLinkToUserFavourites(linkObject)
@@ -340,7 +285,6 @@ export const addFavouriteForUser = (linkObject) => {
 }
 
 export const addPlaylistForUser = (playlistObject) => {
-  console.log('addPlaylistForUser userLinksReducer')
   return async (dispatch) => {
     try {
       const playlist = await linkService.createPlaylist(playlistObject)
@@ -372,7 +316,6 @@ export const addToUserRelated = (linkObjects) => {
   return async (dispatch) => {
     try {
       const links = await linkService.addLinksToRelated(linkObjects)
-      console.log('addToUserRelated links.length: ' + links.length)
       dispatch({
         type: 'ADD_RELATED',
         data: links
@@ -391,7 +334,6 @@ export const updateRelatedCount = (relatedLinkObjects) => {
         let newObject = {...relatedLinkObjects[i], count: relatedLinkObjects[i].count + 1}
         const updatedLink = await linkService.updateRelatedCount(newObject)
         newObjects.push(updatedLink._id)
-        console.log('Päivitetty linkki')
       }
       dispatch({
         type: 'UPDATE_COUNT',

@@ -51,7 +51,6 @@ class RelatedLinks extends React.Component {
   }
 
   sortByName = async (event) => {
-    console.log('sortByName RelatedLinks')
     event.preventDefault()
     await this.props.sortRelatedsByName()
     this.setState({
@@ -60,7 +59,6 @@ class RelatedLinks extends React.Component {
   }
 
   sortByCount = async (event) => {
-    console.log('sortByCount RelatedLinks')
     event.preventDefault()
     await this.props.sortRelatedsByCount()
     this.setState({
@@ -69,7 +67,6 @@ class RelatedLinks extends React.Component {
   }
 
   render() {
-    console.log('Rendering RelatedLinks')
     const onTop = {
       position: 'relative',
       zIndex: 1

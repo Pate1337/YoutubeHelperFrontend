@@ -1,5 +1,4 @@
 import React from 'react'
-import Youtube from 'react-youtube'
 import { connect } from 'react-redux'
 import { setPlayingVideo } from '../reducers/videoPlayingReducer'
 import AddToUserLinksButtons from './AddToUserLinksButtons'
@@ -35,7 +34,6 @@ class YTSearchResult extends React.Component {
   }
 
   render() {
-    console.log('Rendering YTSearchResult')
     const active = this.state.active
     const content = (
       <Icon name='play' size='huge' />
@@ -87,18 +85,7 @@ class YTSearchResult extends React.Component {
     )
   }
 }
-/*<Grid.Column>
-  <img onClick={this.playVideo}
-    src={this.props.item.thumbnail}
-    alt={this.props.item.title}
-    style={{cursor: 'pointer', display: 'inline-block'}}
-  />
-  id: {this.props.item.linkId}, title: {this.props.item.title}, count: {this.props.count}
-  {this.props.loggedUser !== null
-    ? <AddToUserLinksButtons link={this.props.item} />
-    : <div></div>
-  }
-</Grid.Column>*/
+
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser

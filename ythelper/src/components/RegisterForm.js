@@ -39,7 +39,6 @@ class RegisterForm extends React.Component {
 
 
   handleRegistering = async (event) => {
-    console.log('handleRegistering RegisterForm')
     event.preventDefault()
     const user = {
       username: this.state.username,
@@ -47,9 +46,8 @@ class RegisterForm extends React.Component {
       password: this.state.password
     }
     if (user.username.length < 5 || user.password.length < 8 || user.name.length < 2) {
-      console.log('Username must be >4 chars and password >7 and name must be >=2')
     } else if (this.state.pwordCheck !== user.password) {
-      console.log('Passwords dont match!')
+
     } else {
       const response = await this.props.addNewUser(user)
       this.setState({
@@ -63,7 +61,6 @@ class RegisterForm extends React.Component {
   }
 
   render() {
-    console.log('Renderöidään uuden käyttäjän rekisteröinti formi')
     return (
       <Grid>
         <Grid.Column>

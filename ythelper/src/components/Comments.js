@@ -35,7 +35,6 @@ class Comments extends React.Component {
       receiver: this.props.cuser,
       sender: this.props.loggedUser.id
     }
-    console.log('Comments.js handleComment')
     const response = await this.props.addSentComment(sComment)
     this.getReceivedComments()
     this.setState({
@@ -46,25 +45,16 @@ class Comments extends React.Component {
   }
 
   getReceivedComments = async () => {
-    console.log('getReveivedComments')
     const comments = await this.props.allUsersComments(this.props.cuser)
-    console.log(comments)
     this.setState({
       resComments: comments
     })
   }
-  
+
 
 
   render() {
-    console.log('Rendering CommentS')
-    console.log(this.props.comments)
-    console.log(this.props.cuser, ' ', this.props.cuser.id, ' ', this.props.cuser._id)
-    console.log(this.props.cuser)
     if(this.state.showComments) {
-      console.log('RENDERING COMMENTS -- ', this.props.userComments)
-      console.log('COMMENTS ', this.props.userComments.rComments)
-      console.log('---')
       return (
         <div>
           <h3 onClick={this.toggleVisibility}>Comments (click to hide)</h3>
@@ -73,7 +63,7 @@ class Comments extends React.Component {
             <Comment key={comment.id} cId={comment.id} received={comment.content} sender={comment.sender}
             date={comment.date} receiver={comment.receiver}/>
           )}
-            
+
           <form onSubmit={this.handleComment}>
             Type a comment to send:
               <input
@@ -93,7 +83,7 @@ class Comments extends React.Component {
         <h3 onClick={this.toggleVisibility}>Comments (click to show)</h3>
       )
     }
-    
+
   }
 }
 

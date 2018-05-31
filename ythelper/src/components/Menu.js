@@ -1,13 +1,11 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { Menu as MenuItem, Segment, Icon, Popup } from 'semantic-ui-react'
+import { Menu as MenuItem, Segment, Icon } from 'semantic-ui-react'
 import { setActiveItem } from '../reducers/menuReducer'
 import { connect } from 'react-redux'
 
 class Menu extends React.Component {
 
   handleItemClick = async (event, { name }) => {
-    console.log('name = ' + name)
     if (name === 'home') {
       await this.props.setActiveItem('/')
     } else {
@@ -28,9 +26,7 @@ class Menu extends React.Component {
   }
 
   render() {
-    console.log('Render Menu')
     const activeItem = this.props.activeItem
-    console.log('activeItem: ' + activeItem)
     return (
       <Segment basic inverted>
         <MenuItem inverted pointing secondary widths={4}>

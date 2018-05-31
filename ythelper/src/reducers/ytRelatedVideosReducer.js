@@ -10,11 +10,8 @@ const ytRelatedVideosReducer = (store = [], action) => {
 }
 
 export const searchForRelatedVideos = (videoId, maxResults) => {
-  console.log('searchForRelatedVideos ytReducer')
   const query = `search?part=snippet&relatedToVideoId=${videoId}&type=video&maxResults=${maxResults}`
-  /*formatItem tähän*/
   const formatItem = (item) => {
-    console.log(item.snippet.title + ', ' + item.id.videoId)
     return {
       linkId: item.id.videoId,
       title: item.snippet.title,
@@ -25,7 +22,6 @@ export const searchForRelatedVideos = (videoId, maxResults) => {
   return async (dispatch) => {
     const result = await youtubeService.search(query)
     const items = result.items
-    console.log('YOUTUBE APISTA HAETUT RELATEDIT:')
     const formattedItems = items.map(i => formatItem(i))
     dispatch({
       type: 'ADD_NEW_RELATEDS',

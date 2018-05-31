@@ -21,9 +21,7 @@ class Users extends React.Component {
 
   showUser = async (id, event) => {
     event.preventDefault()
-    console.log('Users.js lista onclickin id:', id)
     const allcomments = await this.props.allUsersComments(id)
-    //console.log('USERS - ', result)
     this.setState({
       userToShow: id,
       comments: allcomments
@@ -31,7 +29,6 @@ class Users extends React.Component {
   }
 
   hideUser = (event) => {
-    console.log('User.js hideUser')
     this.setState({
       userToShow: null
     })

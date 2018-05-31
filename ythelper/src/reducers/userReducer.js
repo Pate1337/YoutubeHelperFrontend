@@ -3,11 +3,8 @@ import userService from '../services/users'
 const userReducer = (store = [], action) => {
   switch(action.type) {
     case 'INIT_USERS':
-      console.log('Initiate users userReducer')
       return action.data
-    //Uusi user, tsekkaa onko tää ihan vituillaan
     case 'NEW_USER':
-      console.log('Uuden käyttäjän lisäys userReducer')
       return [...store, action.data]
     default:
       return store
@@ -15,7 +12,6 @@ const userReducer = (store = [], action) => {
 }
 
 export const usersInitialization = () => {
-  console.log('usersInitialization in userReducer')
   const formatUser = (user) => {
     return {
       id: user.id,
@@ -40,7 +36,6 @@ export const usersInitialization = () => {
 }
 
 export const addNewUser = (userObject) => {
-  console.log('kutsuttu addNewUseria userReducerissa')
   const formatUser = (user) => {
     return {
       id: user.id,
@@ -48,8 +43,6 @@ export const addNewUser = (userObject) => {
       name: user.name,
       links: user.links,
       playlists: user.playlists
-
-      //Favorite linkit ?? (ja muut kentät??)
     }
   }
   return async (dispatch) => {

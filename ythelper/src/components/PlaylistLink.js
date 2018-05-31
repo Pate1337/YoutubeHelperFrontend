@@ -27,11 +27,9 @@ class PlaylistLink extends React.Component {
 
   playVideo = async () => {
     if (this.props.playingPlaylist.playlist === null) {
-      console.log('playingPlaylist === null')
       await this.props.initPlayingPlaylist(this.props.playlist)
       const index = this.props.playingPlaylist.playlist.links
         .findIndex(l => this.props.link._id === l._id)
-      console.log('indeksi on: ' + index)
       await this.props.play(index)
       await this.props.setPlayingVideo(this.props.playingPlaylist.playlist.links[index])
     } else if (this.props.playingPlaylist.playlist._id !== this.props.playlist._id) {
@@ -68,7 +66,6 @@ class PlaylistLink extends React.Component {
     })
     const response = await this.props.deleteLinkFromPlaylist(this.props.link, this.props.playlist._id)
     if (response !== 'error') {
-      console.log('POISTETTU')
       const message = this.props.link.title + ' has been succesfully removed from ' + this.props.playlist.title
       await this.props.setNotification('Link removed', message, 'success', true)
       setTimeout(async () => {
@@ -76,14 +73,12 @@ class PlaylistLink extends React.Component {
       }, 3000)
       if (this.props.playingPlaylist.playlist !== null &&
         this.props.playlist._id === this.props.playingPlaylist.playlist._id) {
-        console.log('Poistetaan myös playingPlaylistiltä')
         await this.props.deleteFromPlayingPlaylist(this.props.link)
         if (this.props.playingVideo._id === this.props.link._id) {
           await this.props.clearPlayingPlaylist()
         }
       }
     } else {
-      console.log('Ei poistettu')
       const message = 'Could not delete ' + this.props.link.title + ' from ' + this.props.playlist.title
       await this.props.setNotification('Something went wrong..', message, 'error', true)
       setTimeout(async () => {
@@ -99,7 +94,6 @@ class PlaylistLink extends React.Component {
   }
 
   render() {
-    console.log('Rendering PlaylistLink')
     let active = this.state.active
     let content = (
       <Icon name='play' size='huge' fitted />
@@ -129,7 +123,7 @@ class PlaylistLink extends React.Component {
         </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.link.title}</Item.Header>
-          <Item.Description>id: {this.props.link.linkId}, yolo: {this.props.link._id}</Item.Description>
+          <Item.Description></Item.Description>
           <Item.Extra>
             <Popup
               trigger={<Button title='Add to' compact color='blue' icon floated='right'>

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Youtube from 'react-youtube'
 import RecommendedLink from './RecommendedLink'
 import { Item, Grid } from 'semantic-ui-react'
 import { setActiveItem } from '../reducers/menuReducer'
@@ -15,11 +14,9 @@ class Home extends React.Component {
   render() {
     const onlyShowOnComputer = { display: (window.innerWidth > 750) ? '' : 'none', marginTop: '30px' }
     const onlyShowOnMobile = { display: (window.innerWidth <= 750) ? '' : 'none', marginTop: '30px' }
-    let count = 0
     let links = []
     if (this.props.randomLinks !== undefined && this.props.randomLinks.length !== 0) {
       links = this.props.randomLinks
-      console.log('KEY: ' + links[0]._id)
     }
     const showHeader = { display: (links.length !== 0) ? '' : 'none' }
     return (
@@ -43,7 +40,6 @@ class Home extends React.Component {
                 </Item.Group>
               </Grid.Column>
             )
-            count++
           })}
         </Grid>
         </div>
@@ -55,7 +51,6 @@ class Home extends React.Component {
                     <RecommendedLink recommend={l} key={l._id} />
                   </Item.Group>
               )
-              count++
             })}
         </div>
       </Grid.Column>

@@ -51,10 +51,6 @@ class FavouriteLinks extends React.Component {
   }
 
   render() {
-    console.log('Rendering FavouriteLinks')
-    console.log('favouriteLiks.length: ' + this.props.favouriteLinks.length)
-    console.log('link._id: ' + this.props.favouriteLinks[0])
-
     if (this.props.loggedUser !== null) {
       const onTop = {
         position: 'relative',

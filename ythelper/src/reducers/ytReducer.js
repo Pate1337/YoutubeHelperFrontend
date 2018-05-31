@@ -3,19 +3,16 @@ import youtubeService from '../services/youtube'
 const ytReducer = (state = {links: [], searching: false}, action) => {
   switch(action.type) {
     case 'SEARCH_YOUTUBE':
-      console.log('SEARCH ytReducer')
       return {
         links: action.data,
         searching: false
       }
     case 'INIT_RESULTS':
-      console.log('INIT_RESULTS ytReducer')
       return {
         links: action.data,
         searching: false
       }
     case 'CLEAR_RESULTS':
-      console.log('CLEAR_RESULTS ytReducer')
       return {
         links: [],
         searching: false
@@ -39,13 +36,9 @@ export const setSearching = () => {
 }
 
 export const searchForVideo = (searchObject) => {
-  console.log('searchForVideo ytReducer')
-  /*Katsotaan hakuehdot tässä. Turha lähettää pyynnön mukana tyhjiä parameterja
-  esim. q=. Tässä vaiheessa kuitenkin pelkkää hakukenttää voidaan muuttaa.*/
   const q = searchObject.text
   const maxResults = searchObject.maxResults
   const query = `search?part=snippet&q=${q}&type=video&maxResults=${maxResults}`
-  /*formatItemissä nyt vaan pari hassua kohtaa*/
   const formatItem = (item) => {
     return {
       linkId: item.id.videoId,
@@ -85,11 +78,9 @@ export const searchForVideo = (searchObject) => {
 }
 
 export const searchResultInitialization = () => {
-  console.log('searchResultInitialization ytReducer')
   return async (dispatch) => {
     const searchResultsJSON = window.localStorage.getItem('ytSearchResults')
     if (searchResultsJSON) {
-      console.log('SEARCH RESULTTEJA ON!!')
       const searchResults = JSON.parse(searchResultsJSON)
       dispatch({
         type: 'INIT_RESULTS',
@@ -100,7 +91,6 @@ export const searchResultInitialization = () => {
 }
 
 export const clearSearchResults = () => {
-  console.log('clearSearchResults ytReducer')
   return async (dispatch) => {
     window.localStorage.removeItem('ytSearchResults')
     dispatch({

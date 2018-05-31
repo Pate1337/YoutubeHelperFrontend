@@ -11,7 +11,6 @@ class RelatedSidebar extends React.Component {
     }
   }
   toggleVisibility = () => {
-    console.log('toggle visibility')
     this.setState({
       visible: !this.state.visible
     })
@@ -21,24 +20,7 @@ class RelatedSidebar extends React.Component {
     const header = document.getElementById('relatedHeader')
     header.scrollIntoView()
   }
-/*<Rail attached style={{width: '40%'}} position='right'>
-  {this.props.loader
-  ? <Segment style={{position: 'fixed', width: '20%', height: '400px'}}>
-    <Dimmer active inverted>
-      <Loader size='large'>Loading...</Loader>
-    </Dimmer>
-  </Segment>
-  : <Segment style={{overflow: 'auto'}}>
-    <h3>Related videos</h3>
-    <Item.Group divided unstackable>
-      {this.props.relatedLinks.map(l =>
-        <RecommendedLink key={l.linkId} recommend={l} sidebar={true} />)}
-    </Item.Group>
-    <Dimmer active={this.props.loader} inverted>
-      <Loader size='large'>Loading...</Loader>
-    </Dimmer>
-  </Segment>}
-</Rail>*/
+
   render() {
     if (window.innerWidth >= 1100 && this.props.playerPlaying) {
       return (

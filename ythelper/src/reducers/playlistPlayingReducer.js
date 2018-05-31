@@ -1,14 +1,11 @@
 const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) => {
   switch(action.type) {
     case 'INIT_PLAYLIST':
-      console.log('INIT_PLAYLIST playlistPlayingReducer')
       return {
         playlist: action.data,
         index: 0
       }
     case 'SHUFFLE_PLAYLIST':
-      console.log('SHUFFLE_PLAYLIST playlistPlayingReducer')
-      console.log('state.index: ' + state.index)
       let links = state.playlist.links
       let i
       let j
@@ -19,8 +16,6 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
           while (j === state.index) {
             j = Math.floor(Math.random() * (i + 1))
           }
-          /*Ei siis muuteta links[state.index] paikkaa, eikä laiteta
-          mitään paikalle links[state.index]*/
           temp = links[i]
           links[i] = links[j]
           links[j] = temp
@@ -32,7 +27,6 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
         index: state.index
       }
     case 'PLAY_NEXT':
-      console.log('PLAY_NEXT playlistPlayingReducer')
       let index
       if (state.index === state.playlist.links.length - 1) {
         index = 0
@@ -44,7 +38,6 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
         index: index
       }
     case 'PLAY_PREV':
-      console.log('PLAY_PREV playlistPlayingReducer')
       let indx
       if (state.index === 0) {
         indx = state.playlist.links.length - 1
@@ -56,20 +49,17 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
         index: indx
       }
     case 'PLAY':
-      console.log('PLAY playlistPlayingReducer')
       return {
         playlist: state.playlist,
         index: action.index
       }
     case 'ADD_LINK':
-      console.log('ADD_LINK playlistPlayingReducer')
       let moddedPlaylist = {...state.playlist, links: [...state.playlist.links, action.data]}
       return {
         playlist: moddedPlaylist,
         index: state.index
       }
     case 'PLAY_RANDOM':
-      console.log('PLAY_RANDOM playlistPlayingReducer')
       let random = Math.floor(Math.random() * state.playlist.links.length)
       if (state.playlist.links.length >= 2) {
         while (random === state.index) {
@@ -93,7 +83,6 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
         if (l._id !== action.data) {
           newPlaylistLinks.push(l)
         } else {
-          console.log('Tämä poistetaan: ' + l.title)
           indexOfRemoved = i
         }
         i++
@@ -105,10 +94,8 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
       } else if (indexOfRemoved > state.index) {
         newIndex = state.index
       } else {
-        console.log('Poistettiin soitettava linkki...')
-        newIndex: 0
+        newIndex = 0
       }
-      console.log('Indeksi on: ' + newIndex)
       return {
         playlist: newPlaylist,
         index: newIndex
@@ -119,7 +106,6 @@ const playlistPlayingReducer = (state = { playlist: null, index: 0 }, action) =>
 }
 
 export const playRandom = () => {
-  console.log('playRandom playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'PLAY_RANDOM'
@@ -138,7 +124,6 @@ export const deleteFromPlayingPlaylist = (link) => {
 
 
 export const initPlayingPlaylist = (playlistObject) => {
-  console.log('initPlayingPlaylist playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'INIT_PLAYLIST',
@@ -148,7 +133,6 @@ export const initPlayingPlaylist = (playlistObject) => {
 }
 
 export const shufflePlaylist = () => {
-  console.log('shufflePlaylist playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'SHUFFLE_PLAYLIST'
@@ -157,7 +141,6 @@ export const shufflePlaylist = () => {
 }
 
 export const playNext = () => {
-  console.log('playNext playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'PLAY_NEXT'
@@ -166,7 +149,6 @@ export const playNext = () => {
 }
 
 export const playPrevious = () => {
-  console.log('playPrevious playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'PLAY_PREV'
@@ -175,7 +157,6 @@ export const playPrevious = () => {
 }
 
 export const play = (index) => {
-  console.log('play playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'PLAY',
@@ -185,7 +166,6 @@ export const play = (index) => {
 }
 
 export const addToPlayingPlaylist = (linkObject) => {
-  console.log('addToPlayingPlaylist playlistPlayingReducer')
   return async (dispatch) => {
     dispatch({
       type: 'ADD_LINK',

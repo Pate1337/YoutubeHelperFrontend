@@ -24,24 +24,19 @@ class PlaylistForm extends React.Component {
       }
       const response = await this.props.addPlaylistForUser(playlistObject)
       if (response !== 'error') {
-        console.log('soittolista lisätty!')
         this.setState({
           title: ''
         })
         await this.props.usersInitialization()
       } else {
-        console.log('Soittolistaa ei lisätty!')
         this.setState({
           title: ''
         })
       }
-    } else {
-      console.log('Soittolistalla pitää olla nimi!')
     }
   }
 
   render() {
-    console.log('Rendering PlaylistFrom')
     return (
       <Grid>
         <Grid.Column>

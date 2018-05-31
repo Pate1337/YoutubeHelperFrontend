@@ -20,13 +20,11 @@ class RecommendedLink extends React.Component {
   }
 
   playVideo = async () => {
-    console.log('LOADING')
     await this.props.setLoading()
     await this.props.setPlayingVideo(this.props.recommend)
     await this.props.clearPlayingPlaylist()
     await this.props.searchForRelatedVideos(this.props.recommend.linkId, 50)
     await this.props.setLoaded()
-    console.log('LOADED')
   }
 
   toggleButtons = () => {
@@ -51,14 +49,12 @@ class RecommendedLink extends React.Component {
     })
     const response = await this.props.removeRelatedFromUser(this.props.recommend._id)
     if (response !== 'error') {
-      console.log('POISTETTTU')
       const message = this.props.recommend.title + ' has been succesfully removed from recommendations'
       await this.props.setNotification('Link removed', message, 'success', true)
       setTimeout(async () => {
         await this.props.hideNotification('Link removed')
       }, 3000)
     } else {
-      console.log('Ei poistettu')
       const message = 'Could not delete ' + this.props.recommend.title + ' from recommendations'
       await this.props.setNotification('Something went wrong..', message, 'error', true)
       setTimeout(async () => {
@@ -95,7 +91,7 @@ class RecommendedLink extends React.Component {
         </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.recommend.title}</Item.Header>
-          <Item.Description>id: {this.props.recommend.linkId}, count: {this.props.count}</Item.Description>
+          <Item.Description></Item.Description>
           <Item.Extra style={onlyForUsers}>
             <Popup
               trigger={<Button title='Add to' compact color='blue' icon floated='right' onClick={this.toggleButtons}>
@@ -137,7 +133,7 @@ class RecommendedLink extends React.Component {
     )
   }
 }
-/*<div style={{marginRight: '10px', height: '95px', width: '124px'}}>*/
+
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.loggedUser

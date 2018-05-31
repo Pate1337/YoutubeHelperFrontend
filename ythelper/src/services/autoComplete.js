@@ -1,4 +1,3 @@
-import axios from 'axios'
 import axiosJSONP from 'axios-jsonp-pro'
 const baseUrl = 'https://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1'
 const key = 'AIzaSyDHoWL_1wl8n14ugcKkRSz-TsycxEy0mvo'

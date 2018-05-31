@@ -11,7 +11,6 @@ class Playlists extends React.Component {
   }
 
   render() {
-    console.log('Rendering Playlists')
     return (
       <Grid>
         <Grid.Column>

@@ -5,13 +5,10 @@ import commentService from '../services/comments'
 const loggedUserReducer = (state = null, action) => {
   switch(action.type) {
     case 'INIT_LOGGED':
-      console.log('INIT_LOGGED loggedUserReducer')
       return action.data
     case 'LOGIN':
-      console.log('LOGIN loggedUserReducer')
       return action.data
     case 'LOGOUT':
-      console.log('LOGOUT loggedUserReducer')
       return null
     default:
       return state
@@ -19,7 +16,6 @@ const loggedUserReducer = (state = null, action) => {
 }
 
 export const addLoggedUser = (userObject) => {
-  console.log('addLoggedUser loggedUserReducer')
   return async (dispatch) => {
     try {
       const user = await loginService.login(userObject)
@@ -31,14 +27,12 @@ export const addLoggedUser = (userObject) => {
         data: user
       })
     } catch (exception) {
-      /*Pikkasen tarkempi virheilmoitus pitää tehdä*/
       return "error"
     }
   }
 }
 
 export const loggedUserInitialization = () => {
-  console.log('loggedUserInitialization loggedUserReducer')
   return async (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -54,7 +48,6 @@ export const loggedUserInitialization = () => {
 }
 
 export const removeLoggedUser = () => {
-  console.log('removeLoggedUser loggedUserReducer')
   window.localStorage.removeItem('loggedUser')
   return async (dispatch) => {
     dispatch({

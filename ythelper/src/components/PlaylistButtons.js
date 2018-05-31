@@ -40,7 +40,6 @@ class PlaylistButtons extends React.Component {
     await this.props.setLoaded()
   }
   showPlaylist = () => {
-    console.log('Show playlist')
     if (this.props.playerPlaying && window.innerWidth > 750) {
       window.scrollTo(0, 560)
     } else if (this.props.playerPlaying && window.innerWidth <= 750) {
@@ -57,7 +56,6 @@ class PlaylistButtons extends React.Component {
       playlistUrl = '/myPlaylists/' + this.props.playingPlaylist._id
       playlistTitle = 'Show ' + this.props.playingPlaylist.title
     }
-    console.log('playlistPlaying: ' + this.props.playingPlaylist)
     return (
       <div>
         <div style={showPlaylistButtons}>

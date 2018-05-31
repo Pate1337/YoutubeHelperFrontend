@@ -6,7 +6,6 @@ import store from './store'
 import { Provider } from 'react-redux'
 
 const render = () => {
-  console.log('render index.js')
   ReactDOM.render(
     <Provider store={store}>
       <App />

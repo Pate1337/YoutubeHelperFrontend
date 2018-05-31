@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { TransitionablePortal, Message } from 'semantic-ui-react'
+import { Message } from 'semantic-ui-react'
 
 class Notification extends React.Component {
 
@@ -20,19 +20,7 @@ class Notification extends React.Component {
     )
   }
 }
-/*<TransitionablePortal
-  open={this.props.showNotification}
-  transition={{animation: 'slide right', duration: 400}}
->
-  <Message
-    error={this.props.notificationType === 'error'}
-    success={this.props.notificationType === 'success'}
-    warning={this.props.notificationType === 'warning'}
-    header={this.props.notificationHeader}
-    content={this.props.notificationContent}
-    style={{left: '0%', position: 'fixed', top: '90%', zIndex: 1000}}
-  />
-</TransitionablePortal>*/
+
 const mapStateToProps = (state) => {
   return {
     showNotification: state.notification.show,

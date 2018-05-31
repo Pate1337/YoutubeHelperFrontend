@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import PlaylistLink from './PlaylistLink'
-import { Grid, Item, Image, Icon, Dimmer, Modal, Button, Header } from 'semantic-ui-react'
+/*import PlaylistLink from './PlaylistLink'*/
+import { Item, Image, Icon, Dimmer, Modal, Button, Header } from 'semantic-ui-react'
 
 class Playlist extends React.Component {
   constructor() {
@@ -12,15 +12,8 @@ class Playlist extends React.Component {
     }
   }
 
-  /*toggleVisibility = () => {
-    this.setState({
-      showPlaylistLinks: !this.state.showPlaylistLinks
-    })
-  }*/
-
   onPlaylistClick = (event) => {
     event.preventDefault()
-    console.log(this.props.playlist._id)
     this.props.history.push(`/myPlaylists/${this.props.playlist._id}`)
   }
   handleShow = () => {
@@ -46,7 +39,6 @@ class Playlist extends React.Component {
   }
 
   render() {
-    console.log('Rendering Playlist')
     const active = this.state.active
     const content = (
       <Icon name='play' size='huge' />
@@ -108,9 +100,6 @@ class Playlist extends React.Component {
   }
 }
 
-/*<div onClick={this.onPlaylistClick} style={{cursor: 'pointer', display: 'inline-block'}}>
-  <h3>{this.props.playlist.title} </h3> links: {this.props.playlist.links.length}
-</div>*/
 const mapStateToProps = (state, ownProps) => {
   let playlist
   if (state.playingPlaylist.playlist === null) {

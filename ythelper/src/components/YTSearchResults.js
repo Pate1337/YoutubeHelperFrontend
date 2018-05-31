@@ -6,7 +6,6 @@ import { Grid, Item, Dimmer, Loader, Segment } from 'semantic-ui-react'
 class YTSearchResults extends React.Component {
 
   render() {
-    console.log('Rendering YTSearchResults')
     const show = { display: (this.props.ytSearchResults.length === 0) ? 'none' : ''}
     if (!this.props.searching) {
     return (

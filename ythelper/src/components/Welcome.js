@@ -11,7 +11,6 @@ class Welcome extends React.Component {
   }
 
   render() {
-    console.log('Rendering Welcome')
     return (
       <Grid>
         <Grid.Column>

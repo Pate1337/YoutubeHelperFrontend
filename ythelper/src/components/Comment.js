@@ -9,7 +9,6 @@ class Comment extends React.Component {
 
 
   render() {
-    console.log('Rendering Comment')
     if (this.props.receiver != this.props.loggedUser.id) {
       return (
         <div>
@@ -29,7 +28,6 @@ class Comment extends React.Component {
 
   removeOneComment = async (event) => {
     event.preventDefault()
-    console.log('removeOneComment Comments.js', this.props.cId)
     await this.props.removeOneComment(this.props.cId)
   }
 

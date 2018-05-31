@@ -77,14 +77,12 @@ class VideoPlayer extends React.Component {
 
   changePosition = async (event) => {
     event.preventDefault()
-    console.log('changePosition')
     this.setState({
       popup: !this.state.popup
     })
   }
 
   handleVisibility = async (isVisible) => {
-    console.log('HADNLEVISIBILITY')
     if (!this.state.firstLoad) {
       if (isVisible) {
         if (this.state.popup) {
@@ -125,7 +123,6 @@ class VideoPlayer extends React.Component {
 
   render() {
     if (this.props.link !== null) {
-      console.log('Rendering VideoPlayer')
       const margin = {marginBottom: '20px'}
       const notShowingInMobilePopup = { display: (window.innerWidth <= 750 && this.state.popup) ? 'none' : ''}
       const showInPopup = { display: (this.state.popup) ? '' : 'none' }
@@ -178,8 +175,7 @@ class VideoPlayer extends React.Component {
           gridStyle = {position: 'relative', height: '550px'}
         }
       }
-      /*const relatedLinks = await this.props.searchForRelatedVideos(this.props.link.linkId)*/
-      console.log('IKKUNAN KOKO' + window.innerWidth + ', ' + window.innerHeight )
+
       return (
         <div style={margin}>
           <Grid style={gridStyle}>
@@ -239,9 +235,7 @@ class VideoPlayer extends React.Component {
 
   }
 }
-/*<Button icon floated='right' onClick={this.hidePlayer}>
-  <Icon name='hide' size='large' />
-</Button>*/
+
 const mapStateToProps = (state) => {
   return {
     link: state.playingVideo.link,

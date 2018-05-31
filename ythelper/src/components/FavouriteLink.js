@@ -51,7 +51,6 @@ class FavouriteLink extends React.Component {
   }
 
   render() {
-    console.log('Rendering FavouriteLink')
     const active = this.state.active
     const content = (
       <Icon name='play' size='huge' />
@@ -72,7 +71,7 @@ class FavouriteLink extends React.Component {
         </Item.Image>
         <Item.Content>
           <Item.Header>{this.props.item.title}</Item.Header>
-          <Item.Description>id: {this.props.item.linkId}, yolo: {this.props.item._id}</Item.Description>
+          <Item.Description></Item.Description>
           <Item.Extra>
             <Popup
               trigger={<Button title='Add to' compact color='blue' icon floated='right'>
@@ -114,12 +113,10 @@ class FavouriteLink extends React.Component {
 
   removeOneFavouriteLink = async (event) => {
     event.preventDefault()
-    console.log('test')
     this.setState({
       modalOpen: false
     })
     const response = await this.props.removeOneFavouriteLink(this.props.item._id)
-    /*await this.props.usersInitialization()*/
     if (response !== 'error') {
       const message = this.props.item.title + ' has been succesfully removed from favourites'
       await this.props.setNotification('Link removed', message, 'success', true)

@@ -13,23 +13,22 @@ import RegisterForm from './components/RegisterForm'
 import PlaylistForm from './components/PlaylistForm'
 import Playlists from './components/Playlists'
 import RelatedLinks from './components/RelatedLinks'
-import UserLists from './components/UserLists'
+/*import UserLists from './components/UserLists'*/
 import Users from './components/Users'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Welcome from './components/Welcome'
 import Home from './components/Home'
-import Menu from './components/Menu'
+/*import Menu from './components/Menu'*/
 import PlaylistView from './components/PlaylistView'
 import VideoPlayer from './components/VideoPlayer'
 import { Container } from 'semantic-ui-react'
-import { Grid, Segment, Sticky, Sidebar } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import Notification from './components/Notification'
 import RelatedSidebar from './components/RelatedSidebar'
 
 class App extends React.Component {
 
   async componentWillMount() {
-    console.log('Mounting App')
     await this.props.loggedUserInitialization()
     await this.props.usersInitialization()
     await this.props.searchResultInitialization()
@@ -37,16 +36,11 @@ class App extends React.Component {
   }
 
   playlistById = (id) => {
-    console.log('id paramssissa: ' + id)
     const playlist = this.props.playlists.find(p => p._id === id)
-    console.log('playlist: ' + playlist)
-    /*console.log('playlist._id: ' + playlist._id)*/
     return playlist
   }
 
   render() {
-    console.log('Rendering App')
-    console.log('Käyttäjät: ' + this.props.users.length)
     const loggedBarStyle = {
       position: 'fixed',
       top: 0,

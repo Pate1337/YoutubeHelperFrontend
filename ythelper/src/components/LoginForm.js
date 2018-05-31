@@ -25,7 +25,6 @@ class LoginForm extends React.Component {
   }
 
   handleLogin = async (event) => {
-    console.log('handleLogin LoginForm')
     event.preventDefault()
     const user = {
       username: this.state.username,
@@ -34,7 +33,6 @@ class LoginForm extends React.Component {
     const response = await this.props.addLoggedUser(user)
     this.props.userLinks()
     if (response !== 'error') {
-      console.log('Logged in')
       this.props.history.push('/')
       await this.props.setActiveItem('/')
       await this.props.setNotification(`Logged in as ${user.username}`, '', 'success', true)
@@ -56,7 +54,6 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log('Rendering LoginForm')
     return (
       <div style={{width: '60%'}}>
         <h2>Login</h2>

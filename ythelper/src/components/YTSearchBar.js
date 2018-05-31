@@ -17,7 +17,6 @@ class YTSearchBar extends React.Component {
       const searchBar = JSON.parse(searchBarJSON)
       text = searchBar.text
       maxResults = searchBar.maxResults
-      console.log('text: ' + text + ', maxResults: ' + maxResults)
     }
     this.state = {
       text: text,
@@ -49,19 +48,14 @@ class YTSearchBar extends React.Component {
   }
 
   handleDropdownChange = (event, { value }) => {
-    console.log('VALUE: ' + value)
     this.setState({
       maxResults: value
     })
   }
 
   handleSubmit = (event) => {
-    console.log('handleSubmit YTSearchBar')
-    /*event.preventDefault()*/
-    console.log('maxresults: ' + this.state.maxResults)
     if (this.state.text !== '') {
       this.props.setSearching()
-      /*Kun tulevaisuudessa useampi kenttä, esim. järjestys, hakutulosten määrä..*/
       const searchObject = {
         text: this.state.text,
         maxResults: this.state.maxResults
@@ -71,8 +65,7 @@ class YTSearchBar extends React.Component {
     }
     this.props.clearAutocomplete()
     this.setState({
-      gridStyle: {},
-      /*drawMobileSearch: false*/
+      gridStyle: {}
     })
     if (this.props.history !== undefined) {
       this.props.history.push('/search')
@@ -80,7 +73,6 @@ class YTSearchBar extends React.Component {
   }
 
   clearResults = async (event) => {
-    console.log('clearResults YTSearchBar')
     event.preventDefault()
     this.props.clearSearchResults()
     const searchObject = {
@@ -96,26 +88,17 @@ class YTSearchBar extends React.Component {
   }
 
   handleInputClick = async (event) => {
-    console.log('PAINETTU')
     await this.props.searchSuggestions(this.state.text)
-    /*if (window.innerHeight <= 800) {
-      this.setState({
-        drawMobileSearch: true
-      })
-    }*/
   }
 
   handleElsewhereClick = async (event) => {
-    console.log('painettu muualta')
     await this.props.clearAutocomplete()
   }
 
   handleSuggestionClick = async (item) => {
-    console.log('NAME: ' + item)
     await this.props.clearAutocomplete()
     this.setState({
       text: item
-      /*drawMobileSearch: false*/
     })
     this.handleSubmit()
   }
@@ -125,7 +108,6 @@ class YTSearchBar extends React.Component {
   }
 
   render() {
-    console.log('Renderöidään YTSearchBar')
     const options = [
       {key: 1, text: '5', value: 5},
       {key: 2, text: '10', value: 10},
@@ -134,13 +116,10 @@ class YTSearchBar extends React.Component {
     ]
     const maxResults = this.state.maxResults
     let gridStyle = this.state.gridStyle
-    /*let searchBarStyle = {width: '400px'}*/
     const searchResultsJSON = window.localStorage.getItem('ytSearchResults')
     if (searchResultsJSON) {
       gridStyle = {}
     }
-    /*let mobileSearchStyle = {}*/
-    /*if (this.state.drawMobileSearch) {*/
       let mobileSearchStyle = {
         position: 'fixed',
         top: '0%',
@@ -150,14 +129,11 @@ class YTSearchBar extends React.Component {
         background: 'white',
         zIndex: 1002
       }
-    /*}*/
     let suggestStyle = {borderStyle: 'solid', width: '55%', position: 'absolute', zIndex: 100, background: 'white'}
     if (this.props.autocompleteItems.length === 0) {
       suggestStyle = {width: '55%', position: 'absolute', zIndex: 100, background: 'white'}
     }
-    /*if (window.innerWidth <= 750) {*/
-      let searchBarStyle = {width: '55%', marginRight: '2px'}
-    /*}*/
+    let searchBarStyle = {width: '55%', marginRight: '2px'}
     const onlyShowOnMobile = { display: (window.innerHeight <= 800) ? '' : 'none'}
     const onlyShowOnComputer = { display: (window.innerHeight > 800) ? '' : 'none'}
     if (this.props.history === undefined) {
@@ -203,7 +179,6 @@ class YTSearchBar extends React.Component {
             <div style={suggestStyle}>
               <List selection verticalAlign='middle'>
                 {this.props.autocompleteItems.map((i, index) =>
-                  /*let boundItemClick = this.handleSuggestionClick.bind('MOI')*/
                   <List.Item key={index} onClick={() => this.handleSuggestionClick(i)}>
                     {i}
                   </List.Item>)}
@@ -266,7 +241,6 @@ class YTSearchBar extends React.Component {
 
             <List divided selection verticalAlign='middle'>
               {this.props.autocompleteItems.map((i, index) =>
-                /*let boundItemClick = this.handleSuggestionClick.bind('MOI')*/
                 <List.Item key={index} onClick={() => this.handleSuggestionClick(i)}>
                   {i}
                 </List.Item>)}
@@ -280,14 +254,7 @@ class YTSearchBar extends React.Component {
   }
   }
 }
-/*<Button icon type='button' onClick={this.goBack}>*/
-/*placeholder={this.state.maxResults.toString()}*/
-/*<Form.Select name='maxResults' onChange={this.handleSearchFieldChange}>
-  <option value='5' selected={(this.state.maxResults.toString() === '5') ? true : false}>5</option>
-  <option value='10' selected={(this.state.maxResults.toString() === '10') ? true : false}>10</option>
-  <option value='25' selected={(this.state.maxResults.toString() === '25') ? true : false}>25</option>
-  <option value='50' selected={(this.state.maxResults.toString() === '50') ? true : false}>50</option>
-</Form.Select>*/
+
 const mapStateToProps = (state) => {
   return {
     text: state.ytSearchBar.text,
